@@ -29,4 +29,4 @@ Chốt: làm blockchain system web về tra thưởng sổ xố (Đề tài 5 Lo
 - Học thêm về etherium, smart contract
 - Đồng coin tự tạo ra (Metamask mặc định rồi tạo ra thêm)
 - Làm như video thầy gửi 
-- Dùng ETH metamask 
+- Dùng ETH metamask # Backend
