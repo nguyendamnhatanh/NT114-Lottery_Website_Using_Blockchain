@@ -2,20 +2,16 @@
 
 ## Members
 
-- Khưu Minh Phong - 20521742
-- Nguyễn Đàm Nhật Anh - 20520880
-- Nguyễn Anh Tài - 20520924
+- Khưu Minh Phong - 20521742 (Back End)
+- Nguyễn Đàm Nhật Anh - 20520880 (DevOps + Designer)
+- Nguyễn Anh Tài - 20520924 (Front End)
 
 ## Project:
 
-<br/>
-
 ### **Project Name: Building a Lottery Website with Anonymous Rewarding Feature using Blockchain Technology** 
-<br/>
 
 ### **Project Detail:**
 
-<br/>
 
 #### **General:**
 
