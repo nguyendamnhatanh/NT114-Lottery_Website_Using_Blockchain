@@ -1,32 +1,52 @@
 # NT114-Lottery_Website_Using_Blockchain
-# Trình bày ý tưởng: 
-	- NFT market: sao chép cách làm của các trang tiền ảo 
-	- chuỗi cung ứng: 
-	- storage: 
-	- Chat app
-	- Lottery
-# Đề tài:
 
-***Đề tài cuối cùng: Xây dựng website sổ xố và trả thưởng ẩn danh ứng dụng blockchain***
+## Members
 
+- Khưu Minh Phong - 20521742
+- Nguyễn Đàm Nhật Anh - 20520880
+- Nguyễn Anh Tài - 20520924
 
-Thay vì lưu tập trung database ( hoặc nhiều chi nhánh data center) 1 bộ phận người có quyền hành truy cập bộ dữ liệu.
+## Project:
 
-Tất cả đều có quyền như nhau, ko phải lưu tập trung: Chỉ đọc được giao dịch mình có tham gia, đọc ẩn danh, đọc ví có giao dịch gì.
+<br/>
 
-Chốt: làm blockchain system web về tra thưởng sổ xố (Đề tài 5 Lottery): 
+### **Project Name: Building a Lottery Website with Anonymous Rewarding Feature using Blockchain Technology** 
+<br/>
 
-- Mỗi user đki hệ thống sẽ đc cấp 1 địa chỉ ví
-- Nạp vô thông qua coin => được token (Giống nạp game)
-- Dùng tiền để mua vé số (tùy chọn) rồi quay random
-- Pool dựa vào cộng dồn vé mua + thưởng
-- Quay có thể / ko thể có người trúng tùy chọn
-- Trúng thì trả bằng token 
-- Quy đổi tiền nạp
+### **Project Detail:**
 
-# Tìm hiểu thêm:
+<br/>
 
-- Học thêm về etherium, smart contract
-- Đồng coin tự tạo ra (Metamask mặc định rồi tạo ra thêm)
-- Làm như video thầy gửi 
-- Dùng ETH metamask
+#### **General:**
+
+Instead of centralize data in a database (or distributed database locate geographically) with access rights belong to one person only. We're builing a lottery website in which everyone has the same rights.
+
+Everyone can have access to the lottery data. 
+
+But the data still have some credentials: 
+
+- User can only read their own transaction.
+- Their own wallet
+- User will browse data anonymously
+
+#### **Feature in developement:**
+
+- User register in the system will be granted a wallet address.
+- Like online games. Currency unit in the system will be coin or token (ETH, Bitcoin, .etc).
+- Use system's currency unit to play
+- Pool based on cumulative ticket purchase + reward
+- One turn may/may not have a winner
+- A winner will be rewarded with token (or coin)
+- Exchange coin
+
+## **On learning:**
+
+- Etherium, Solidity Smart Contract
+- Default: Metamask coin/ Optional: Personal Coin
+
+## **Reference:**
+
+- [Build and Deploy a Modern Web 3.0 Blockchain App | Solidity, Smart Contracts, Crypto](https://www.youtube.com/watch?v=Wn_Kb3MR_cU)
+- [Solidity Basic](https://drive.google.com/file/d/1ANongpXXJX5ndr8SCt1jOwYguw46884d/view?usp=sharing) (Use Student Email)
+- [Decentralize Lottery by SKG | BlockChain](https://www.youtube.com/watch?v=Il9kcuD1UnI)
+- [Trenddapp](https://github.com/trenddapp/lottery)
