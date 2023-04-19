@@ -13,7 +13,6 @@ const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
 const contract = new ethers.Contract(contractAddress, abi, signer);
 
-
 const PaymentController = {
   getAllTransactions: async (req, res) => {
     try {
@@ -38,11 +37,26 @@ const PaymentController = {
       let txHash = req.body.txHash;
       let ticketPrice = req.body.ticketPrice;
 
+      let noTransaction = !histories.some(item => item.hash === txHash);
+      if (noTransaction) {
+        res.status(429).json({
+          message: 'No Transaction Found',
+        });
+      }
+
       const hasTransaction = histories.some(
         (item) =>
-          item.hash === txHash &&
-          readableValue(item.value) <= ticketPrice
+          item.hash === txHash && readableValue(item.value) >= ticketPrice
       );
+
+      let fisrtTransaction = histories.find(item => item.hash === txHash); 
+      let invalidTransaction = readableValue(fisrtTransaction.value) <= ticketPrice;
+      
+      if (invalidTransaction) {
+        res.status(429).json({
+          message: "insufficient funds"
+        })
+      }
 
       if (hasTransaction) {
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
