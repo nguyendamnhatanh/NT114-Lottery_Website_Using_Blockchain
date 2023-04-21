@@ -37,7 +37,7 @@ const PaymentController = {
       let txHash = req.body.txHash;
       let ticketPrice = req.body.ticketPrice;
 
-      let noTransaction = !histories.some(item => item.hash === txHash);
+      let noTransaction = !histories.some((item) => item.hash === txHash);
       if (noTransaction) {
         res.status(429).json({
           message: 'No Transaction Found',
@@ -49,13 +49,17 @@ const PaymentController = {
           item.hash === txHash && readableValue(item.value) >= ticketPrice
       );
 
-      let fisrtTransaction = histories.find(item => item.hash === txHash); 
-      let invalidTransaction = readableValue(fisrtTransaction.value) <= ticketPrice;
-      
+      let fisrtTransaction = histories.find((item) => item.hash === txHash);
+      console.log('Transaction Hash: ' + fisrtTransaction.hash);
+      console.log('Wei number of amount: ' + fisrtTransaction.value);
+      console.log('ETH Form: ' + readableValue(fisrtTransaction.value));
+      let invalidTransaction =
+        readableValue(fisrtTransaction.value) < ticketPrice;
+
       if (invalidTransaction) {
         res.status(429).json({
-          message: "insufficient funds"
-        })
+          message: 'insufficient funds',
+        });
       }
 
       if (hasTransaction) {
@@ -69,6 +73,23 @@ const PaymentController = {
     } catch (error) {
       res.status(500).json({
         message: error + '',
+      });
+    }
+  },
+  getLotteryPool: async (req, res) => {
+    try {
+      const poolWei = await contract.getCurrentPoolBalance();
+      const poolETH = readableValue(poolWei);
+
+      if (poolETH) {
+        res.status(200).json({
+          message: 'success',
+          pool: poolETH,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        error: error + '',
       });
     }
   },

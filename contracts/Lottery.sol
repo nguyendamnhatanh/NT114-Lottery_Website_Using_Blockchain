@@ -36,7 +36,7 @@ contract Lottery {
         return currentTicket;
     }
 
-    function getCurrentPotBalance() public view returns (uint) {
+    function getCurrentPoolBalance() public view returns (uint) {
         return address(this).balance;
     }
     
