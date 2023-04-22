@@ -1,6 +1,5 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
-const res = require('express/lib/response');
 const { readableValue } = require('../utils/format');
 dotenv.config();
 
@@ -90,6 +89,19 @@ const PaymentController = {
     } catch (error) {
       res.status(500).json({
         error: error + '',
+      });
+    }
+  },
+  getAddress: (req, res) => {
+    const address = process.env.CONTRACT_ADDRESS;
+    if (address) {
+      res.status(200).json({
+        message: 'success',
+        address: address,
+      });
+    } else {
+      res.status(500).json({
+        message: 'No Address Found',
       });
     }
   },
