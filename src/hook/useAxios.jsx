@@ -11,13 +11,14 @@ export const useAxios = async (method, url, token = undefined, data = undefined)
     },
     ...(data && { data: data })
   }
-  console.log(requestOption);
+  console.log('sent request: ', requestOption);
   try {
     const response = await axios(requestOption);
+    console.log("Success:", response?.data);
     return response;
   } catch (error) {
-    // console.error(error);
-    console.error("Error:", error.response.data);
+    console.error("Error:", error?.response?.data);
+    return undefined;
   }
 }
 

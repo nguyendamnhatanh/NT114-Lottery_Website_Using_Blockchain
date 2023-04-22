@@ -3,14 +3,17 @@ import React, { useContext, createContext, useState, useEffect } from "react";
 import { useAddress, useContract, useMetamask, useContractWrite, useWallet } from '@thirdweb-dev/react';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { ethers } from "ethers";
-import { useAxios } from "../hook";
+import { useAxios, useSmartContractAddress } from "../hook";
 import { parseAmount } from "../utils/parseAmount";
 import Web3 from "web3";
 
 const StateContext = createContext();
 
 // const contractAddress = '0x3412d73497Ea52F2293a15e2d9159f54BE0b0a33';
-const contractAddress = '0xE13a78BFC5505526E6e64F922653252D7EA3fD37';
+
+// const contractAddress = useAddress();
+
+
 const { ethereum } = window;
 const web3 = new Web3(ethereum);
 
@@ -20,10 +23,14 @@ export const StateContextProvider = ({ children }) => {
     const [txHash, setTxHash] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isTxSuccess, setIsTxSuccess] = useState(0);
-    const [luckNumber, setLuckNumber] = useState(0);
     const [amount, setAmount] = useState(0);
+    // const [smartAddress, setSmartAddress] = useState('');
+    const [contract, setContract] = useState();
+    const [luckNumber, setLuckNumber] = useState(0);
 
-    // const contract = useContract(contractAddress);
+    const contract = await useSmartContractAddress();
+    console.log(contract)
+
     // const wallet = useWallet();
 
     useEffect(() => {
@@ -100,7 +107,7 @@ export const StateContextProvider = ({ children }) => {
         }
     }
 
-    
+
 
     return (
         <StateContext.Provider value={{
@@ -111,7 +118,9 @@ export const StateContextProvider = ({ children }) => {
             sendTransaction,
             txHash,
             isLoading,
-            setIsLoading
+            setIsLoading,
+            smartAddress,
+            setSmartAddress
         }}>
             {children}
         </StateContext.Provider>

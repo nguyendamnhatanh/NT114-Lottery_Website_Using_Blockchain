@@ -10,26 +10,25 @@ import { useStateContext } from '../context';
 import { CountBox, CustomButton, Loader } from '../components';
 import { calculateBarPercentage, daysLeft } from '../utils';
 import { thirdweb, pickluck } from '../assets';
+import { useSmartContractAddress } from "../hook";
+
 
 const LotteryRoom = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { donate, getDonations, contract, address } = useStateContext();
 
+  const { donate, getDonations, contract, address, smartAddress } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
   const [donators, setDonators] = useState([]);
 
   const ticketPrice = 0.03;
   const betLeft = 5;
-
   const remainingDays = 10;
-
   const img = 'https://www.minhngoc.net.vn/upload/images/veso/bth_20-04-2023.jpg';
 
   const fetchDonators = async () => {
     const data = await getDonations(state.pId);
-
     setDonators(data);
   }
 
@@ -39,9 +38,7 @@ const LotteryRoom = () => {
 
   const handleDonate = async () => {
     setIsLoading(true);
-
     await donate(state.pId, amount);
-
     navigate('/')
     setIsLoading(false);
   }
@@ -63,8 +60,7 @@ const LotteryRoom = () => {
         </div>
       </div>
 
-      <div className="mt-[60px] flex lg:flex-row flex-col gap-5">
-
+      <div className="mt-[60px] flex flex-col lg:flex-row gap-5">
         <div className="flex-2">
           <div className="w-full flex md:flex-row flex-col gap-[30px]">
             <div className="flex-1 flex-row ">
@@ -97,17 +93,14 @@ const LotteryRoom = () => {
         </div>
 
         <div className="flex-1">
-          <div className="w-full flex md:flex-row flex-col gap-[30px]">
-            <div className="flex-1 flex-row  ">
-              <div className="flex flex-col p-[50px] bg-[#1c1c24] rounded-[10px] ">
-                <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-white uppercase">User Control</p>
-                <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">Ticket Price: {ticketPrice}</p>
-                <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">Bet Left: {betLeft}</p>
-                <div className="mt-[30px]">
+          <div className="w-full flex flex-col flex-1 gap-[30px] justify-center items-center  h-full p-[50px] bg-[#1c1c24] rounded-[10px]">
+            <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-white uppercase">User Control</p>
+            <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">Ticket Price: {ticketPrice}</p>
+            <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">Bet Left: {betLeft}</p>
 
-                </div>
-              </div>
-            </div>
+            {/* <div className="mt-[30px]">
+            </div> */}
+
             {/* <div className="flex flex-wrap md:w-[150px] w-full  justify-between ">
               <CountBox value={remainingDays} title={'Purchase Date'} />
               <CountBox value={remainingDays} title={'Purchase Date'} />
@@ -115,7 +108,6 @@ const LotteryRoom = () => {
             </div> */}
           </div>
         </div>
-
 
       </div>
 
