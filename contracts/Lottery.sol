@@ -11,7 +11,8 @@ contract Lottery {
     struct Ticket {
         address player;
         uint lotteryCode;
-        uint256 timestamp;
+        uint256 createDate;
+        uint256 expireDate;
     }
 
     Ticket[] currentTicket;
@@ -28,8 +29,8 @@ contract Lottery {
         owner = msg.sender;
     }
 
-    function addTicket(uint lotteryCode) public {
-        currentTicket.push(Ticket(msg.sender, lotteryCode ,block.timestamp));
+    function addTicket(address player, uint lotteryCode, uint256 expireDate) public {
+        currentTicket.push(Ticket(player, lotteryCode ,block.timestamp, expireDate));
     }
 
     function getCurrentTickets() public view returns (Ticket[] memory) {
@@ -42,5 +43,10 @@ contract Lottery {
     
     function getAllPlayer() public view returns (address payable[] memory) {
         return players;
+    }
+
+    function destroy() public {
+        require(msg.sender == owner, "You are not the contract owner");
+        selfdestruct(payable(owner));
     }
 }
