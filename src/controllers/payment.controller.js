@@ -35,6 +35,7 @@ const PaymentController = {
 
       let txHash = req.body.txHash;
       let ticketPrice = req.body.ticketPrice;
+      let player = req.body.playerAddress;
 
       let noTransaction = !histories.some((item) => item.hash === txHash);
       if (noTransaction) {
@@ -61,12 +62,17 @@ const PaymentController = {
         });
       }
 
+      let expireDate = Math.floor(
+        (new Date().getTime() + 7 * 24 * 60 * 60 * 1000) / 1000
+      );
+
       if (hasTransaction) {
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
-        await contract.addTicket(lotteryNumber);
+        await contract.addTicket(player, lotteryNumber, expireDate);
         res.status(201).json({
           message: 'Create Lottery Successfully',
           lottery: lotteryNumber,
+          expireDate: expireDate,
         });
       }
     } catch (error) {
