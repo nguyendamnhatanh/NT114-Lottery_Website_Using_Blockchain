@@ -8,23 +8,53 @@ import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
 import { CountBox, CustomButton, Loader } from '../components';
-import { calculateBarPercentage, daysLeft } from '../utils';
+import { calculateBarPercentage, convertTimestampToDateString, daysLeft } from '../utils';
 import { thirdweb, pickluck } from '../assets';
-import { useSmartContractAddress } from "../hook";
 
+import { useSmartContractAddress, usePool, useEntry, useTimeRemaining } from "../hook";
+import axios from 'axios';
 
 const LotteryRoom = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const { donate, getDonations, contract, address, smartAddress } = useStateContext();
+  const { donate, getDonations, contract, address, smartAddress, timeRemaining } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
   const [donators, setDonators] = useState([]);
+  const [time, setTime] = useState('')
+  
+  function convert(timestamp) {
+
+    const now = Math.floor((new Date().getTime()) / 1000);
+
+    console.log("Now", now)
+    
+  
+    const futureDate = timestamp;
+
+    console.log("futureDate" ,futureDate)
+  
+    const timeleft = (futureDate - now) * 1000;
+  
+    const days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+  
+  
+    const dateString = `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    return dateString;
+  };
+
+  // const timeRemaining = convertTimestampToDateString(useTimeRemaining());
+
 
   const ticketPrice = 0.03;
   const betLeft = 5;
-  const remainingDays = 10;
+  const pool = usePool();
+  const entry = useEntry();
   const img = 'https://www.minhngoc.net.vn/upload/images/veso/bth_20-04-2023.jpg';
 
   const fetchDonators = async () => {
@@ -34,6 +64,16 @@ const LotteryRoom = () => {
 
   useEffect(() => {
     if (contract) fetchDonators();
+    axios({
+      method: 'GET',
+      url: 'http://test.fkmdev.site/api/getExpire',
+    }).then(res => 
+      {
+        console.log(res.data.remain)
+        setTime(convert(res.data.remain))
+      }
+      
+    )
   }, [contract, address])
 
   const handleDonate = async () => {
@@ -94,19 +134,33 @@ const LotteryRoom = () => {
 
         <div className="flex-1">
           <div className="w-full flex flex-col flex-1 gap-[30px] justify-center items-center  h-full p-[50px] bg-[#1c1c24] rounded-[10px]">
-            <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-white uppercase">User Control</p>
-            <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">Ticket Price: {ticketPrice}</p>
-            <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">Bet Left: {betLeft}</p>
-
-            {/* <div className="mt-[30px]">
-            </div> */}
-
-            {/* <div className="flex flex-wrap md:w-[150px] w-full  justify-between ">
-              <CountBox value={remainingDays} title={'Purchase Date'} />
-              <CountBox value={remainingDays} title={'Purchase Date'} />
-              <CountBox value={remainingDays} title={'Purchase Date'} />
-            </div> */}
+            <div className='flex flex-col gap-[10px]'>
+              <p className="font-epilogue font-medium text-[24px] leading-[30px] text-center text-white uppercase">Time Remaining:</p>
+              <p className="font-epilogue text-[50px] leading-[30px] text-center text-white uppercase">{time}</p>
+            </div>
+            <div className='flex flex-col gap-[10px]'>
+              <p className="flex items-center justify-center font-epilogue fount-medium text-[24px] leading-[30px] text-center text-[#808191]">Lottery Pool:
+                {
+                  pool ? pool : (<Loader />)
+                }
+              </p>
+              <p className="flex items-center justify-center font-epilogue fount-medium text-[24px] leading-[30px] text-center text-[#808191]">Entry:
+                {
+                  entry ? entry : (<Loader />)
+                }
+              </p>
+            </div>
           </div>
+
+
+          {/* <div className="mt-[30px]">
+            </div> */}
+
+          {/* <div className="flex flex-wrap md:w-[150px] w-full  justify-between ">
+              <CountBox value={remainingDays} title={'Purchase Date'} />
+              <CountBox value={remainingDays} title={'Purchase Date'} />
+              <CountBox value={remainingDays} title={'Purchase Date'} />
+            </div> */}
         </div>
 
       </div>

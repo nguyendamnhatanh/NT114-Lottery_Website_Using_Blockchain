@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export const useAxios = async (method, url, token = undefined, data = undefined) => {
+export const useAxios = async (method, url, token = '', data = '') => {
   const requestOption = {
     method: method,
     url: url,
@@ -18,7 +18,7 @@ export const useAxios = async (method, url, token = undefined, data = undefined)
     return response;
   } catch (error) {
     console.error("Error:", error?.response?.data);
-    return undefined;
+    return '';
   }
 }
 

@@ -3,8 +3,10 @@ import React, { useContext, createContext, useState, useEffect } from "react";
 import { useAddress, useContract, useMetamask, useContractWrite, useWallet } from '@thirdweb-dev/react';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { ethers } from "ethers";
-import { useAxios, useSmartContractAddress } from "../hook";
+import { useAxios, useSmartContractAddress, useTimeRemaining } from "../hook";
 import { parseAmount } from "../utils/parseAmount";
+import { convertTimestampToDateString } from '../utils';
+
 import Web3 from "web3";
 
 const StateContext = createContext();
@@ -20,26 +22,26 @@ const web3 = new Web3(ethereum);
 export const StateContextProvider = ({ children }) => {
     const address = useAddress();
     const connect = useMetamask();
+    const contractAddress = useSmartContractAddress();
+    const timeRemaining = useTimeRemaining();
+
     const [txHash, setTxHash] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isTxSuccess, setIsTxSuccess] = useState(0);
-    const [amount, setAmount] = useState(0);
-    // const [smartAddress, setSmartAddress] = useState('');
-    const [contract, setContract] = useState();
     const [luckNumber, setLuckNumber] = useState(0);
+    const [amount, setAmount] = useState(0);
+    const [smartAddress, setSmartAddress] = useState('');
 
-    const contract = await useSmartContractAddress();
-    console.log(contract)
 
-    // const wallet = useWallet();
+    useEffect(() => {   
 
-    useEffect(() => {
-        if (txHash) getTransactionStatus(txHash);
-        else return;
+        if (txHash) getTransactionStatus(txHash); else return;
         console.log('isTxSuccess', isTxSuccess);
         if (isTxSuccess === 1) getLuckyNumber(txHash, amount);
-
     }, [isTxSuccess, txHash])
+
+    const getTimeRemaining = () => {
+    }
 
     /// 0: failed, 1: success, 2: pending, random: processing
     const getTransactionStatus = async (txHash) => {
@@ -83,6 +85,7 @@ export const StateContextProvider = ({ children }) => {
             // getTransactionStatus('0xe143f860db1c2dd3a78b8c147fe2d96495b6e1ecd88802a37c4f3529164dfdc4');
             const ticketPrice = (amount - (1 / 1000) * amount);
             setAmount(ticketPrice);
+            console.log('contractAddress', contractAddress)
             await ethereum
                 .request({
                     method: 'eth_sendTransaction',
@@ -120,7 +123,8 @@ export const StateContextProvider = ({ children }) => {
             isLoading,
             setIsLoading,
             smartAddress,
-            setSmartAddress
+            setSmartAddress,
+            timeRemaining
         }}>
             {children}
         </StateContext.Provider>
