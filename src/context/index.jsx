@@ -23,7 +23,6 @@ export const StateContextProvider = ({ children }) => {
     const address = useAddress();
     const connect = useMetamask();
     const contractAddress = useSmartContractAddress();
-    const timeRemaining = useTimeRemaining();
 
     const [txHash, setTxHash] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -31,17 +30,14 @@ export const StateContextProvider = ({ children }) => {
     const [luckNumber, setLuckNumber] = useState(0);
     const [amount, setAmount] = useState(0);
     const [smartAddress, setSmartAddress] = useState('');
+    const [timeRemaining, setTimeRemaining] = useState('');
 
-
-    useEffect(() => {   
-
+    useEffect(() => {
         if (txHash) getTransactionStatus(txHash); else return;
         console.log('isTxSuccess', isTxSuccess);
         if (isTxSuccess === 1) getLuckyNumber(txHash, amount);
     }, [isTxSuccess, txHash])
 
-    const getTimeRemaining = () => {
-    }
 
     /// 0: failed, 1: success, 2: pending, random: processing
     const getTransactionStatus = async (txHash) => {

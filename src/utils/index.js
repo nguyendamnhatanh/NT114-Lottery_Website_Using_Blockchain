@@ -6,22 +6,14 @@ export const daysLeft = (timestamp) => {
 
 export const convertTimestampToDateString = (timestamp) => {
 
-  const now = Math.floor((new Date().getTime()) / 1000);
-  console.log('timestamp', timestamp)
-  console.log('now', now)
-
-  const futureDate = timestamp;
-
-  const timeleft = (futureDate - now) * 1000;
-
-  const days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+  const remainingTime = timestamp - Math.floor(Date.now() / 1000);
 
 
+  const seconds = Math.floor(remainingTime % 60);
+  const minutes = Math.floor((remainingTime / 60) % 60);
+  const hours = Math.floor((remainingTime / (60 * 60)) % 24);
+  const days = Math.floor(remainingTime / (60 * 60 * 24));
   const dateString = `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
   return dateString;
 };
 
