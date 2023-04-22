@@ -50,9 +50,6 @@ const PaymentController = {
       );
 
       let fisrtTransaction = histories.find((item) => item.hash === txHash);
-      console.log('Transaction Hash: ' + fisrtTransaction.hash);
-      console.log('Wei number of amount: ' + fisrtTransaction.value);
-      console.log('ETH Form: ' + readableValue(fisrtTransaction.value));
       let invalidTransaction =
         readableValue(fisrtTransaction.value) < ticketPrice;
 
@@ -63,6 +60,7 @@ const PaymentController = {
       }
 
       if (hasTransaction) {
+        console.log("excecuted")
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
         let expireDate = Math.floor(
           (new Date().getTime() + 7 * 24 * 60 * 60 * 1000) / 1000
