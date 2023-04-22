@@ -62,12 +62,11 @@ const PaymentController = {
         });
       }
 
-      let expireDate = Math.floor(
-        (new Date().getTime() + 7 * 24 * 60 * 60 * 1000) / 1000
-      );
-
       if (hasTransaction) {
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
+        let expireDate = Math.floor(
+          (new Date().getTime() + 7 * 24 * 60 * 60 * 1000) / 1000
+        );  
         await contract.addTicket(player, lotteryNumber, expireDate);
         res.status(201).json({
           message: 'Create Lottery Successfully',
