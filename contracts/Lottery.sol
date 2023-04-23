@@ -7,12 +7,12 @@ import "hardhat/console.sol";
 contract Lottery {
     address public owner;
     address payable[] public players;
+    uint[] winner;
 
     struct Ticket {
         address player;
         uint lotteryCode;
         uint256 createDate;
-        uint256 expireDate;
     }
 
     Ticket[] currentTicket;
@@ -30,7 +30,7 @@ contract Lottery {
     }
 
     function addTicket(address player, uint lotteryCode, uint256 expireDate) public {
-        currentTicket.push(Ticket(player, lotteryCode ,block.timestamp, expireDate));
+        currentTicket.push(Ticket(player, lotteryCode ,block.timestamp));
     }
 
     function getCurrentTickets() public view returns (Ticket[] memory) {
