@@ -12,10 +12,15 @@ const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
 const contract = new ethers.Contract(contractAddress, abi, signer);
 
+const etherscanKey = process.env.ETHERSCAN_KEY;
+
 const PaymentController = {
   getAllTransactions: async (req, res) => {
     try {
-      let etherscanProvider = new ethers.providers.EtherscanProvider('sepolia');
+      let etherscanProvider = new ethers.providers.EtherscanProvider(
+        'sepolia',
+        etherscanKey
+      );
       const histories = await etherscanProvider.getHistory(contractAddress);
       if (histories) {
         res.status(200).json({
@@ -30,11 +35,15 @@ const PaymentController = {
   },
   generateLottery: async (req, res) => {
     try {
-      let etherscanProvider = new ethers.providers.EtherscanProvider('sepolia');
+      let etherscanProvider = new ethers.providers.EtherscanProvider(
+        'sepolia',
+        etherscanKey
+      );
       const histories = await etherscanProvider.getHistory(contractAddress);
 
       let txHash = req.body.txHash;
       let ticketPrice = req.body.ticketPrice;
+      let player = req.body.playerAddress;
 
       let noTransaction = !histories.some((item) => item.hash === txHash);
       if (noTransaction) {
@@ -49,9 +58,6 @@ const PaymentController = {
       );
 
       let fisrtTransaction = histories.find((item) => item.hash === txHash);
-      console.log('Transaction Hash: ' + fisrtTransaction.hash);
-      console.log('Wei number of amount: ' + fisrtTransaction.value);
-      console.log('ETH Form: ' + readableValue(fisrtTransaction.value));
       let invalidTransaction =
         readableValue(fisrtTransaction.value) < ticketPrice;
 
@@ -62,11 +68,13 @@ const PaymentController = {
       }
 
       if (hasTransaction) {
+        console.log('excecuted');
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
-        await contract.addTicket(lotteryNumber);
+        await contract.addTicket(player, lotteryNumber, expireDate);
         res.status(201).json({
           message: 'Create Lottery Successfully',
           lottery: lotteryNumber,
+          expireDate: expireDate,
         });
       }
     } catch (error) {
@@ -102,6 +110,23 @@ const PaymentController = {
     } else {
       res.status(500).json({
         message: 'No Address Found',
+      });
+    }
+  },
+  getEntries: async (req, res) => {
+    const entries = await contract.getAllPlayer();
+    let unique = entries.filter(
+      (value, index, array) => array.indexOf(value) === index
+    );
+
+    if (unique.length > 0) {
+      res.status(200).json({
+        message: 'success',
+        players: unique,
+      });
+    } else {
+      res.status(204).json({
+        message: 'No Player in the lobby',
       });
     }
   },
