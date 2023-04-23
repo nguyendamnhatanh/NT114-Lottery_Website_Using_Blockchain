@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
-import { CountBox, CustomButton, Loader } from '../components';
+import { CountBox, CustomButton, Loader, DisplayLuckyNumber } from '../components';
 import { calculateBarPercentage, daysLeft } from '../utils';
 import { thirdweb, pickluck } from '../assets';
 
@@ -17,13 +17,13 @@ const LotteryRoom = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const { donate, getDonations, contract, address, smartAddress } = useStateContext();
+  const { donate, getDonations, contract, address, smartAddress, sendTransaction } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
-  const [donators, setDonators] = useState([]);
+  // const [donators, setDonators] = useState([]);
 
 
-  const ticketPrice = 0.03;
+  const ticketPrice = 0.01;
   const betLeft = 5;
   const pool = usePool();
   const timeRemaining = useTimeRemaining();
@@ -80,17 +80,26 @@ const LotteryRoom = () => {
                         <img src={pickluck} alt="image" className="w-[200px] h-[200px] object-contain " />
                       )}
                       styles="bg-transparent border-[1px] border-[#2C3333]"
-                      handleClick={() => { }}
+                      handleClick={async () => {
+                        try {
+                          console.log('click')
+                          setIsLoading(true);
+                          await sendTransaction('0.001')
+                          setIsLoading(false);
+
+                        } catch (error) {
+                          console.log(error);
+                          setIsLoading(false);
+                        }
+                      }}
                     />
                   </div>
                 </div>
               </div>
             </div>
-            {/* <div className="flex flex-wrap md:w-[150px] w-full  justify-between ">
-              <CountBox value={remainingDays} title={'Purchase Date'} />
-              <CountBox value={remainingDays} title={'Purchase Date'} />
-              <CountBox value={remainingDays} title={'Purchase Date'} />
-            </div> */}
+            <div className="flex flex-wrap md:w-[150px] w-full  justify-between ">
+              <DisplayLuckyNumber number = {123}/>
+            </div>
           </div>
         </div>
 
@@ -100,18 +109,16 @@ const LotteryRoom = () => {
               <p className="font-epilogue font-medium text-[24px] leading-[30px] text-center text-white uppercase">Time Remaining:</p>
               <div className="font-epilogue text-[50px] leading-[30px] text-center text-white uppercase">
                 {
-                timeRemaining
-                  ? <CountBox time={timeRemaining} />
-                  : <Loader />
-                  }
+                  timeRemaining
+                    ? <CountBox time={timeRemaining} />
+                    : <Loader />
+                }
               </div>
             </div>
             <div className='flex flex-col gap-[10px]'>
-              <div className="flex items-center justify-center font-epilogue fount-medium text-[24px] leading-[30px] text-center text-[#808191]">Lottery Pool:
-                {pool ? pool : (<Loader />)}
+              <div className="flex items-center justify-center font-epilogue fount-medium text-[24px] leading-[30px] text-center text-[#808191]">Lottery Pool: {pool ? pool : (<Loader />)}
               </div>
-              <div className="flex items-center justify-center font-epilogue fount-medium text-[24px] leading-[30px] text-center text-[#808191]">Entry:
-                {entry ? entry : (<Loader />)}
+              <div className="flex items-center justify-center font-epilogue fount-medium text-[24px] leading-[30px] text-center text-[#808191]">Entry: {entry ? entry.length : (<Loader />)}
               </div>
             </div>
           </div>
@@ -130,7 +137,7 @@ const LotteryRoom = () => {
       </div>
 
       <div className="flex-[2] flex flex-col gap-[40px]">
-        <div>
+        {/* <div>
           <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">Creator</h4>
 
           <div className="mt-[20px] flex flex-row items-center flex-wrap gap-[14px]">
@@ -142,20 +149,20 @@ const LotteryRoom = () => {
               <p className="mt-[4px] font-epilogue font-normal text-[12px] text-[#808191]">10 Campaigns</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
 
-        <div>
-          <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">Donators</h4>
+        <div className="mt-[60px] ">
+          <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">Player</h4>
 
           <div className="mt-[20px] flex flex-col gap-4">
-            {donators.length > 0 ? donators.map((item, index) => (
-              <div key={`${'item.donator'}-${'index'}`} className="flex justify-between items-center gap-4">
-                <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">{'index + 1'}. {'item.donator'}</p>
-                <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">{'item.donation'}</p>
+            {entry.length > 0 ? entry.map((item, index) => (
+              <div key={`${item}-${index}`} className="flex justify-between items-center gap-4">
+                <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">{index + 1}. {item}</p>
+                {/* <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">{item.donation}</p> */}
               </div>
             )) : (
-              <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">No donators yet. Be the first one!</p>
+              <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">No player yet. Be the first one!</p>
             )}
           </div>
         </div>

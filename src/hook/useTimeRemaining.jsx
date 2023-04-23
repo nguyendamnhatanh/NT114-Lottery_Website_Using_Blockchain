@@ -8,22 +8,22 @@ import { useAxios } from "./useAxios";
 export const useTimeRemaining = () => {
     const [Result, setResult] = useState();
 
-    const getResult = async () => {
-        try {
-            const response = await useAxios('GET', 'http://test.fkmdev.site/api/getExpire');
-            setResult(response?.data?.remain);
-        } catch (error) {
-            console.error(error);
-            setResult('');
-        }
-    };
+    // const getResult = async () => {
+    //     try {
+    //         // const response = await useAxios('GET', 'http://test.fkmdev.site/api/getExpire');
+    //         // setResult(response?.data?.remain);
+    //     } catch (error) {
+    //         console.error(error);
+    //         setResult('');
+    //     }
+    // };
 
-    useEffect(() => {
-        if (!Result) getResult()
-        else return;
-    }, [Result]);
+    // useEffect(() => {
+    //     if (!Result) getResult()
+    //     else return;
+    // }, [Result]);
 
-    return Result;
+    return 1682579131;
 }
 
 export default useTimeRemaining;

@@ -15,7 +15,7 @@ export const useEntry = () => {
         try {
             // setIsLoading(true);
             const response = await useAxios('GET', 'http://test.fkmdev.site/api/getEntries');
-            setResult(response?.data?.players.length);
+            setResult(response?.data?.players);
             // setIsLoading(false);
         } catch (error) {
             setIsLoading(false);

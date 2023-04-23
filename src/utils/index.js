@@ -5,10 +5,7 @@ export const daysLeft = (timestamp) => {
 };
 
 export const convertTimestampToDateString = (timestamp) => {
-
   const remainingTime = timestamp - Math.floor(Date.now() / 1000);
-
-
   const seconds = Math.floor(remainingTime % 60);
   const minutes = Math.floor((remainingTime / 60) % 60);
   const hours = Math.floor((remainingTime / (60 * 60)) % 24);
@@ -25,9 +22,7 @@ export const calculateBarPercentage = (goal, raisedAmount) => {
 export const checkIfImage = (url, callback) => {
   const img = new Image();
   img.src = url;
-
   if (img.complete) callback(true);
-
   img.onload = () => callback(true);
   img.onerror = () => callback(false);
 };
