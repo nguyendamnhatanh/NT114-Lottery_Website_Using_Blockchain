@@ -1,7 +1,6 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
 const { readableValue } = require('../utils/format');
-const res = require('express/lib/response');
 dotenv.config();
 
 const abi = require('../../artifacts/contracts/Lottery.sol/Lottery.json').abi;
