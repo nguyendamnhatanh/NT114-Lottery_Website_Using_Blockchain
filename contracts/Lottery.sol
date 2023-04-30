@@ -7,7 +7,6 @@ import "hardhat/console.sol";
 contract Lottery {
     address public owner;
     address payable[] public players;
-    uint[] winner;
 
     struct Ticket {
         address player;
@@ -29,7 +28,7 @@ contract Lottery {
         owner = msg.sender;
     }
 
-    function addTicket(address player, uint lotteryCode, uint256 expireDate) public {
+    function addTicket(address player, uint lotteryCode) public {
         currentTicket.push(Ticket(player, lotteryCode ,block.timestamp));
     }
 
@@ -43,6 +42,18 @@ contract Lottery {
     
     function getAllPlayer() public view returns (address payable[] memory) {
         return players;
+    }
+
+    function getContractOwner() public view returns (address) {
+        return owner;
+    }
+
+    function removeAllTicket() public {
+        delete currentTicket;
+    }
+
+    function getNumberOfTicket() public view returns(uint) {
+        return currentTicket.length;
     }
 
     function destroy() public {

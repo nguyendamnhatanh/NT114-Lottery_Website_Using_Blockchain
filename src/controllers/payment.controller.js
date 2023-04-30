@@ -1,6 +1,7 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
 const { readableValue } = require('../utils/format');
+const res = require('express/lib/response');
 dotenv.config();
 
 const abi = require('../../artifacts/contracts/Lottery.sol/Lottery.json').abi;
@@ -13,6 +14,10 @@ const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 const contract = new ethers.Contract(contractAddress, abi, signer);
 
 const etherscanKey = process.env.ETHERSCAN_KEY;
+
+provider.on('pending', (tx) => {
+  console.log('New pending transaction:', tx);
+});
 
 const PaymentController = {
   getAllTransactions: async (req, res) => {
@@ -35,46 +40,27 @@ const PaymentController = {
   },
   generateLottery: async (req, res) => {
     try {
-      let etherscanProvider = new ethers.providers.EtherscanProvider(
-        'sepolia',
-        etherscanKey
+      let wssProvider = new ethers.providers.WebSocketProvider(
+        'wss://eth-sepolia.g.alchemy.com/v2/PaYQty97bkPd0uDjTGjWX0eB8zAblAQE',
+        'sepolia'
       );
-      const histories = await etherscanProvider.getHistory(contractAddress);
 
       let txHash = req.body.txHash;
-      let ticketPrice = req.body.ticketPrice;
       let player = req.body.playerAddress;
 
-      let noTransaction = !histories.some((item) => item.hash === txHash);
-      if (noTransaction) {
-        res.status(429).json({
-          message: 'No Transaction Found',
-        });
-      }
+      let transaction = await wssProvider.getTransaction(txHash);
 
-      const hasTransaction = histories.some(
-        (item) =>
-          item.hash === txHash && readableValue(item.value) >= ticketPrice
-      );
-
-      let fisrtTransaction = histories.find((item) => item.hash === txHash);
-      let invalidTransaction =
-        readableValue(fisrtTransaction.value) < ticketPrice;
-
-      if (invalidTransaction) {
-        res.status(429).json({
-          message: 'insufficient funds',
-        });
-      }
-
-      if (hasTransaction) {
-        console.log('excecuted');
+      if (transaction) {
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
-        await contract.addTicket(player, lotteryNumber, expireDate);
+        await contract.addTicket(player, lotteryNumber);
         res.status(201).json({
           message: 'Create Lottery Successfully',
           lottery: lotteryNumber,
-          expireDate: expireDate,
+        });
+      }
+      else {
+        res.status(422).json({
+          message: 'No transaction found',
         });
       }
     } catch (error) {
@@ -118,7 +104,6 @@ const PaymentController = {
     let unique = entries.filter(
       (value, index, array) => array.indexOf(value) === index
     );
-
     if (unique.length > 0) {
       res.status(200).json({
         message: 'success',
@@ -128,6 +113,18 @@ const PaymentController = {
       res.status(204).json({
         message: 'No Player in the lobby',
       });
+    }
+  },
+  destroy: async (req, res) => {
+    try {
+      await contract.destroy()
+      res.status(200).json({
+        message: 'success'
+      })
+    } catch (error) {
+      res.status(500).json({
+        error: error + ''
+      })
     }
   },
 };
