@@ -1,42 +1,9 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
-const { readableValue } = require('../utils/format');
+const { contract } = require('../utils/contract');
 dotenv.config();
 
-const abi = require('../../artifacts/contracts/Lottery.sol/Lottery.json').abi;
-
-const contractAddress = process.env.CONTRACT_ADDRESS;
-
-const provider = new ethers.providers.JsonRpcProvider(process.env.APP_URL);
-const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-
-const contract = new ethers.Contract(contractAddress, abi, signer);
-
-const etherscanKey = process.env.ETHERSCAN_KEY;
-
-provider.on('pending', (tx) => {
-  console.log('New pending transaction:', tx);
-});
-
 const PaymentController = {
-  getAllTransactions: async (req, res) => {
-    try {
-      let etherscanProvider = new ethers.providers.EtherscanProvider(
-        'sepolia',
-        etherscanKey
-      );
-      const histories = await etherscanProvider.getHistory(contractAddress);
-      if (histories) {
-        res.status(200).json({
-          transactions: histories,
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: error + '',
-      });
-    }
-  },
   generateLottery: async (req, res) => {
     try {
       let wssProvider = new ethers.providers.WebSocketProvider(
@@ -56,8 +23,7 @@ const PaymentController = {
           message: 'Create Lottery Successfully',
           lottery: lotteryNumber,
         });
-      }
-      else {
+      } else {
         res.status(422).json({
           message: 'No transaction found',
         });
@@ -66,64 +32,6 @@ const PaymentController = {
       res.status(500).json({
         message: error + '',
       });
-    }
-  },
-  getLotteryPool: async (req, res) => {
-    try {
-      const poolWei = await contract.getCurrentPoolBalance();
-      const poolETH = readableValue(poolWei);
-
-      if (poolETH) {
-        res.status(200).json({
-          message: 'success',
-          pool: poolETH,
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        error: error + '',
-      });
-    }
-  },
-  getAddress: (req, res) => {
-    const address = process.env.CONTRACT_ADDRESS;
-    if (address) {
-      res.status(200).json({
-        message: 'success',
-        address: address,
-      });
-    } else {
-      res.status(500).json({
-        message: 'No Address Found',
-      });
-    }
-  },
-  getEntries: async (req, res) => {
-    const entries = await contract.getAllPlayer();
-    let unique = entries.filter(
-      (value, index, array) => array.indexOf(value) === index
-    );
-    if (unique.length > 0) {
-      res.status(200).json({
-        message: 'success',
-        players: unique,
-      });
-    } else {
-      res.status(204).json({
-        message: 'No Player in the lobby',
-      });
-    }
-  },
-  destroy: async (req, res) => {
-    try {
-      await contract.destroy()
-      res.status(200).json({
-        message: 'success'
-      })
-    } catch (error) {
-      res.status(500).json({
-        error: error + ''
-      })
     }
   },
 };
