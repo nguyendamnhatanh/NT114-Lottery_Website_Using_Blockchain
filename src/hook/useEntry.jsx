@@ -5,29 +5,28 @@ import { useAxios } from "./useAxios";
 
 import { useStateContext } from '../context';
 
-
 export const useEntry = () => {
-    const { setIsLoading } = useStateContext();
+    const { setIsLoading, address } = useStateContext();
 
-    const [Result, setResult] = useState('');
+    const [Result, setResult] = useState();
 
     const getResult = async () => {
         try {
-            // setIsLoading(true);
             const response = await useAxios('GET', 'http://test.fkmdev.site/api/getEntries');
+            // console.log('response ', response);
             setResult(response?.data?.players);
-            // setIsLoading(false);
+
         } catch (error) {
-            setIsLoading(false);
-            setResult('');
+
             console.error(error);
+            setResult([]);
         }
     };
 
     useEffect(() => {
         if (!Result) getResult()
         else return;
-    }, [Result]);
+    }, [Result, address]);
 
     return Result;
 }

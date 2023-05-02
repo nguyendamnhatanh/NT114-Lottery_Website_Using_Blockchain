@@ -13,7 +13,7 @@ import { LotteryRoom } from '.';
 
 const TestFeat = () => {
   // Creating a transaction param
-  const { address, connect, sendTransaction, txHash, isLoading, setIsLoading } = useStateContext();
+  // const { address, connect, sendTransaction, txHash, isLoading, setIsLoading } = useStateContext();
 
 
   return (

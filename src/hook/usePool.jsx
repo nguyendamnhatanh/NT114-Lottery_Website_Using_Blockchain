@@ -2,11 +2,13 @@
 import { useEffect, useState } from "react";
 
 import { useAxios } from "./useAxios";
+import { useStateContext } from "../context";
 
 
 
-export const useTimeRemaining = () => {
+export const usePool = () => {
     const [Result, setResult] = useState();
+    const { address } = useStateContext();
 
     const getResult = async () => {
         try {
@@ -21,9 +23,9 @@ export const useTimeRemaining = () => {
     useEffect(() => {
         if (!Result) getResult()
         else return;
-    }, [Result]);
+    }, [Result, address]);
 
     return Result;
 }
 
-export default useTimeRemaining;
+export default usePool;

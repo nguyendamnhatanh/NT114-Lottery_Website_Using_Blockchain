@@ -26,3 +26,20 @@ export const checkIfImage = (url, callback) => {
   img.onload = () => callback(true);
   img.onerror = () => callback(false);
 };
+
+export const getTicketData = (response) => {
+  const result = [];
+  const ticketData = response.map((ticket) => {
+    const luckyNumber = ticket.luckyNumber;
+    const createDate = ticket.createDate;
+    const ticketData = {
+      luckyNumber,
+      createDate,
+    };
+    result.push(ticketData);
+  });
+  console.log('result', result)
+  return result;
+};
+
+

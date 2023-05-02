@@ -1,8 +1,4 @@
-
-
-
-
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
@@ -11,17 +7,19 @@ import { CountBox, CustomButton, Loader, DisplayLuckyNumber } from '../component
 import { calculateBarPercentage, daysLeft } from '../utils';
 import { thirdweb, pickluck } from '../assets';
 
+import dummyData from '../utils/dummyData';
+import dummyEntry from '../utils/dummyEntry';
+
 import { useSmartContractAddress, useTimeRemaining, usePool, useEntry } from "../hook";
 
 const LotteryRoom = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const { donate, getDonations, contract, address, smartAddress, sendTransaction } = useStateContext();
+  const { contract, address, smartAddress, sendTransaction } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
   // const [donators, setDonators] = useState([]);
-
 
   const ticketPrice = 0.01;
   const betLeft = 5;
@@ -29,6 +27,8 @@ const LotteryRoom = () => {
   const timeRemaining = useTimeRemaining();
   const entry = useEntry();
   const img = 'https://www.minhngoc.net.vn/upload/images/veso/bth_20-04-2023.jpg';
+
+  const shouldRun = useRef(0)
 
   // const fetchDonators = async () => {
   //   const data = await getDonations(state.pId);
@@ -46,6 +46,15 @@ const LotteryRoom = () => {
   //   navigate('/')
   //   setIsLoading(false);
   // }
+
+  useEffect(() => {
+    if (shouldRun.current === 0) {
+      console.log('shouldRun.current ', shouldRun.current);
+      shouldRun.current++;
+      return;
+    }
+    else { console.log('shouldRun.current bigger than 0', shouldRun.current); return; }
+  }, []);
 
   return (
     <div>
@@ -82,10 +91,10 @@ const LotteryRoom = () => {
                       styles="bg-transparent border-[1px] border-[#2C3333]"
                       handleClick={async () => {
                         try {
-                          console.log('click')
                           setIsLoading(true);
                           await sendTransaction('0.001')
                           setIsLoading(false);
+                          window.location.reload();
 
                         } catch (error) {
                           console.log(error);
@@ -97,9 +106,10 @@ const LotteryRoom = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap md:w-[150px] w-full  justify-between ">
-              <DisplayLuckyNumber number = {123}/>
-            </div>
+            {
+              // Display Lucky Number, data good -> display, bad -> display nothing
+              <DisplayLuckyNumber />
+            }
           </div>
         </div>
 
@@ -151,24 +161,34 @@ const LotteryRoom = () => {
           </div>
         </div> */}
 
-
         <div className="mt-[60px] ">
           <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">Player</h4>
 
           <div className="mt-[20px] flex flex-col gap-4">
-            {entry.length > 0 ? entry.map((item, index) => (
-              <div key={`${item}-${index}`} className="flex justify-between items-center gap-4">
-                <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">{index + 1}. {item}</p>
-                {/* <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">{item.donation}</p> */}
-              </div>
-            )) : (
-              <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">No player yet. Be the first one!</p>
-            )}
+            {
+              // // example dummy data
+              // dummyEntry.reverse().map((item, index) => (
+              //   <div key={`${index.player}`} className="flex justify-between items-center gap-4">
+              //     <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">{index + 1}. {item.player}</p>
+              //   </div>
+              // ))
+
+              entry ? (entry.length > 0 ? entry.map((player, index) => (
+                <div key={`${player}-${index}`} className="flex justify-between items-center gap-4">
+                  <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">{index + 1}. {player}</p>
+                  {/* <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">{item.donation}</p> */}
+                </div>
+              ))
+                :
+                <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">No player yet. Be the first one!</p>
+              ) : <Loader />
+
+            }
           </div>
         </div>
       </div>
 
-    </div>
+    </div >
   )
 }
 

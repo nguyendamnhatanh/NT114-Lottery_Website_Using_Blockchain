@@ -7,8 +7,6 @@ import { navlinks } from '../constants'
 // import { connect } from 'react-redux'
 import { useStateContext } from '../context'
 
-const address = '0x...abc'
-
 const Navbar = () => {
 
   const navigate = useNavigate();

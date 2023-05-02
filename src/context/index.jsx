@@ -3,7 +3,7 @@ import React, { useContext, createContext, useState, useEffect } from "react";
 import { useAddress, useContract, useMetamask, useContractWrite, useWallet } from '@thirdweb-dev/react';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { ethers } from "ethers";
-import { useAxios, useSmartContractAddress, useTimeRemaining } from "../hook";
+import { useAxios, useSmartContractAddress, useTimeRemaining, useUserTicket } from "../hook";
 import { parseAmount } from "../utils/parseAmount";
 import { convertTimestampToDateString } from '../utils';
 
@@ -20,9 +20,6 @@ const { ethereum } = window;
 const web3 = new Web3(ethereum);
 
 export const StateContextProvider = ({ children }) => {
-    const playerAddress = useAddress();
-    const connect = useMetamask();
-    const contractAddress = useSmartContractAddress();
 
     const [txHash, setTxHash] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -30,20 +27,38 @@ export const StateContextProvider = ({ children }) => {
     const [luckNumber, setLuckNumber] = useState(0);
     const [amount, setAmount] = useState(0);
     const [smartAddress, setSmartAddress] = useState('');
+    const [ticket, setTicket] = useState([]);
     const [timeRemaining, setTimeRemaining] = useState(1682579131);
 
+    const playerAddress = useAddress();
+    const connect = useMetamask();
+    const contractAddress = useSmartContractAddress();
+    const userTicket = useUserTicket(playerAddress, setIsLoading);
+
     useEffect(() => {
+        if (!playerAddress) { console.log('Wallet not connected, trying connecting'); ConnectWallet(); }
+        else console.log(playerAddress);
         if (txHash) getTransactionStatus(txHash); else return;
-        console.log('isTxSuccess', isTxSuccess);
         if (isTxSuccess === 1) getLuckyNumber(txHash, amount);
-    }, [isTxSuccess, txHash])
+    }, [isTxSuccess, txHash, playerAddress])
+
+    useEffect(() => {
+        if (playerAddress) setTicket(userTicket);
+    }, [playerAddress])
 
     const BuyTicket = async (amount) => {
         try {
             await sendTransaction(amount);
-
         } catch (error) { }
     }
+    const ConnectWallet = async () => {
+        try {
+            await connect();
+        } catch (error) {
+            console.log('ConnectWallet error', error);
+        }
+    }
+
 
     /// 0: failed, 1: success, 2: pending, random: processing
     // const getTransactionStatus = async (txHash) => {
@@ -122,7 +137,8 @@ export const StateContextProvider = ({ children }) => {
             setIsLoading,
             smartAddress,
             setSmartAddress,
-            timeRemaining
+            timeRemaining,
+            userTicket
         }}>
             {children}
         </StateContext.Provider>
