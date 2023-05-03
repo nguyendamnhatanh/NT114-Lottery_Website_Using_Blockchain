@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
-import { CountBox, CustomButton, Loader, DisplayLuckyNumber } from '../components';
+import { CountBox, CustomButton, Loader, DisplayLuckyNumber, Timer } from '../components';
 import { calculateBarPercentage, daysLeft } from '../utils';
 import { thirdweb, pickluck } from '../assets';
 
@@ -16,18 +16,18 @@ const LotteryRoom = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const { contract, address, smartAddress, sendTransaction } = useStateContext();
+  const { contract, address, smartAddress, sendTransaction, BuyTicket } = useStateContext();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState('');
   // const [donators, setDonators] = useState([]);
 
-  const ticketPrice = 0.01;
+  const ticketPrice = (0.01).toString();
   const betLeft = 5;
   const pool = usePool();
   const timeRemaining = useTimeRemaining();
   const entry = useEntry();
   const img = 'https://www.minhngoc.net.vn/upload/images/veso/bth_20-04-2023.jpg';
-
+  const transactionTime = 0;
   const shouldRun = useRef(0)
 
   // const fetchDonators = async () => {
@@ -49,16 +49,24 @@ const LotteryRoom = () => {
 
   useEffect(() => {
     if (shouldRun.current === 0) {
-      console.log('shouldRun.current ', shouldRun.current);
+      // console.log('shouldRun.current ', shouldRun.current);
       shouldRun.current++;
       return;
     }
-    else { console.log('shouldRun.current bigger than 0', shouldRun.current); return; }
+    else {
+      //  console.log('shouldRun.current bigger than 0', shouldRun.current); 
+      return;
+    }
   }, []);
 
   return (
     <div>
-      {isLoading && <Loader />}
+      {isLoading && (
+        <div className="flex flex-col ">
+          <Loader />
+          <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-white uppercase">Sending your transaction... {<Timer time={transactionTime} />}s</p>
+        </div>
+      )}
       <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
         <div className="flex-1 flex-col ">
 
@@ -91,11 +99,9 @@ const LotteryRoom = () => {
                       styles="bg-transparent border-[1px] border-[#2C3333]"
                       handleClick={async () => {
                         try {
-                          setIsLoading(true);
-                          await sendTransaction('0.001')
-                          setIsLoading(false);
+                          await BuyTicket(ticketPrice);
+                          await new Promise(resolve => setTimeout(resolve, 5000));
                           window.location.reload();
-
                         } catch (error) {
                           console.log(error);
                           setIsLoading(false);

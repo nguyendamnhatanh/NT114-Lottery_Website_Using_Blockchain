@@ -10,7 +10,7 @@ export const useSmartContractAddress = () => {
     const [smartAddress, setSmartAddress] = useState();
     const getSmartAddress = async () => {
         try {
-            const response = await useAxios('GET', 'http://test.fkmdev.site/api/getAddress');
+            const response = await useAxios('GET', 'https://test.fkmdev.site/api/getAddress');
             setSmartAddress(response?.data?.address);
         } catch (error) {
             console.error(error);

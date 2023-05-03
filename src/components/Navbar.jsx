@@ -29,7 +29,11 @@ const Navbar = () => {
             title={address ? address : 'Connect'}
             styles={address ? 'bg-[#8c6dfd]' : 'bg-[#1dc071]'}
             handleClick={() => {
-              if (address) console.log('Address: ', address);
+              if (address) 
+              {
+
+                // console.log('Address: ', address);
+              }
               else connect();
             }}
           />

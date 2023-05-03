@@ -10,7 +10,7 @@ export const useTimeRemaining = () => {
 
     // const getResult = async () => {
     //     try {
-    //         // const response = await useAxios('GET', 'http://test.fkmdev.site/api/getExpire');
+    //         // const response = await useAxios('GET', 'https://test.fkmdev.site/api/getExpire');
     //         // setResult(response?.data?.remain);
     //     } catch (error) {
     //         console.error(error);

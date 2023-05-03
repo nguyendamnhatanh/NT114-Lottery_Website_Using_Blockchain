@@ -12,7 +12,7 @@ export const usePool = () => {
 
     const getResult = async () => {
         try {
-            const response = await useAxios('GET', 'http://test.fkmdev.site/api/getPool');
+            const response = await useAxios('GET', 'https://test.fkmdev.site/api/getPool');
             setResult(response?.data?.pool);
         } catch (error) {
             console.error(error);

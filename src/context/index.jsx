@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useState, useEffect } from "react";
+import React, { useContext, createContext, useState, useEffect, useCallback } from "react";
 
 import { useAddress, useContract, useMetamask, useContractWrite, useWallet } from '@thirdweb-dev/react';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
@@ -16,8 +16,7 @@ const StateContext = createContext();
 // const contractAddress = useAddress();
 
 
-const { ethereum } = window;
-const web3 = new Web3(ethereum);
+
 
 export const StateContextProvider = ({ children }) => {
 
@@ -35,9 +34,16 @@ export const StateContextProvider = ({ children }) => {
     const contractAddress = useSmartContractAddress();
     const userTicket = useUserTicket(playerAddress, setIsLoading);
 
+
+
     useEffect(() => {
-        if (!playerAddress) { console.log('Wallet not connected, trying connecting'); ConnectWallet(); }
-        else console.log(playerAddress);
+        if (!playerAddress) {
+            // console.log('Wallet not connected, trying connecting');
+            ConnectWallet();
+        }
+        else {
+            // console.log(playerAddress); 
+        }
         if (txHash) getTransactionStatus(txHash); else return;
         if (isTxSuccess === 1) getLuckyNumber(txHash, amount);
     }, [isTxSuccess, txHash, playerAddress])
@@ -48,17 +54,48 @@ export const StateContextProvider = ({ children }) => {
 
     const BuyTicket = async (amount) => {
         try {
+            setIsLoading(true);
             await sendTransaction(amount);
-        } catch (error) { }
-    }
-    const ConnectWallet = async () => {
-        try {
-            await connect();
+            setIsLoading(false);
         } catch (error) {
-            console.log('ConnectWallet error', error);
+            // console.log('BuyTicket error', error);
+            setIsLoading(false);
         }
     }
+    // const ConnectWallet = async () => {
+    //     try {
+    //         await connect();
+    //     } catch (error) {
+    //         console.log('ConnectWallet error', error);
+    //     }
+    // }
+    const ConnectWallet = useCallback(async () => {
+        const handleConnect = () => {
+            // setConnected(true);
 
+            if (window.ethereum) {
+                window.ethereum.on("accountsChanged", checkAccountConnected);
+            }
+        };
+
+        const handleError = () => {
+            // setConnected(false);
+        };
+
+        try {
+            if (window.ethereum) {
+                window.web3 = new Web3(window.ethereum);
+                await window.ethereum.enable();
+            } else if (window.web3) {
+                window.web3 = new Web3(window.web3.currentProvider);
+            } else {
+                throw new Error("Browser does not support Ethereum");
+            }
+            handleConnect();
+        } catch (e) {
+            handleError();
+        }
+    }, []);
 
     /// 0: failed, 1: success, 2: pending, random: processing
     // const getTransactionStatus = async (txHash) => {
@@ -82,8 +119,8 @@ export const StateContextProvider = ({ children }) => {
 
     const getLuckyNumber = async (txHash, amount) => {
         try {
-            const response = await useAxios('POST', 'http://test.fkmdev.site/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
-            console.log('txHash', txHash)
+            const response = await useAxios('POST', 'https://test.fkmdev.site/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
+            // console.log('txHash', txHash)
             // .then((res) => {
             //     console.log(res.data)
             //     setLuckNumber(res.data.luckyNumber);
@@ -99,22 +136,24 @@ export const StateContextProvider = ({ children }) => {
 
     const sendTransaction = async (amount) => {
         try {
-            if (playerAddress) console.log('Wallet Connected ✓ ', playerAddress);
+            if (playerAddress) {
+                // console.log('Wallet Connected ✓ ', playerAddress);
+            }
             else await connect();
             // getTransactionStatus('0xe143f860db1c2dd3a78b8c147fe2d96495b6e1ecd88802a37c4f3529164dfdc4');
             const ticketPrice = (amount);
             setAmount(ticketPrice);
-            console.log('contractAddress', contractAddress)
+            // console.log('contractAddress', contractAddress)
 
             const txHash = await web3.eth.sendTransaction({
                 from: playerAddress, // The user's active address.
                 to: contractAddress, // Required except during contract publications.
                 value: parseAmount(amount), // Only required to send ether to the recipient from the initiating external account.         
             })
-            console.log(txHash);
+            // console.log(txHash);
             // setTxHash(txHash.transactionHash);
             const lottery = await getLuckyNumber(txHash.transactionHash, ticketPrice);
-            console.log('lottery', lottery);
+            // console.log('lottery', lottery);
 
 
         } catch (error) {
@@ -138,7 +177,8 @@ export const StateContextProvider = ({ children }) => {
             smartAddress,
             setSmartAddress,
             timeRemaining,
-            userTicket
+            userTicket,
+            BuyTicket
         }}>
             {children}
         </StateContext.Provider>

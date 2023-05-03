@@ -12,7 +12,7 @@ export const useEntry = () => {
 
     const getResult = async () => {
         try {
-            const response = await useAxios('GET', 'http://test.fkmdev.site/api/getEntries');
+            const response = await useAxios('GET', 'https://test.fkmdev.site/api/getEntries');
             // console.log('response ', response);
             setResult(response?.data?.players);
 

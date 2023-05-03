@@ -13,8 +13,8 @@ export const useUserTicket = (address, setIsLoading) => {
     const [Result, setResult] = useState();
 
     useEffect(() => {
-        console.log('Result', Result)
-        console.log('Player Get Ticket', address)
+        // console.log('Result', Result)
+        // console.log('Player Get Ticket', address)
 
         getResult();
 
@@ -25,10 +25,10 @@ export const useUserTicket = (address, setIsLoading) => {
         try {
             if (!address) { setResult([]); return; }
             setIsLoading(true);
-            const response = await useAxios('GET', 'http://test.fkmdev.site/api/getUserTickets?player=' + address);
+            const response = await useAxios('GET', 'https://test.fkmdev.site/api/getUserTickets?player=' + address);
             setIsLoading(false);
             const Array = getTicketData(response?.data?.tickets)
-            console.log('Array', Array)
+            // console.log('Array', Array)
             setResult(Array);
         } catch (error) {
             console.error(error);

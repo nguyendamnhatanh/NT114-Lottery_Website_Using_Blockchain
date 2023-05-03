@@ -11,10 +11,10 @@ export const useAxios = async (method, url, token = '', data = '') => {
     },
     ...(data && { data: data })
   }
-  console.log('sent request: ', requestOption);
+  // console.log('sent request: ', requestOption);
   try {
     const response = await axios(requestOption);
-    console.log("Success:", response?.data);
+    // console.log("Success:", response?.data);
     return response;
   } catch (error) {
     console.error("Error:", error?.response?.data);

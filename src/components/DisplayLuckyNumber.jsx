@@ -11,7 +11,7 @@ import Loader from './Loader';
 export const DisplayLuckyNumber = () => {
     // const userTicket = useUserTicket();
     const { isLoading, userTicket } = useStateContext();
-    console.log('userTicket', userTicket)
+    // console.log('userTicket', userTicket)
 
     return (
         isLoading ? (<div className="flex justify-center items-center"><Loader /></div>) :
