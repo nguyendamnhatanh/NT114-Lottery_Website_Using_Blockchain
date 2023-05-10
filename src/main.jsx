@@ -37,15 +37,15 @@ import { ThirdwebProvider } from '@thirdweb-dev/react';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThirdwebProvider>
-    <StateContextProvider>
-      <BrowserRouter>
-        <React.StrictMode>
+    <BrowserRouter>
+      <React.StrictMode>
+        <StateContextProvider>
           <Provider store={store}>
             <App />
           </Provider>
-        </React.StrictMode>
-      </BrowserRouter>
-    </StateContextProvider>
+        </StateContextProvider>
+      </React.StrictMode>
+    </BrowserRouter>
   </ThirdwebProvider>
 
 )

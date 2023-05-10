@@ -1,20 +1,15 @@
 import React from 'react'
 
-import { useUserTicket } from "../hook";
-
 import dummyData from '../utils/dummyData';
-
-import { useStateContext } from '../context';
 
 import Loader from './Loader';
 
-export const DisplayLuckyNumber = () => {
-    // const userTicket = useUserTicket();
-    const { isLoading, userTicket } = useStateContext();
-    // console.log('userTicket', userTicket)
-
+export const DisplayLuckyNumber = ({ isLoading, userTicket }) => {
     return (
-        isLoading ? (<div className="flex justify-center items-center"><Loader /></div>) :
+        // isLoading
+        //     ?
+        //     (<div className="flex justify-center items-center"><Loader /></div>)
+        //     :
             (
                 userTicket?.length > 0
                     ?
@@ -45,14 +40,5 @@ export const DisplayLuckyNumber = () => {
         // console.log('number', number); 
     );
 }
-
-// export const DisplayLuckyNumber = ({ number }) => {
-//     // console.log('number', number); 
-//     return (
-//         <div className="flex font-epilogue font-medium text-[20px] leading-[30px] justify-center items-center w-36 h-12 rounded-[10px] bg-[#F5EA5A] text-black text-xl">
-//             {number}
-//         </div>
-//     );
-// }
 
 export default DisplayLuckyNumber

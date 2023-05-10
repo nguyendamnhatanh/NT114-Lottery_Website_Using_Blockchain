@@ -8,5 +8,7 @@ export { default as FundCard } from './FundCard';
 export { default as CountBox } from './CountBox';
 export { default as DisplayLuckyNumber } from './DisplayLuckyNumber';
 export { default as Timer } from './Timer';
+export { default as MessageAlertBox } from './MessageAlertBox';
+
 
 

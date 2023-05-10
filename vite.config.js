@@ -6,7 +6,8 @@ import pluginRewriteAll from 'vite-plugin-rewrite-all';
 export default defineConfig({
   plugins: [react(), pluginRewriteAll()],
   define: {
-    global: "global",
+    global: "globalThis",
+    // global: "global",
     "process.env": {},
   },
 })

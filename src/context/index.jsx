@@ -1,9 +1,9 @@
-import React, { useContext, createContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, createContext, useState, useEffect, useCallback, useRef } from "react";
 
 import { useAddress, useContract, useMetamask, useContractWrite, useWallet } from '@thirdweb-dev/react';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { ethers } from "ethers";
-import { useAxios, useSmartContractAddress, useTimeRemaining, useUserTicket } from "../hook";
+import { useAxios, useSmartContractAddress, useTimeRemaining } from "../hook";
 import { parseAmount } from "../utils/parseAmount";
 import { convertTimestampToDateString } from '../utils';
 
@@ -15,71 +15,59 @@ const StateContext = createContext();
 
 // const contractAddress = useAddress();
 
-
-
-
 export const StateContextProvider = ({ children }) => {
 
     const [txHash, setTxHash] = useState('');
+    const currentTxHash = useRef('');
+    useEffect(() => {
+        currentTxHash.current = txHash;
+    }, [txHash])
+
     const [isLoading, setIsLoading] = useState(false);
-    const [isTxSuccess, setIsTxSuccess] = useState(0);
-    const [luckNumber, setLuckNumber] = useState(0);
+
+    const [luckyNumber, setLuckyNumber] = useState(0);
+
     const [amount, setAmount] = useState(0);
+
     const [smartAddress, setSmartAddress] = useState('');
-    const [ticket, setTicket] = useState([]);
-    const [timeRemaining, setTimeRemaining] = useState(1682579131);
+
+    // const [timeRemaining, setTimeRemaining] = useState();
+    // 0: denied by user
+    // 1: success, 2: buying ticket, 3: sending transaction, 4: sent transaction success, 5: getting lucky number, 6: get lucky number success
+    //-1: failed, -2: no transaction, -3: ..........., , -4: send transaction failed, -5: ...................., -6: get lucky number failed
+    // 7: Getting userData
+
+    const [status, setStatus] = useState(-1);
+
+    const currentStatus = useRef(-1);
+
+    useEffect(() => {
+        currentStatus.current = status;
+    }, [status])
+
+    /// 0: failed, 1: success, 2: pending, random: processing
+    const [isTxSent, setIsTxSent] = useState(0);
 
     const playerAddress = useAddress();
     const connect = useMetamask();
     const contractAddress = useSmartContractAddress();
-    const userTicket = useUserTicket(playerAddress, setIsLoading);
 
-
-
-    useEffect(() => {
-        if (!playerAddress) {
-            // console.log('Wallet not connected, trying connecting');
-            ConnectWallet();
-        }
-        else {
-            // console.log(playerAddress); 
-        }
-        if (txHash) getTransactionStatus(txHash); else return;
-        if (isTxSuccess === 1) getLuckyNumber(txHash, amount);
-    }, [isTxSuccess, txHash, playerAddress])
-
-    useEffect(() => {
-        if (playerAddress) setTicket(userTicket);
-    }, [playerAddress])
-
-    const BuyTicket = async (amount) => {
-        try {
-            setIsLoading(true);
-            await sendTransaction(amount);
-            setIsLoading(false);
-        } catch (error) {
-            // console.log('BuyTicket error', error);
-            setIsLoading(false);
-        }
-    }
-    // const ConnectWallet = async () => {
-    //     try {
-    //         await connect();
-    //     } catch (error) {
-    //         console.log('ConnectWallet error', error);
+    // useEffect(() => {
+    //     if (isTxSent === 1) {
+    //         getLuckyNumber(txHash, amount);
+    //         if (luckyNumber) {
+    //             setStatus(1);
+    //             console.log('luckyNumber', luckyNumber)
+    //         }
     //     }
-    // }
+    // }, [isTxSent, txHash])
+
+
     const ConnectWallet = useCallback(async () => {
         const handleConnect = () => {
-            // setConnected(true);
-
             if (window.ethereum) {
                 window.ethereum.on("accountsChanged", checkAccountConnected);
             }
-        };
-
-        const handleError = () => {
-            // setConnected(false);
         };
 
         try {
@@ -93,76 +81,110 @@ export const StateContextProvider = ({ children }) => {
             }
             handleConnect();
         } catch (e) {
-            handleError();
+            console.log("Error:", e);
         }
+
     }, []);
 
-    /// 0: failed, 1: success, 2: pending, random: processing
-    // const getTransactionStatus = async (txHash) => {
-    //     try {
-    //         await new Promise((resolve) => setTimeout(resolve, 1000));
-    //         const receipt = await web3.eth.getTransactionReceipt(txHash);
-    //         if (receipt.status) {
-    //             console.log('Transaction Success');
-    //             setIsTxSuccess(1);
-    //         } else {
-    //             console.log('Transaction Failed');
-    //             setIsTxSuccess(0);
-    //         }
-    //     } catch (error) {
-    //         console.log('Transaction Pending', error);
-    //         // random number            
-    //         const randomNumber = Math.floor(Math.random() * 100);
-    //         setIsTxSuccess(randomNumber);
-    //     }
-    // };
-
-    const getLuckyNumber = async (txHash, amount) => {
-        try {
-            const response = await useAxios('POST', 'https://test.fkmdev.site/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
-            // console.log('txHash', txHash)
-            // .then((res) => {
-            //     console.log(res.data)
-            //     setLuckNumber(res.data.luckyNumber);
-            //     setIsLoading(false);
-            // });
-            return response.data.lottery;
-        } catch (error) {
-            // console.log('BE processing:', error);
-            const randomNumber = Math.floor(Math.random() * 100);
-            setIsTxSuccess(randomNumber);
+    const checkAccountConnected = async () => {
+        const accounts = await window.ethereum.request({ method: "eth_accounts" });
+        if (accounts.length === 0) {
+            console.log("Please connect to MetaMask.");
+        } else {
+            console.log("Connected:", accounts[0]);
         }
     };
 
+    const BuyTicket = async (amount) => {
+        try {
+            setStatus(2);
+            await sendTransaction(amount);
+
+            await new Promise(resolve => setTimeout(resolve, 500));
+            // cannot write barely code here <- txHash and status not update from initial state
+            // solution 0: split code to async function X
+            // solution 1: use useRef to store status and txHash
+            await gettingLuckNumber(currentTxHash.current, amount);
+        } catch (error) {
+            if (error.message === 'User denied transaction signature') {
+                setStatus(0);
+                setIsLoading(false);
+            }
+            else if (error.message === 'Get Lucky Number error. Maybe the transaction is still pending. Please try again later') {
+                setStatus(-6);
+                setIsLoading(false);
+            }
+            else if (error.message === 'Send transaction error. Please try again later') {
+                setStatus(-4);
+                setIsLoading(false);
+            }
+            else {
+                console.log('Un-processing error:', error)
+                setIsLoading(false);
+            }
+        }
+    }
+
+    const gettingLuckNumber = async (txHash, amount) => {
+        console.log('status gettingLuckNumber', currentStatus.current)
+        if (currentStatus.current === 4 && txHash) {
+            setStatus(5);
+            const gettingLKN = await getLuckyNumber(txHash, amount);
+            if (gettingLKN) {
+                setStatus(6);
+                setIsLoading(false);
+                setLuckyNumber(gettingLKN);
+                console.log('Congratulation, Buy Ticket Success', gettingLKN)
+                setStatus(1);
+            }
+            else {
+                throw new Error('Get Lucky Number error. Maybe the transaction is still pending. Please try again later');
+            }
+        }
+    }
+
     const sendTransaction = async (amount) => {
         try {
-            if (playerAddress) {
-                // console.log('Wallet Connected ✓ ', playerAddress);
-            }
-            else await connect();
-            // getTransactionStatus('0xe143f860db1c2dd3a78b8c147fe2d96495b6e1ecd88802a37c4f3529164dfdc4');
             const ticketPrice = (amount);
             setAmount(ticketPrice);
-            // console.log('contractAddress', contractAddress)
-
+            setStatus(3);
+            setIsLoading(true);
             const txHash = await web3.eth.sendTransaction({
                 from: playerAddress, // The user's active address.
                 to: contractAddress, // Required except during contract publications.
                 value: parseAmount(amount), // Only required to send ether to the recipient from the initiating external account.         
-            })
-            // console.log(txHash);
-            // setTxHash(txHash.transactionHash);
-            const lottery = await getLuckyNumber(txHash.transactionHash, ticketPrice);
-            // console.log('lottery', lottery);
+            });
 
+            if (txHash) {
+                setTxHash(txHash.transactionHash);
+                setStatus(4);
+                console.log('status transaction success', currentStatus.current)
+            }
+            else {
+                throw new Error('Send transaction error. Please try again later');
+            }
 
         } catch (error) {
-            console.log(error);
-            throw new Error("No ethereum wallet found");
+            // console.log('sendTx', error);
+            if (error.code === 4001) {
+                throw new Error('User denied transaction signature');
+            }
         }
     }
 
-
+    const getLuckyNumber = async (txHash, amount) => {
+        try {
+            const response = await useAxios('POST', 'https://test.fkmdev.site/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
+            setLuckyNumber(response.data.luckyNumber);
+            return response.data.lottery;
+        } catch (error) {
+            // console.log('BE processing:', error);
+            const randomNumber = Math.floor(Math.random() * 100);
+            setIsTxSent(randomNumber);
+            throw new Error('Get Lucky Number error. Maybe the transaction is still pending. Please try again later');
+            return false;
+        }
+    };
 
     return (
         <StateContext.Provider value={{
@@ -176,9 +198,13 @@ export const StateContextProvider = ({ children }) => {
             setIsLoading,
             smartAddress,
             setSmartAddress,
-            timeRemaining,
-            userTicket,
-            BuyTicket
+            // timeRemaining,
+            // userTicket,
+            BuyTicket,
+            status,
+            luckyNumber,
+            ConnectWallet,
+            setStatus
         }}>
             {children}
         </StateContext.Provider>

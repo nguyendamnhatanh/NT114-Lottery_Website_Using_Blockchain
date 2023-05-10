@@ -27,7 +27,7 @@ export const checkIfImage = (url, callback) => {
   img.onerror = () => callback(false);
 };
 
-export const getTicketData = (response) => {
+export const extractTicketData = (response) => {
   const result = [];
   const ticketData = response.map((ticket) => {
     const luckyNumber = ticket.luckyNumber;
@@ -38,8 +38,60 @@ export const getTicketData = (response) => {
     };
     result.push(ticketData);
   });
-  console.log('result', result)
+  // console.log('result extractTicketData', result)
   return result;
 };
+
+export const getMessageBasedOnBuyStatus = (status, luckyNumber) => {
+  // 0: denied by user
+  // 1: success, 2: buying ticket, 3: sending transaction, 4: sent transaction success, 5: getting lucky number, 6: get lucky number success
+  //-1: failed, -2: no transaction, -3: ..........., , -4: send transaction failed, -5: ...................., -6: get lucky number failed
+  // console.log(status)
+  // 
+  switch (status) {
+    case 0:
+      return 'Transaction is denied by user. Please try again.';
+    case 1:
+      return 'Transaction is success. Your lottery number is: ' + luckyNumber + '. Please wait for the result.';
+    case 2:
+      return 'Transaction is pending. Please wait for the result.';
+    case 3:
+      return 'Processing your transaction. Please wait for the result.';
+    case 4:
+      return 'Transaction is success. Please wait for the result.';
+    case 5:
+      return 'Getting lucky number. Please wait for the result.';
+    case 6:
+      return 'Get lucky number success. Please wait for the result.';
+    case 7:
+      return 'Getting User Data';
+    case -1:
+      return 'Getting User Data';
+    case -2:
+      return 'Not enough balance. Please try again.';
+    case -3:
+      return 'Unknown error. Please try again.';
+    case -4:
+      return 'Something went wrong. Please try again.';
+    case -5:
+      return 'Unknown error. Please try again.';
+    case -6:
+      return 'Get lucky number failed. Please try again.';
+    default:
+      return 'Unknown error. Please try again.';
+
+  }
+
+  // status === 0 ? 'Transaction is failed. Please try again.' :
+  //   status === 1 ? 'Transaction is success. Your lottery number is: ' + luckyNumber + '. Please wait for the result.' :
+  //     status === 2 ? 'Transaction is pending. Please wait for the result.' :
+  //       status === 3 ? 'Transaction is under processing. Please wait for the result.' :
+  //         status === -1 ? 'There is no Transaction found. Please try again.' :
+  //           status === -2 ? 'Not enough balance. Please try again.' :
+  //             status === -3 ? 'Transaction is canceled by user. Please try again.' :
+  //               'Something went wrong. Please try again.'
+
+};
+
 
 

@@ -14,6 +14,8 @@ import dashboard from './dashboard.svg';
 import lucky from './lucky.svg';
 import test from './test.svg';
 import pickluck from './pickluck.svg';
+import badgeCheck from './badgeCheck.svg';
+import statusFailed from './statusFailed.svg';
 
 export {
     test,
@@ -32,4 +34,6 @@ export {
     loader,
     thirdweb,
     pickluck,
+    badgeCheck,
+    statusFailed
 };

@@ -2,10 +2,13 @@ const FtpDeploy = require("ftp-deploy");
 const ftpDeploy = new FtpDeploy();
 
 const config = {
-    user: "deployfe@test.fkmdev.site",
-    // Password optional, prompted if none given
-    password: "Xs}Q,@57WzF>]'h",
-    host: "103.200.23.188",
+    // // fkm_dev host
+    // password: "Xs}Q,@57WzF>]'h",
+    // host: "103.200.23.188",
+    // dacn host
+    user: "lottery@dacn.site",
+    password: "IgwaLcPWxB48",
+    host: "14.225.255.250",
     port: 21,
     localRoot: "./build",
     remoteRoot: "/",

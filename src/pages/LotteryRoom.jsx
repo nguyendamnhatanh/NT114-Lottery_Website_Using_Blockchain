@@ -1,25 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, ReactDOM } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
-import { CountBox, CustomButton, Loader, DisplayLuckyNumber, Timer } from '../components';
-import { calculateBarPercentage, daysLeft } from '../utils';
-import { thirdweb, pickluck } from '../assets';
+import { CountBox, CustomButton, Loader, DisplayLuckyNumber, Timer, MessageAlertBox } from '../components';
+import { calculateBarPercentage, daysLeft, getMessageBasedOnBuyStatus } from '../utils';
+import { thirdweb, pickluck, badgeCheck, statusFailed } from '../assets';
 
 import dummyData from '../utils/dummyData';
 import dummyEntry from '../utils/dummyEntry';
 
-import { useSmartContractAddress, useTimeRemaining, usePool, useEntry } from "../hook";
+import { useSmartContractAddress, useTimeRemaining, usePool, useEntry, useUserTicket } from "../hook";
 
 const LotteryRoom = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  const { contract, address, smartAddress, sendTransaction, BuyTicket } = useStateContext();
-  const [isLoading, setIsLoading] = useState(false);
+  const { contract, address, smartAddress, sendTransaction, BuyTicket, isLoading, luckyNumber, status, ConnectWallet } = useStateContext();
+  // const [status, setStatus] = useState(1);
+
   const [amount, setAmount] = useState('');
-  // const [donators, setDonators] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [ticket, setTicket] = useState([]);
 
   const ticketPrice = (0.01).toString();
   const betLeft = 5;
@@ -28,17 +31,28 @@ const LotteryRoom = () => {
   const entry = useEntry();
   const img = 'https://www.minhngoc.net.vn/upload/images/veso/bth_20-04-2023.jpg';
   const transactionTime = 0;
-  const shouldRun = useRef(0)
+  const shouldRun = useRef(0);
+  const userTicket = useUserTicket();
 
-  // const fetchDonators = async () => {
-  //   const data = await getDonations(state.pId);
-  //   setDonators(data);
-  // }
+  const handleBuyTicket = async () => {
+    try {
+      await BuyTicket(ticketPrice);
+      // setModalIsOpen(true);
+    } catch (error) {
+      console.log(error);
+      // setIsLoading(false);
+    }
+  }
 
-  // useEffect(() => {
-  //   // if (contract) fetchDonators();
-  //   setTimeRemaining(convertTimestampToDateString(timeRemaining));
-  // }, [timeRemaining])
+  useEffect(() => {
+    if (address) setTicket(userTicket);
+    else ConnectWallet();
+  }, [address])
+
+  useEffect(() => {
+    const a = getMessageBasedOnBuyStatus(status, luckyNumber);
+    setMessage(a);
+  }, [status])
 
   // const handleDonate = async () => {
   //   setIsLoading(true);
@@ -57,16 +71,32 @@ const LotteryRoom = () => {
       //  console.log('shouldRun.current bigger than 0', shouldRun.current); 
       return;
     }
+
   }, []);
 
   return (
     <div>
-      {isLoading && (
-        <div className="flex flex-col ">
-          <Loader />
-          <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-white uppercase">Sending your transaction... {<Timer time={transactionTime} />}s</p>
-        </div>
-      )}
+      {
+        isLoading &&
+        (
+          <div className="flex flex-col items-center">
+            <div className="flex text-green-600 py-5">
+              {
+                status &&
+                (
+                  <div>
+                    <Loader />
+                    <p className="font-epilogue  text-[20px] text-center text-white uppercase">Processing...</p>
+                    <p className="font-epilogue  text-[20px] text-center text-white">Status: {message}</p>
+                  </div>
+                )
+              }
+            </div>
+
+          </div>
+        )
+      }
+
       <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
         <div className="flex-1 flex-col ">
 
@@ -97,16 +127,7 @@ const LotteryRoom = () => {
                         <img src={pickluck} alt="image" className="w-[200px] h-[200px] object-contain " />
                       )}
                       styles="bg-transparent border-[1px] border-[#2C3333]"
-                      handleClick={async () => {
-                        try {
-                          await BuyTicket(ticketPrice);
-                          await new Promise(resolve => setTimeout(resolve, 5000));
-                          window.location.reload();
-                        } catch (error) {
-                          console.log(error);
-                          setIsLoading(false);
-                        }
-                      }}
+                      handleClick={handleBuyTicket}
                     />
                   </div>
                 </div>
@@ -114,7 +135,7 @@ const LotteryRoom = () => {
             </div>
             {
               // Display Lucky Number, data good -> display, bad -> display nothing
-              <DisplayLuckyNumber />
+              <DisplayLuckyNumber isLoading={isLoading} userTicket={userTicket} />
             }
           </div>
         </div>
@@ -193,8 +214,20 @@ const LotteryRoom = () => {
           </div>
         </div>
       </div>
-
+      <MessageAlertBox
+        title="NOTIFY YOUR TRANSACTION STATUS"
+        message={message}
+        type={
+          status === 4 ? 'success' :
+            status < 0 ? 'error' :
+              'warning'
+        }
+        handleConfirm={() => { window.location.reload() }}
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+      />
     </div >
+
   )
 }
 
