@@ -1,9 +1,9 @@
 # NT114-Lottery_Website_Using_Blockchain
-## Dev Domain: test.fkmdev.site
-## Product Domain: lottery.dacn.site
+## Dev Domain: [dev](https://test.fkmdev.site) 
+## Product Domain: [product](https://lottery.dacn.site) 
 ## Members
 
-- Khưu Minh Phong - 20521742 (Back End)
+- Khưu Minh Phong - 20521742 (Back End)  
 - Nguyễn Đàm Nhật Anh - 20520880 (DevOps + Designer)
 - Nguyễn Anh Tài - 20520924 (Front End)
 
