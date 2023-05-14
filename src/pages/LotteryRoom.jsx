@@ -11,6 +11,7 @@ import dummyData from '../utils/dummyData';
 import dummyEntry from '../utils/dummyEntry';
 
 import { useSmartContractAddress, useTimeRemaining, usePool, useEntry, useUserTicket } from "../hook";
+import { io } from 'socket.io-client';
 
 const LotteryRoom = () => {
   const { state } = useLocation();
@@ -53,6 +54,16 @@ const LotteryRoom = () => {
     const a = getMessageBasedOnBuyStatus(status, luckyNumber);
     setMessage(a);
   }, [status])
+
+  let counter = 1;
+
+  useEffect(() => {
+    const socket = io('http://localhost:3000');
+    console.log(++counter)
+    socket.on('pick winner', (data) => {
+      console.log(data)
+    })
+  })
 
   // const handleDonate = async () => {
   //   setIsLoading(true);
