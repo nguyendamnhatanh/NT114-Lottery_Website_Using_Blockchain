@@ -1,24 +1,17 @@
-const express = require('express');
-const app = express();
-const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const routes = require('./src/routes/routes');
+const app = require('./src/utils/app');
+const schedule = require('node-schedule');
 
-//Server Configs's section
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(cors());
-app.use('/api', routes);
-dotenv.config();
+app.startApp();
 
-//Connection Section
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server listening on port ` + port);
+app.io.on('connection', () => {
+  console.log('user connected');
 });
 
-setInterval(() => {
-  
-}, 1000)
+const now = new Date();
+const date = new Date(now.getTime() + 4 * 1000);
+
+const job = schedule.scheduleJob(date, function () {
+  const random = Math.floor(100000 + Math.random() * 900000);
+  console.log('Random:' + random);
+  app.io.emit('pick winner', random);
+});

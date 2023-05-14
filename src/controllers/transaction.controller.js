@@ -1,7 +1,7 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
 const { contractAddress } = require('../utils/contract');
-const { contract } = require('../utils/contract');
+const { contract, etherscanKey } = require('../utils/contract');
 dotenv.config();
 
 const TransactionController = {

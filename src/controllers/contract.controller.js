@@ -22,7 +22,7 @@ const ContractController = {
     }
   },
   getAddress: (req, res) => {
-    if (address) {
+    if (contractAddress) {
       res.status(200).json({
         message: 'success',
         address: contractAddress,
