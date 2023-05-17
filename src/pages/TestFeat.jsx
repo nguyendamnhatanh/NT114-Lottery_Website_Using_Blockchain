@@ -7,7 +7,7 @@ import { useStateContext } from '../context';
 
 import { useAxios } from '../hook';
 
-import { LotteryRoom } from '.';
+import { LotteryRoomNew } from '.';
 
 // test txHash: 0x56c892e3a97b9a6644ec07fe8626d0fa8a59ee4403fefcdd4302a865005c86e0
 
@@ -18,7 +18,7 @@ const TestFeat = () => {
 
   return (
     <div>
-      <LotteryRoom></LotteryRoom>
+      <LotteryRoomNew></LotteryRoomNew>
     </div>
   )
 }

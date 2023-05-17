@@ -33,18 +33,24 @@ import { Provider } from 'react-redux'
 import { StateContextProvider } from './context';
 import { ThirdwebProvider } from '@thirdweb-dev/react';
 
-
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './theme';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThirdwebProvider>
     <BrowserRouter>
       <React.StrictMode>
-        <StateContextProvider>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </StateContextProvider>
+        <ThemeProvider theme={theme}>
+          <StateContextProvider>
+            <Provider store={store}>
+              <CssBaseline />
+              <App />
+            </Provider>
+          </StateContextProvider>
+        </ThemeProvider>
       </React.StrictMode>
+
     </BrowserRouter>
   </ThirdwebProvider>
 

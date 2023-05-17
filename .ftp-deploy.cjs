@@ -2,13 +2,17 @@ const FtpDeploy = require("ftp-deploy");
 const ftpDeploy = new FtpDeploy();
 
 const config = {
-    // // fkm_dev host
+    
+    // // dev host
+    // user: "deployfe@test.fkmdev.site ",
     // password: "Xs}Q,@57WzF>]'h",
     // host: "103.200.23.188",
-    // dacn host
+
+    // product host
     user: "lottery@dacn.site",
     password: "IgwaLcPWxB48",
     host: "14.225.255.250",
+
     port: 21,
     localRoot: "./build",
     remoteRoot: "/",

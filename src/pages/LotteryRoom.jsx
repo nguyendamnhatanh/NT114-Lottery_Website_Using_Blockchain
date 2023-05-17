@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { useStateContext } from '../context';
 import { CountBox, CustomButton, Loader, DisplayLuckyNumber, Timer, MessageAlertBox } from '../components';
 import { calculateBarPercentage, daysLeft, getMessageBasedOnBuyStatus } from '../utils';
-import { thirdweb, pickluck, badgeCheck, statusFailed } from '../assets';
+import { thirdweb, badgeCheck, statusFailed, pickluck } from '../assets';
 
 import dummyData from '../utils/dummyData';
 import dummyEntry from '../utils/dummyEntry';
@@ -38,7 +38,7 @@ const LotteryRoom = () => {
   const handleBuyTicket = async () => {
     try {
       await BuyTicket(ticketPrice);
-      // setModalIsOpen(true);
+      setModalIsOpen(true);
     } catch (error) {
       console.log(error);
       // setIsLoading(false);
@@ -135,7 +135,7 @@ const LotteryRoom = () => {
                       btnType="button"
                       // title="Buy Ticket"
                       custom={(
-                        <img src={pickluck} alt="image" className="w-[200px] h-[200px] object-contain " />
+                        <img src={PickLuckIcon} alt="image" className="w-[200px] h-[200px] object-contain " />
                       )}
                       styles="bg-transparent border-[1px] border-[#2C3333]"
                       handleClick={handleBuyTicket}

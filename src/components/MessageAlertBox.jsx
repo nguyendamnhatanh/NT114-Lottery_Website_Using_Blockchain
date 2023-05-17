@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Modal, { setAppElement } from 'react-modal';
 import CustomButton from './CustomButton';
-import { pickluck } from '../assets';
 
 const MessageAlertBox = ({ title, message, type, handleConfirm, modalIsOpen, setModalIsOpen }) => {
     setAppElement('#root');
