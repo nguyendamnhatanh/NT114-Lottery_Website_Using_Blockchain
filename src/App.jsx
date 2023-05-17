@@ -1,5 +1,5 @@
 // import { Navbar, Welcome, Footer, Services, Transactions } from "./components"
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { Home, Profile, LotteryRoom, CreateRoom, TestFeat } from './pages'
@@ -7,6 +7,7 @@ import { Navbar, Sidebar } from './components'
 
 
 const App = () => {
+
     return (
         <div className="relative sm:-8 p-4 bg-[#2C3333] min-h-screen flex flex-row">
             <div className="sm:flex hidden mr-10 relative">

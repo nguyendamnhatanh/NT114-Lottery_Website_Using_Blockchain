@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ReactDOM } from 'react'
+import React, { useState, useEffect, useRef, ReactDOM, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
@@ -38,7 +38,7 @@ const LotteryRoom = () => {
   const handleBuyTicket = async () => {
     try {
       await BuyTicket(ticketPrice);
-      setModalIsOpen(true);
+      // setModalIsOpen(true);
     } catch (error) {
       console.log(error);
       // setIsLoading(false);
@@ -55,15 +55,24 @@ const LotteryRoom = () => {
     setMessage(a);
   }, [status])
 
+  const messages = useMemo(() => getMessageBasedOnBuyStatus(status, luckyNumber), [status, luckyNumber]);
+
   let counter = 1;
 
+  const socket = io('https://lottery.dacn.site');
+
   useEffect(() => {
-    const socket = io('http://localhost:3000');
     console.log(++counter)
     socket.on('pick winner', (data) => {
       console.log(data)
     })
   })
+
+  const emitEvent = () => {
+    socket.emit(
+      'testEmit', 'hello from client'
+    );
+  }
 
   // const handleDonate = async () => {
   //   setIsLoading(true);
@@ -98,7 +107,7 @@ const LotteryRoom = () => {
                   <div>
                     <Loader />
                     <p className="font-epilogue  text-[20px] text-center text-white uppercase">Processing...</p>
-                    <p className="font-epilogue  text-[20px] text-center text-white">Status: {message}</p>
+                    <p className="font-epilogue  text-[20px] text-center text-white">Status: {messages}</p>
                   </div>
                 )
               }
@@ -135,7 +144,7 @@ const LotteryRoom = () => {
                       btnType="button"
                       // title="Buy Ticket"
                       custom={(
-                        <img src={PickLuckIcon} alt="image" className="w-[200px] h-[200px] object-contain " />
+                        <img src={pickluck} alt="image" className="w-[200px] h-[200px] object-contain " />
                       )}
                       styles="bg-transparent border-[1px] border-[#2C3333]"
                       handleClick={handleBuyTicket}

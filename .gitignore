@@ -12,7 +12,6 @@ dist
 dist-ssr
 build
 *.local
-.*
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -24,3 +23,5 @@ build
 *.sln
 *.sw?
 smart_contract
+
+.ftp_deploy.cjs

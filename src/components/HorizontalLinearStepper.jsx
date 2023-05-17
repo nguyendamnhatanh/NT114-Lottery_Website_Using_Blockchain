@@ -61,7 +61,9 @@ export const HorizontalLinearStepper = () => {
         return step === -1;
     };
 
-    const handleFailed 
+    const handleFailed = () => {
+
+    };
 
     return (
         <div className='flex items-center justify-center w-[90%] h-[50%] '>

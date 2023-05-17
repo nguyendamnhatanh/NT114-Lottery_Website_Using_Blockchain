@@ -7,7 +7,7 @@
     "dev": "vite --open",
     "build": "rimraf build && vite build --outDir ./build",
     "preview": "vite preview",
-    "deploy": "npm run build && node .ftp-deploy.cjs"
+    "deploy": "npm run build && node .ftp_deploy.cjs"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
