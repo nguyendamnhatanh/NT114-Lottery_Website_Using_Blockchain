@@ -15,3 +15,5 @@ const job = schedule.scheduleJob(date, function () {
   console.log('Random:' + random);
   app.io.emit('pick winner', random);
 });
+
+console.log("test")
