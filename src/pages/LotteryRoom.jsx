@@ -97,11 +97,15 @@ const LotteryRoom = () => {
     });
   });
 
-  const emitEvent = () => {
-    socket.emit(
-      'testEmit', 'hello from client'
-    );
-  }
+  useEffect(() => {
+    socket.on('getTestNum', (data) => {
+      setTestWinner(data)
+    })
+  })
+
+  const getTestNumber = () => {
+    socket.emit('testRandom', 'test')
+  };
 
   // const handleDonate = async () => {
   //   setIsLoading(true);
@@ -120,16 +124,6 @@ const LotteryRoom = () => {
       return;
     }
   }, []);
-
-  useEffect(() => {
-    socket.on('getTestNum', (data) => {
-      setTestWinner(data)
-    })
-  })
-
-  const getTestNumber = () => {
-    socket.emit('testRandom', 'test')
-  };
 
   return (
     <div>
