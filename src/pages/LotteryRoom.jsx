@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ReactDOM } from 'react';
+import React, { useState, useEffect, useRef, ReactDOM, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
@@ -84,14 +84,18 @@ const LotteryRoom = () => {
     setMessage(a);
   }, [status]);
 
-  const messages = useMemo(() => getMessageBasedOnBuyStatus(status, luckyNumber), [status, luckyNumber]);
+  const messages = useMemo(
+    () => getMessageBasedOnBuyStatus(status, luckyNumber),
+    [status, luckyNumber]
+  );
 
   let counter = 1;
 
-  const socket = io('https://lottery.dacn.site');
+  //todo: @n4t41 please change this url to host domain
+  const socket = io('http://lottery.dacn.site/');
 
   useEffect(() => {
-    console.log(++counter)
+    console.log(++counter);
     socket.on('pick winner', (data) => {
       console.log(data);
     });
@@ -99,12 +103,12 @@ const LotteryRoom = () => {
 
   useEffect(() => {
     socket.on('getTestNum', (data) => {
-      setTestWinner(data)
-    })
-  })
+      setTestWinner(data);
+    });
+  });
 
   const getTestNumber = () => {
-    socket.emit('testRandom', 'test')
+    socket.emit('testRandom', 'test');
   };
 
   // const handleDonate = async () => {
@@ -163,7 +167,9 @@ const LotteryRoom = () => {
                 {testWinner}
               </p>
             </div>
-          ) : ''}
+          ) : (
+            ''
+          )}
           <div className='relative w-full h-[5px] bg-[#3a3a43] mt-2'>
             <div
               className='absolute h-full bg-[#4acd8d]'
