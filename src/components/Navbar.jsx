@@ -6,14 +6,46 @@ import { logo, menu, search, thirdweb } from '../assets'
 import { navlinks } from '../constants'
 // import { connect } from 'react-redux'
 import { useStateContext } from '../context'
+import { Box, Modal } from '@mui/material'
 
 const Navbar = () => {
 
   const navigate = useNavigate();
   const [toggleDrawer, setToggleDrawer] = useState(false);
   const [isActive, setIsActive] = useState('dashboard')
-  const { address, connect } = useStateContext();
+  const { address, ConnectWallet } = useStateContext();
 
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const style = {
+    p: 4,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '75%',
+    height: '50%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+  };
+
+  const NotifyError = () => (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description">
+      <Box sx={style}>
+        <p className="font-sans text-[20px] text-center text-black uppercase">Please Open Metamask or Refresh Page</p>
+      </Box>
+    </Modal>
+  )
 
   return (
     <div className='flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6'>
@@ -24,17 +56,27 @@ const Navbar = () => {
         </div>
       </div>
       <div className="sm:flex hidden flex-row justify-end gap-4">
+        <NotifyError />
         <CustomButton
           btnType="button"
           title={address ? address : 'Connect'}
           styles={address ? 'bg-[#8c6dfd]' : 'bg-[#1dc071]'}
-          handleClick={() => {
-            if (address) {
+          handleClick={
+            async () => {
+              try {
+                if (address) {
 
-              // console.log('Address: ', address);
+                }
+                else {
+                  await ConnectWallet();
+                }
+              }
+              catch (e) {
+                setOpen(true);
+                // console.log('error');
+              }
             }
-            else connect();
-          }}
+          }
         />
         <Link to='/profile'>
           <div className='w-[52px] h-[52px] rounded-full bg-[#2c2f32] flex justify-center items-center cursor-pointer'>

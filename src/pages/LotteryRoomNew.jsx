@@ -3,12 +3,16 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
-import { CountBox, CustomButton, Loader, DisplayLuckyNumber, Timer, MessageAlertBox, HorizontalLinearStepper, ModalStepperBox, PlayerBoard } from '../components';
+import { CountBox, CustomButton, Loader, DisplayLuckyNumber, Timer, MessageAlertBox, HorizontalLinearStepper, ModalStepperBox, PlayerBoard, Confetti } from '../components';
 import { calculateBarPercentage, daysLeft, getMessageBasedOnBuyStatus } from '../utils';
 import { thirdweb, pickluck, badgeCheck, statusFailed } from '../assets';
 
 import dummyData from '../utils/dummyData';
 import dummyEntry from '../utils/dummyEntry';
+
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
+
 
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
@@ -24,6 +28,8 @@ import { Typography } from '@mui/material';
 import { useSmartContractAddress, useTimeRemaining, usePool, useEntry, useUserTicket } from "../hook";
 import { Padding, RoundedCorner, WidthFull } from '@mui/icons-material';
 import Stack from '@mui/material/Stack';
+
+// import classes from '../assets/styles/main.sass'
 
 const LotteryRoom = () => {
     const { state } = useLocation();
@@ -51,8 +57,10 @@ const LotteryRoom = () => {
 
     const handleBuyTicket = async () => {
         try {
+            setModalIsOpen(true);
             await BuyTicket(ticketPrice);
-            // setModalIsOpen(true);
+            setModalIsOpen(false);
+
         } catch (error) {
             console.log(error);
             // setIsLoading(false);
@@ -88,6 +96,52 @@ const LotteryRoom = () => {
         }
 
     }, []);
+
+
+    const Transition = React.forwardRef(function Transition(props, ref) {
+        return <Slide direction="up" ref={ref} {...props} />;
+    });
+
+    const [FSDOpen, setFSDOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setFSDOpen(true);
+    };
+
+    const handleClose = () => {
+        setFSDOpen(false);
+    };
+
+    const FullScreenDialog = () => (
+        <div className='flex justify-center items-center'>
+            <Button variant="outlined" onClick={handleClickOpen}>
+                Open full-screen dialog
+            </Button>
+            <Dialog
+                fullScreen
+                open={FSDOpen}
+                onClose={handleClose}
+                TransitionComponent={Transition}
+            >
+                <div className='absolute w-full h-full overflow-hidden'>
+                    <Confetti />
+                </div>
+                <div className='flex w-full h-full justify-center items-center'>
+                    <div className='flex flex-col justify-center items-center'>
+                        <img src={badgeCheck} alt="image" className="w-[200px] h-[200px] object-contain" />
+                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">Congratulations!</p>
+                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">You won the lottery!</p>
+                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">Your lucky number is: {luckyNumber}</p>
+                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">You won: {pool} ETH</p>
+                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">Transaction time: {transactionTime} seconds</p>
+                    </div>
+                </div>
+
+            </Dialog >
+        </div >
+
+    )
+
 
     const LotteryRoomHeader = () =>
     (
@@ -247,12 +301,10 @@ const LotteryRoom = () => {
             {/* Lottery Room Header */}
             {/* <LotteryRoomHeader /> */}
             {/* Display Component */}
-            <ModalStepperBox>
-
-            </ModalStepperBox>
+            <FullScreenDialog />
+            <ModalStepperBox isLoading={isLoading} luckyNumber={luckyNumber} isOpen={modalIsOpen} status={status} />
 
             <div className="mt-[60px] flex flex-col lg:flex-row gap-5">
-
                 {/* ControlBox */}
                 <ControlBox />
                 {/* PlayerTicketBox */}
@@ -262,10 +314,10 @@ const LotteryRoom = () => {
             <div className="mt-[20px] flex flex-col lg:flex-row gap-5">
                 {/* WinnerBox */}
                 <WinnerBox />
-                <PlayerBoard entry={entry}/>
+                <PlayerBoard entry={entry} />
             </div>
 
-            <MessageAlertBox
+            {/* <MessageAlertBox
                 title="NOTIFY YOUR TRANSACTION STATUS"
                 message={message}
                 type={
@@ -276,11 +328,9 @@ const LotteryRoom = () => {
                 handleConfirm={() => { window.location.reload() }}
                 modalIsOpen={modalIsOpen}
                 setModalIsOpen={setModalIsOpen}
-            />
+            /> */}
         </div >
     )
-
-
 
     return (
         (!timeRemaining || !pool || !entry || !address) ?
@@ -289,12 +339,12 @@ const LotteryRoom = () => {
                     <Stack spacing={1}>
                         <Skeleton variant="text" sx={{ fontSize: '2rem' }} />
                         <div className='flex justify-between gap-6'>
-                            <Skeleton variant="rounded" width={600} height={250} />
-                            <Skeleton variant="rounded" width={600} height={250} />
+                            <Skeleton variant="rounded" width={300} height={250} />
+                            <Skeleton variant="rounded" width={300} height={250} />
                         </div>
                         <div className='flex justify-between gap-5'>
-                            <Skeleton variant="rounded" width={600} height={250} />
-                            <Skeleton variant="rounded" width={600} height={250} />
+                            <Skeleton variant="rounded" width={300} height={250} />
+                            <Skeleton variant="rounded" width={300} height={250} />
                         </div>
                     </Stack>
                 </div>

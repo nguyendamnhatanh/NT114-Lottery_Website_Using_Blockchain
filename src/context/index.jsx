@@ -65,11 +65,17 @@ export const StateContextProvider = ({ children }) => {
 
     const ConnectWallet = useCallback(async () => {
         const handleConnect = () => {
-            if (window.ethereum) {
-                window.ethereum.on("accountsChanged", checkAccountConnected);
+            try {
+                if (window.ethereum) {
+                    connect();
+                    window.ethereum.on("accountsChanged", checkAccountConnected);
+                }
+            } catch (error) {
+                if (error.code === -32002) {
+                    throw new Error("Under processing.");
+                }
             }
         };
-
         try {
             if (window.ethereum) {
                 window.web3 = new Web3(window.ethereum);
@@ -81,7 +87,9 @@ export const StateContextProvider = ({ children }) => {
             }
             handleConnect();
         } catch (e) {
-            console.log("Error:", e);
+            if (e.code === -32002) {
+                throw new Error("Under processing.");
+            }
         }
 
     }, []);
@@ -108,20 +116,20 @@ export const StateContextProvider = ({ children }) => {
         } catch (error) {
             if (error.message === 'User denied transaction signature') {
                 setStatus(0);
-                setIsLoading(false);
             }
             else if (error.message === 'Get Lucky Number error. Maybe the transaction is still pending. Please try again later') {
                 setStatus(-6);
-                setIsLoading(false);
             }
             else if (error.message === 'Send transaction error. Please try again later') {
                 setStatus(-4);
-                setIsLoading(false);
             }
             else {
                 console.log('Un-processing error:', error)
-                setIsLoading(false);
             }
+        }
+        finally {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            setIsLoading(false);
         }
     }
 
@@ -165,9 +173,11 @@ export const StateContextProvider = ({ children }) => {
             }
 
         } catch (error) {
-            // console.log('sendTx', error);
             if (error.code === 4001) {
                 throw new Error('User denied transaction signature');
+            }
+            if (error.code === -32002) {
+                throw new Error('Under processing.');
             }
         }
     }

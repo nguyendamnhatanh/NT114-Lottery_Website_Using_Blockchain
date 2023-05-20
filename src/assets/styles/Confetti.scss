@@ -1,0 +1,149 @@
+// :root {
+//   --confettiNum: 7;
+//   --$coinNum: 30;
+//   --$dollarNum: 50;
+//   --main-bg-color: #111;
+// }
+
+$confettiNum: 400;
+$coinNum: 30;
+$dollarNum: 50;
+
+// body {
+//     background-color: var(--main-bg-color, #111);
+//     margin: 0;
+//     padding: 0;
+// }
+
+[class|="confetti"],
+[class|="coin"],
+[class|="dollar"] {
+    position: absolute;
+}
+
+.confettiHerePlease,
+.dollarDollarBillYall,
+.moreMoneyMoreProblems {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* confetti */
+@for $i from 1 through $confettiNum {
+    $confettiColors: (#146ff5, #dd1a8f, #ee6f40, #3adcc8, #8154e2, #8b4513);
+    $paperSize: random(15);
+    $left: random(100);
+    $fallSpeed: 2; // lower number = faster
+    .confetti-#{$i} {
+        width: #{$paperSize}px;
+        height: #{$paperSize * 0.4}px;
+        background-color: nth($confettiColors, random(6));
+        top: -10%;
+        left: unquote($left + "%");
+        opacity: random() + 0.5;
+        transform: rotate(#{random(360)}deg);
+        animation: confetti-explosion-#{$i}
+            unquote($fallSpeed + "s")
+            unquote(random() * 5 + "s")
+            infinite
+            ease-in;
+        z-index: random(5);
+    }
+
+    @keyframes confetti-explosion-#{$i} {
+        100% {
+            top: 110%;
+            left: unquote($left + random(15) + "%");
+        }
+    }
+}
+
+/* coins */
+@for $i from 1 through $coinNum {
+    $coinColors: (#ffd700, #daa520, #c0c0c0, #dcdcdc);
+    $fallSpeed: 1.25; // lower number = faster
+    $coinSize: random(8); // random# + 20px
+    $left: random(100); // can start anywhere on the y-axis
+
+    .coin-#{$i} {
+        width: #{$coinSize + 20}px;
+        height: #{$coinSize + 20}px;
+        border-radius: 50%;
+        background-color: nth($coinColors, random(4));
+        top: -10%;
+        left: unquote($left + "%");
+        opacity: random() + 0.4;
+        transform: rotate(#{random(360)}deg);
+        animation: coins-keep-falling-on-my-head-#{$i}
+            unquote($fallSpeed + "s")
+            unquote(random() * 5 + "s")
+            infinite
+            ease-in;
+        z-index: random(5) + 2;
+        font-size: $coinSize + 16px; // adjusts $ size with coin size
+        line-height: 1;
+        font-weight: 900;
+
+        &::before {
+            content: "$";
+            position: relative;
+            top: 0.1em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+    }
+
+    @keyframes coins-keep-falling-on-my-head-#{$i} {
+        100% {
+            top: 110%;
+        }
+    }
+}
+
+// DOLLAR CONSTRAINTS
+// width: 40 – 80px
+// height: 40 – 80px
+// animation-duration: 4 – 8s
+// animation-iteration-count: 30 – 60
+// transform-origin: right -15px – -45px
+// opacity: 0.3 – 0.9
+// animation-delay: 0s – 3.5s
+// animation-timing-function: ease-in, ease-out, linear
+
+/* dollars */
+@for $i from 1 through $dollarNum {
+    $fallType: (ease-in, ease-out, linear);
+    $paperSize: random(5) * 10 + 30;
+    $left: random(100);
+
+    .dollar-#{$i} {
+        width: #{$paperSize}px;
+        height: #{$paperSize}px;
+        top: -200px;
+        left: unquote($left + "%");
+        opacity: calc(random(7) / 10) + 0.2;
+        display: inline-block;
+        z-index: random(5) + 3;
+        animation: make-it-rain-#{$i}
+            unquote(3 + random(8) + "s")
+            unquote(random(8) - 1 + "s")
+            infinite
+            nth($fallType, random(3));
+        animation-iteration-count: random(31) + 29;
+        transform-origin: right unquote(random(3) * -15 + "px");
+        background-image: url('data:image/svg+xml,%3Csvg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"%3E%3Cg%3E%3Cg%3E%3Cpath style="fill:%2374D24F;" d="M496,112H16c-8.82,0-16,7.18-16,16v256c0,8.82,7.18,16,16,16h480c8.82,0,16-7.18,16-16V128 C512,119.18,504.82,112,496,112z"/%3E%3C/g%3E%3Cg%3E%3Cpath style="fill:%23FFEFBC;" d="M472,192c-22.055,0-40-17.945-40-40c0-4.422-3.578-8-8-8H88c-4.422,0-8,3.578-8,8 c0,22.055-17.945,40-40,40c-4.422,0-8,3.578-8,8v112c0,4.422,3.578,8,8,8c22.055,0,40,17.945,40,40c0,4.422,3.578,8,8,8h336 c4.422,0,8-3.578,8-8c0-22.055,17.945-40,40-40c4.422,0,8-3.578,8-8V200C480,195.578,476.422,192,472,192z"/%3E%3C/g%3E%3Cg%3E%3Cpath style="fill:%23869B55;" d="M128,256c0,48.221,26.691,90.175,66.081,112h123.839C357.309,346.175,384,304.221,384,256 s-26.691-90.175-66.081-112H194.08C154.691,165.825,128,207.779,128,256z"/%3E%3C/g%3E%3Cg%3E%3Cpath style="fill:%23FFEFBC;" d="M256,244c-16.023,0-28-8.445-28-16c0-7.555,11.977-16,28-16s28,8.445,28,16c0,6.625,5.375,12,12,12 s12-5.375,12-12c0-19.236-16.824-34.862-40-38.932V184c0-6.625-5.375-12-12-12s-12,5.375-12,12v5.068 c-23.176,4.07-40,19.695-40,38.932c0,22.43,22.844,40,52,40c16.023,0,28,8.445,28,16c0,7.555-11.977,16-28,16s-28-8.445-28-16 c0-6.625-5.375-12-12-12s-12,5.375-12,12c0,19.236,16.824,34.862,40,38.932V328c0,6.625,5.375,12,12,12s12-5.375,12-12v-5.068 c23.176-4.07,40-19.695,40-38.932C308,261.57,285.156,244,256,244z"/%3E%3C/g%3E%3Cg%3E%3Ccircle style="fill:%2374D24F;" cx="80" cy="256" r="24"/%3E%3C/g%3E%3Cg%3E%3Ccircle style="fill:%2374D24F;" cx="432" cy="256" r="24"/%3E%3C/g%3E%3Cg%3E%3Ccircle style="fill:%23869B55;" cx="40" cy="152" r="16"/%3E%3C/g%3E%3Cg%3E%3Ccircle style="fill:%23869B55;" cx="472" cy="152" r="16"/%3E%3C/g%3E%3Cg%3E%3Ccircle style="fill:%23869B55;" cx="40" cy="360" r="16"/%3E%3C/g%3E%3Cg%3E%3Ccircle style="fill:%23869B55;" cx="472" cy="360" r="16"/%3E%3C/g%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3Cg%3E%3C/g%3E%3C/svg%3E%0A');
+    }
+
+    @keyframes make-it-rain-#{$i} {
+        0% {
+            transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6);
+        }
+        100% {
+            transform: translate3d(15px, 1200px, 0px) rotate(360deg) scale(0.6);
+            top: 110%;
+        }
+    }
+}
