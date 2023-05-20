@@ -12,6 +12,8 @@ export { default as MessageAlertBox } from './MessageAlertBox';
 export { default as HorizontalLinearStepper } from './HorizontalLinearStepper';
 export { default as ModalStepperBox } from './ModalStepperBox';
 export { default as PlayerBoard } from './PlayerBoard';
+export { default as Confetti } from './Confetti';
+
 
 
 

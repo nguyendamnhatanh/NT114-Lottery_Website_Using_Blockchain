@@ -1,5 +1,7 @@
 @tailwind base;
 @tailwind components;
+@tailwind utilities;
+
 /* Firefox */
 * {
     scrollbar-width: thin;
@@ -18,5 +20,4 @@
   *::-webkit-scrollbar-thumb {
     background-color:  #2E4F4F ;
     border-radius: 10px;    
-  }
-@tailwind utilities;
+  } 
