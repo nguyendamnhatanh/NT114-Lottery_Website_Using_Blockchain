@@ -179,22 +179,22 @@ const LotteryRoom = () => {
     )
 
     const ControlBox = () => (
-        <div className="flex-1 flex flex-col bg-[#1c1c24] items-center justify-center rounded-[10px]">
+        <div className="flex-1 flex flex-col bg-[#1c1c24] items-center justify-start rounded-[10px]">
 
-            <div className="flex w-full justify-center items-start">
+            <div className="flex w-full">
                 <div className="w-full bg-[#2E4F4F] rounded-t-[10px]">
                     <h2 className="text-lg font-medium text-center">Your Balance</h2>
                 </div>
             </div>
 
-            <div className="flex flex-col w-[95%] gap-[30px] justify-center items-center  p-[50px] bg-[#000000] rounded-[10px] my-[20px]">
+            <div className="flex flex-col w-[95%] h-[50%] gap-[30px] justify-center items-center p-[50px] bg-[#000000] rounded-[10px] my-[20px]">
                 <div className='flex flex-col gap-[10px]'>
                     <p className="font-epilogue font-medium text-[20px] text-center text-white uppercase">
                         Time Remaining:
                     </p>
                     <div className="font-epilogue text-[50px] leading-[30px] text-center text-white uppercase">
                         {
-                            true ? <CountBox time={timeRemaining} /> : (<CircularProgress />)
+                            timeRemaining ? <CountBox time={timeRemaining} /> : (<CircularProgress />)
                         }
                     </div>
                 </div>
@@ -207,9 +207,9 @@ const LotteryRoom = () => {
                 </div>
             </div>
 
-            <div className=" w-[95%] flex-row flex md:flex-row gap-[30px] mb-[20px] ">
+            <div className="flex flex-row w-[95%] h-[50%] md:flex-row gap-[30px] mb-[20px] bg-[#000000] rounded-[10px]">
                 <div className="flex-1 flex-row ">
-                    <div className="flex flex-col p-[50px] bg-[#000000] rounded-[10px]">
+                    <div className="flex flex-col p-[50px] ">
                         <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-white uppercase">User Control</p>
                         <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">Ticket Price: {ticketPrice}</p>
                         <p className="font-epilogue fount-medium text-[20px] leading-[30px] text-center text-[#808191]">Bet Left: {betLeft}</p>
@@ -294,7 +294,7 @@ const LotteryRoom = () => {
     )
 
     const LotteryRoom = () => (
-        <div>
+        <div className='w-full'>
             {/* Lottery Room Status */}
             {/* <LotteryStatus /> */}
             {/* <HorizontalLinearStepper /> */}
@@ -334,15 +334,16 @@ const LotteryRoom = () => {
 
     return (
         (!timeRemaining || !pool || !entry || !address) ?
+        // true ?
             (
-                <div className='flex justify-center'>
+                <div className='flex justify-center items-center w-full h-full '>
                     <Stack spacing={1}>
                         <Skeleton variant="text" sx={{ fontSize: '2rem' }} />
-                        <div className='flex justify-between gap-6'>
+                        <div className='flex justify-between gap-6 flex-col lg:flex-row'>
                             <Skeleton variant="rounded" width={300} height={250} />
                             <Skeleton variant="rounded" width={300} height={250} />
                         </div>
-                        <div className='flex justify-between gap-5'>
+                        <div className='flex justify-between gap-5 flex-col lg:flex-row'>
                             <Skeleton variant="rounded" width={300} height={250} />
                             <Skeleton variant="rounded" width={300} height={250} />
                         </div>

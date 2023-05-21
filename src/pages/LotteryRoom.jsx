@@ -51,7 +51,7 @@ const LotteryRoom = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [ticket, setTicket] = useState([]);
-  const [testWinner, setTestWinner] = useState(0);
+
 
   const ticketPrice = (0.01).toString();
   const betLeft = 5;
@@ -91,21 +91,30 @@ const LotteryRoom = () => {
 
   let counter = 1;
 
-  //todo: @n4t41 please change this url to host domain
-  const socket = io('http://lottery.dacn.site/');
+  // //todo: @n4t41 please change this url to host domain
+  // const socket = io('http://lottery.dacn.site');
+
+
+  const [testWinner, setTestWinner] = useState(0);
+  const [socket, setSocket] = useState(null);
+
+
+  // useEffect(() => {
+  //   console.log('pick winner');
+  //   socket.on('pick winner', (data) => {
+  //     console.log(data);
+  //   });
+  // }, []);
 
   useEffect(() => {
-    console.log(++counter);
-    socket.on('pick winner', (data) => {
-      console.log(data);
-    });
-  });
-
-  useEffect(() => {
-    socket.on('getTestNum', (data) => {
+    //Local: http://localhost:3000
+    const socket = io('http://localhost:3000');
+    setSocket(socket);
+    console.log('set boy');
+    socket.on('testRandom', (data) => {
       setTestWinner(data);
     });
-  });
+  }, []);
 
   const getTestNumber = () => {
     socket.emit('testRandom', 'test');

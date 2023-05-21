@@ -17,7 +17,7 @@ const TestFeat = () => {
 
 
   return (
-    <div>
+    <div className='flex flex-1 justify-center items-center '>
       <LotteryRoomNew></LotteryRoomNew>
     </div>
   )

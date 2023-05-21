@@ -12,8 +12,8 @@ const CountBox = ({ time }) => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center w-[150px]">
-      <h4 className="font-epilogue font-bold text-[30px] text-white p-3 rounded-t-[10px] w-full text-center">
+    <div className="flex flex-col items-center w-full justify-center">
+      <h4 className="font-epilogue font-bold text-[30px] text-white p-3 rounded-t-[10px] w-full h-full text-center">
         {dateString}
       </h4>
     </div>
