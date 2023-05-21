@@ -3,17 +3,22 @@ const schedule = require('node-schedule');
 
 app.startApp();
 
-app.io.on('connection', () => {
-  console.log('user connected');
+const io = app.io;
+
+io.on('connection', (socket) => {
+  socket.on('testRandom', (data) => {
+    if (data === 'test') {
+      const random = Math.floor(100000 + Math.random() * 900000);
+      socket.emit('getTestNum', random);
+    }
+  });
 });
 
 const now = new Date();
 const date = new Date(now.getTime() + 4 * 1000);
 
-const job = schedule.scheduleJob(date, function () {
-  const random = Math.floor(100000 + Math.random() * 900000);
-  console.log('Random:' + random);
-  app.io.emit('pick winner', random);
-});
-
-console.log("test")
+// const job = schedule.scheduleJob(date, function () {
+//   const random = Math.floor(100000 + Math.random() * 900000);
+//   console.log('Random:' + random);
+//   app.io.emit('pick winner', random);
+// });
