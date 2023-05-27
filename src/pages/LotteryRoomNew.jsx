@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
-import { CountdownTimer, CustomButton, Loader, DisplayLuckyNumber, Timer, MessageAlertBox, HorizontalLinearStepper, ModalStepperBox, PlayerBoard, Confetti } from '../components';
+import { CountdownTimer, CustomButton, Loader, DisplayLuckyNumber, MessageAlertBox, HorizontalLinearStepper, ModalStepperBox, PlayerBoard, Confetti } from '../components';
 import { calculateBarPercentage, daysLeft, getMessageBasedOnBuyStatus } from '../utils';
 import { thirdweb, pickluck, badgeCheck, statusFailed } from '../assets';
 

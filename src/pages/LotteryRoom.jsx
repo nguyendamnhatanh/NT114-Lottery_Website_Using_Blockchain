@@ -8,7 +8,6 @@ import {
   CustomButton,
   Loader,
   DisplayLuckyNumber,
-  Timer,
   MessageAlertBox,
 } from '../components';
 import {
