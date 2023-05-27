@@ -18,7 +18,6 @@ const PaymentController = {
       let transaction = await wssProvider.getTransaction(txHash);
 
       if (transaction) {
-        let tickets = await contract.getCurrentTickets();
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
         const tickets = await contract.getCurrentTickets();
         const rawTickets = tickets.filter((item) => item.player === player);
