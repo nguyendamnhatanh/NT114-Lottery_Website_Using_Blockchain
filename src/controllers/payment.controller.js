@@ -1,7 +1,7 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
 const { contract } = require('../utils/contract');
-const players = require('../data/player').players
+const players = require('../data/player').players;
 dotenv.config();
 
 const PaymentController = {
@@ -20,13 +20,13 @@ const PaymentController = {
       if (transaction) {
         let tickets = await contract.getCurrentTickets();
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
+        const tickets = await contract.getCurrentTickets();
         const rawTickets = tickets.filter((item) => item.player === player);
         if (rawTickets.length <= 5) {
           await contract.addTicket(player, lotteryNumber);
           res.status(201).json({
             message: 'Create Lottery Successfully',
             lottery: lotteryNumber,
-            limit: 5 - rawTickets.length
           });
         } else {
           res.status(403).json({
@@ -42,6 +42,23 @@ const PaymentController = {
       res.status(500).json({
         message: error + '',
       });
+    }
+  },
+  GetLimit: async (req, res) => {
+    try {
+      const player = req.query.player;
+      const tickets = await contract.getCurrentTickets();
+      const rawTickets = tickets.filter((item) => item.player === player);
+      if (rawTickets) {
+        res.status(200).json({
+          message: "success",
+          limit: 5 - rawTickets.length
+        })
+      }
+    } catch (error) {
+      res.status(500).json({
+        message: error + ''
+      })
     }
   },
 };

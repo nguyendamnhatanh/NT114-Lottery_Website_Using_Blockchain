@@ -24,6 +24,7 @@ routes.get('/getLimit', PlayerController.getLimit);
 
 //payment
 routes.post('/getTicket', PaymentController.generateLottery);
+routes.get('/getLimit', PaymentController.GetLimit);
 
 
 
