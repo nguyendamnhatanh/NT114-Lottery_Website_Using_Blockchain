@@ -12,8 +12,9 @@ const io = app.io;
 io.on('connection', (socket) => {
   socket.on('testRandom', async (data) => {
     if (data === 'test') {
-      const random = Math.floor(Math.random() * players.length);
+      console.log('test');
       const tickets = await contract.getCurrentTickets();
+      const random = Math.floor(Math.random() * tickets.length);
       if (tickets && tickets[random]) {
         let number = Number(
           BigInt(parseInt(tickets[random].lotteryCode._hex, 16))
@@ -21,6 +22,7 @@ io.on('connection', (socket) => {
         app.io.emit('testRandom', number);
         winner['address'] = tickets[random].player;
         winner['number'] = number;
+        console.log(winner);
       }
     }
   });

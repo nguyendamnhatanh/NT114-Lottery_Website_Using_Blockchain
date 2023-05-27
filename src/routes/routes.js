@@ -19,6 +19,7 @@ routes.delete('/destroy', ContractController.destroy);
 //player
 routes.post('/isWinner', PlayerController.IsWinner);
 routes.post('/claim', PlayerController.ClaimReward);
+routes.get('/getWinner', PlayerController.GetWinner);
 
 
 //payment

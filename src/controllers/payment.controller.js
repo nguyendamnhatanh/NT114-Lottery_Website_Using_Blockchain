@@ -22,7 +22,7 @@ const PaymentController = {
         await contract.addTicket(player, lotteryNumber);
         players.push({
           address: player,
-          number: number
+          number: lotteryNumber
         })
         res.status(201).json({
           message: 'Create Lottery Successfully',
