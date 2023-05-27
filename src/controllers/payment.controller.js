@@ -19,15 +19,18 @@ const PaymentController = {
 
       if (transaction) {
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
-        await contract.addTicket(player, lotteryNumber);
-        players.push({
-          address: player,
-          number: lotteryNumber
-        })
-        res.status(201).json({
-          message: 'Create Lottery Successfully',
-          lottery: lotteryNumber,
-        });
+        const rawTickets = tickets.filter((item) => item.player === player);
+        if (rawTickets.length <= 5) {
+          await contract.addTicket(player, lotteryNumber);
+          res.status(201).json({
+            message: 'Create Lottery Successfully',
+            lottery: lotteryNumber,
+          });
+        } else {
+          res.status(403).json({
+            message: 'You have reached limit',
+          });
+        }
       } else {
         res.status(422).json({
           message: 'No transaction found',

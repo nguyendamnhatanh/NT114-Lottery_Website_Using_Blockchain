@@ -44,6 +44,7 @@ const TransactionController = {
         res.status(200).json({
           message: 'success',
           tickets: userTickets,
+          limit: 5 - userTickets.length
         });
       }
     } catch (error) {
