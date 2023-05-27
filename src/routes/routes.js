@@ -20,9 +20,11 @@ routes.delete('/destroy', ContractController.destroy);
 routes.post('/isWinner', PlayerController.IsWinner);
 routes.post('/claim', PlayerController.ClaimReward);
 routes.get('/getWinner', PlayerController.GetWinner);
-
+routes.get('/getLimit', PlayerController.getLimit);
 
 //payment
 routes.post('/getTicket', PaymentController.generateLottery);
+
+
 
 module.exports = routes;

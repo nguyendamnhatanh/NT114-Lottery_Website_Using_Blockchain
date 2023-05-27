@@ -56,6 +56,31 @@ const PlayerController = {
       });
     }
   },
+  getLimit: async (req, res) => {
+    let player = req.body.playerAddress;
+    let tickets = await contract.getCurrentTickets();
+    const rawTickets = tickets.filter((item) => item.player === player);
+    console.log(rawTickets);
+    try {
+      if (rawTickets.length <= 5) {
+        res.status(200).json({
+          message: 'success',
+          limit: 5 - rawTickets.length,
+          current: rawTickets.length
+        });
+      }
+      else {
+        res.status(403).json({
+          message: 'You have reached limit',
+        });
+      }
+    }
+    catch (error) {
+      res.status(500).json({
+        message: error + '',
+      });
+    }
+  },
 };
 
 module.exports = PlayerController;
