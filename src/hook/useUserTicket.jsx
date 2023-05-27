@@ -32,7 +32,7 @@ export const useUserTicket = () => {
 
         const fetchData = async () => {
             setIsLoading(true);
-            const response = await useAxios('GET', 'https://test.fkmdev.site/api/getUserTickets?player=' + address);
+            const response = await useAxios('GET', 'http://localhost:3000/api/getUserTickets?player=' + address);
             const newData = extractTicketData(response?.data?.tickets)
             if (isMounted && newData.length !== Result.length) {
                 setResult(newData);
@@ -67,7 +67,7 @@ export const useUserTicket = () => {
         try {
             if (!address) { setResult([]); return; }
             setIsLoading(true);
-            const response = await useAxios('GET', 'https://test.fkmdev.site/api/getUserTickets?player=' + address);
+            const response = await useAxios('GET', 'http://localhost:3000/api/getUserTickets?player=' + address);
             const Array = extractTicketData(response?.data?.tickets)
             setResult(Array);
             setIsLoading(false);

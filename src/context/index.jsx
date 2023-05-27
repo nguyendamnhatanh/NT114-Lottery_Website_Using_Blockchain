@@ -52,16 +52,6 @@ export const StateContextProvider = ({ children }) => {
     const connect = useMetamask();
     const contractAddress = useSmartContractAddress();
 
-    // useEffect(() => {
-    //     if (isTxSent === 1) {
-    //         getLuckyNumber(txHash, amount);
-    //         if (luckyNumber) {
-    //             setStatus(1);
-    //             console.log('luckyNumber', luckyNumber)
-    //         }
-    //     }
-    // }, [isTxSent, txHash])
-
 
     const ConnectWallet = useCallback(async () => {
         const handleConnect = () => {
@@ -134,6 +124,9 @@ export const StateContextProvider = ({ children }) => {
     }
 
     const gettingLuckNumber = async (txHash, amount) => {
+        console.log("🚀 ~ file: index.jsx:137 ~ gettingLuckNumber ~ txHash:", txHash)
+        console.log("🚀 ~ file: index.jsx:137 ~ gettingLuckNumber ~ amount:", amount)
+        if (typeof (amount) !== 'number') amount = Number(amount);
         console.log('status gettingLuckNumber', currentStatus.current)
         if (currentStatus.current === 4 && txHash) {
             setStatus(5);
@@ -184,7 +177,7 @@ export const StateContextProvider = ({ children }) => {
 
     const getLuckyNumber = async (txHash, amount) => {
         try {
-            const response = await useAxios('POST', 'https://test.fkmdev.site/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
+            const response = await useAxios('POST', 'http://localhost:3000/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
             setLuckyNumber(response.data.luckyNumber);
             return response.data.lottery;
         } catch (error) {

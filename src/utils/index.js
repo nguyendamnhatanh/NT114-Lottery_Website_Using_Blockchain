@@ -5,13 +5,16 @@ export const daysLeft = (timestamp) => {
 };
 
 export const convertTimestampToDateString = (timestamp) => {
+  console.log("🚀 ~ file: index.js:8 ~ convertTimestampToDateString ~ timestamp:", timestamp)
+
   const remainingTime = timestamp - Math.floor(Date.now() / 1000);
   const seconds = Math.floor(remainingTime % 60);
   const minutes = Math.floor((remainingTime / 60) % 60);
   const hours = Math.floor((remainingTime / (60 * 60)) % 24);
   const days = Math.floor(remainingTime / (60 * 60 * 24));
   const dateString = `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  return dateString;
+  // return dateString;
+  return [days, hours, minutes, seconds];
 };
 
 export const calculateBarPercentage = (goal, raisedAmount) => {
@@ -37,6 +40,16 @@ export const extractTicketData = (response) => {
       createDate,
     };
     result.push(ticketData);
+  });
+  // console.log('result extractTicketData', result)
+  return result;
+};
+
+
+export const extractEntryData = (response) => {
+  const result = [];
+  const entryData = response.map((entry) => {
+    result.push(entry);
   });
   // console.log('result extractTicketData', result)
   return result;

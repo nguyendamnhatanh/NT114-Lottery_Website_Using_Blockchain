@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
-import { CountBox, CustomButton, Loader, DisplayLuckyNumber, Timer, MessageAlertBox, HorizontalLinearStepper, ModalStepperBox, PlayerBoard, Confetti } from '../components';
+import { CountdownTimer, CustomButton, Loader, DisplayLuckyNumber, Timer, MessageAlertBox, HorizontalLinearStepper, ModalStepperBox, PlayerBoard, Confetti } from '../components';
 import { calculateBarPercentage, daysLeft, getMessageBasedOnBuyStatus } from '../utils';
 import { thirdweb, pickluck, badgeCheck, statusFailed } from '../assets';
 
@@ -178,6 +178,7 @@ const LotteryRoom = () => {
         )
     )
 
+
     const ControlBox = () => (
         <div className="flex-1 flex flex-col bg-[#1c1c24] items-center justify-start rounded-[10px]">
 
@@ -194,8 +195,9 @@ const LotteryRoom = () => {
                     </p>
                     <div className="font-epilogue text-[50px] leading-[30px] text-center text-white uppercase">
                         {
-                            timeRemaining ? <CountBox time={timeRemaining} /> : (<CircularProgress />)
+                            timeRemaining ? <CountdownTimer targetDate={timeRemaining} /> : (<CircularProgress />)
                         }
+
                     </div>
                 </div>
 
@@ -334,7 +336,7 @@ const LotteryRoom = () => {
 
     return (
         (!timeRemaining || !pool || !entry || !address) ?
-        // true ?
+            // true ?
             (
                 <div className='flex justify-center items-center w-full h-full '>
                     <Stack spacing={1}>

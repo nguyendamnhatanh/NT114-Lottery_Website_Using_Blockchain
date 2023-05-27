@@ -27,6 +27,9 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App'
 
 import './index.css'
+import './assets/styles/Confetti.scss'
+import './assets/styles/CountDownTimer.scss'
+
 
 import { store } from './redux/store'
 import { Provider } from 'react-redux'

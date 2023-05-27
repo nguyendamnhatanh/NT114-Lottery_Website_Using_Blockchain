@@ -10,7 +10,7 @@ export const useTicketHistory = () => {
 
     const getSmartAddress = async () => {
         try {          
-            const response = await useAxios('GET', 'https://test.fkmdev.site/api/getAddress');
+            const response = await useAxios('GET', 'http://localhost:3000/api/getAddress');
             setSmartAddress(response?.data?.address);
         } catch (error) {
             console.error(error);

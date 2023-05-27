@@ -5,7 +5,7 @@ export { default as FormField } from './FormField';
 export { default as Loader } from './Loader';
 export { default as DisplayCampaigns } from './DisplayCampaigns';
 export { default as FundCard } from './FundCard';
-export { default as CountBox } from './CountBox';
+export { default as CountdownTimer } from './CountdownTimer';
 export { default as DisplayLuckyNumber } from './DisplayLuckyNumber';
 export { default as Timer } from './Timer';
 export { default as MessageAlertBox } from './MessageAlertBox';

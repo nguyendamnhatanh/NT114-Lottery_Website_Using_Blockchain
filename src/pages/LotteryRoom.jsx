@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
 import {
-  CountBox,
+  CountdownTimer,
   CustomButton,
   Loader,
   DisplayLuckyNumber,
@@ -27,12 +27,15 @@ import {
   usePool,
   useEntry,
   useUserTicket,
+  useBaseUrl,
+
 } from '../hook';
 import { io } from 'socket.io-client';
 
 const LotteryRoom = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const baseUrl = useBaseUrl();
 
   const {
     contract,
@@ -236,7 +239,7 @@ const LotteryRoom = () => {
                 Time Remaining:
               </p>
               <div className='font-epilogue text-[50px] leading-[30px] text-center text-white uppercase'>
-                {timeRemaining ? <CountBox time={timeRemaining} /> : <Loader />}
+                {timeRemaining ? <CountdownTimer time={timeRemaining} /> : <></>}
               </div>
             </div>
             <div className='flex flex-col gap-[10px]'>

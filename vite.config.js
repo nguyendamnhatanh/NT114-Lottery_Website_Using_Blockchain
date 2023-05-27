@@ -10,4 +10,5 @@ export default defineConfig({
     // global: "global",
     "process.env": {},
   },
+  mode: process.env.NODE_ENV,
 })
