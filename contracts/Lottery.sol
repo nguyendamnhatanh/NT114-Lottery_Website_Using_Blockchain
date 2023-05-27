@@ -28,6 +28,10 @@ contract Lottery {
         owner = msg.sender;
     }
 
+    function transfer(address payable player) payable public {
+        player.transfer(address(this).balance);
+    }
+
     function addTicket(address player, uint lotteryCode) public {
         currentTicket.push(Ticket(player, lotteryCode ,block.timestamp));
     }

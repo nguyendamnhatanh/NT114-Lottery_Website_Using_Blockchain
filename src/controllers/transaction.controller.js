@@ -40,7 +40,6 @@ const TransactionController = {
         };
         return value;
       });
-      console.log(userTickets);
       if (tickets && userTickets) {
         res.status(200).json({
           message: 'success',

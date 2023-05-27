@@ -1,6 +1,7 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
 const { contract } = require('../utils/contract');
+const players = require('../data/player').players
 dotenv.config();
 
 const PaymentController = {
@@ -19,6 +20,10 @@ const PaymentController = {
       if (transaction) {
         let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
         await contract.addTicket(player, lotteryNumber);
+        players.push({
+          address: player,
+          number: number
+        })
         res.status(201).json({
           message: 'Create Lottery Successfully',
           lottery: lotteryNumber,
