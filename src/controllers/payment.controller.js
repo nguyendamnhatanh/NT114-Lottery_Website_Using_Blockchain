@@ -25,6 +25,7 @@ const PaymentController = {
           res.status(201).json({
             message: 'Create Lottery Successfully',
             lottery: lotteryNumber,
+            limit: 5 - rawTickets.length
           });
         } else {
           res.status(403).json({
