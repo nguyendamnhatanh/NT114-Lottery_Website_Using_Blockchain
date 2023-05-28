@@ -116,15 +116,6 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
-          {/* <CustomButton
-            btnType="button"
-            title={address ? address : 'Connect'}
-            styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
-            handleClick={() => {
-              if (address) console.log('Address: ', address);
-              else connect();
-            }}
-          /> */}
         </div>
       </div>
     </div >

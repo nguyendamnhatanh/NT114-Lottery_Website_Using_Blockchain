@@ -12,6 +12,14 @@ export { default as DisplayLuckyNumber } from './DisplayLuckyNumber';
 export { default as ModalStepperBox } from './ModalStepperBox';
 export { default as PlayerBoard } from './PlayerBoard';
 export { default as Confetti } from './Confetti';
+export { default as TestDialog } from './TestDialog';
+export { default as ConfettiDialog } from './ConfettiDialog';
+export { default as GetWinner } from './GetWinner';
+
+
+
+
+
 
 
 

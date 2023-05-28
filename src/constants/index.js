@@ -1,4 +1,4 @@
-import { logo, lottery, lucky, payment, profile, dashboard, logout, test } from '../assets';
+import { logo, lottery, lucky, payment, profile, dashboard, logout, test, money } from '../assets';
 
 export const navlinks = [
   {
@@ -24,17 +24,7 @@ export const navlinks = [
     name: 'test-feat',
     imgUrl: test,
     path: '/test-feat',
-  },
-  // {
-  //   name: 'payment',
-  //   imgUrl: payment,
-  //   path: '/payment',
-  //   disabled: false,
-  // },
-  // {
-  //   name: 'logout',
-  //   imgUrl: logout,
-  //   path: '/',
-  //   disabled: false,
-  // },
+  }
+  
+  
 ];

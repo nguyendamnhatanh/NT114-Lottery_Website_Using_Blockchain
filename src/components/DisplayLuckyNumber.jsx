@@ -15,10 +15,12 @@ export const DisplayLuckyNumber = ({ userTicket, isWinner }) => {
     return (
         userTicket?.length > 0
             ?
-            <div className=" rounded-lg w-[150px] flex flex-col justify-center items-center">
-                {
-                    userTicket.reverse().map((item, index) => (
-                        !isWinner ?
+            !isWinner
+                ?
+                <div className="rounded-lg justify-center items-center grid lg:grid-cols-5 md:grid-cols-3 sm:md:grid-cols-1 sm:h-[300px] gap-4 py-5">
+                    {
+                        userTicket.reverse().map((item, index) => (
+
                             (
                                 <div key={item.luckyNumber} className='py-1'>
                                     <div className="flex justify-center items-center text-center font-epilogue font-medium text-[20px] leading-[30px] w-36 h-12 rounded-[10px] bg-[#F5EA5A] text-black text-xl">
@@ -26,7 +28,14 @@ export const DisplayLuckyNumber = ({ userTicket, isWinner }) => {
                                     </div>
                                 </div>
                             )
-                            :
+
+                        ))
+                    }
+                </div>
+                :
+                <div className=" rounded-lg flex-col justify-center items-center ">
+                    {
+                        userTicket.reverse().map((item, index) => (
                             (
                                 <div key={item.luckyNumber} className='relative w-full h-full'>
                                     <img src={winnerTrophy} className='w-full h-full max-w-[150px]' />
@@ -36,12 +45,14 @@ export const DisplayLuckyNumber = ({ userTicket, isWinner }) => {
                                 </div>
 
                             )
-                    ))
-                }
-            </div>
+                        ))
+                    }
+                </div>
             :
             (
-                []
+                <div className="flex flex-col justify-center items-center h-[100px]">
+                    <p className='text-xl text-white font-medium'>...</p>
+                </div>
             )
     );
 }

@@ -9,7 +9,6 @@ const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
         setOpen(isOpen);
     }, [isOpen])
 
-
     const [message, setMessage] = useState('');
 
     const [SeverityStatus, setSeverityStatus] = useState('warning');

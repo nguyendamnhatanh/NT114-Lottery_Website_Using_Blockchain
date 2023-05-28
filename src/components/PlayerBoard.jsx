@@ -1,17 +1,17 @@
 import React from 'react'
 
 import { CircularProgress } from '@mui/material'
+import { shortenAddress } from '../utils/shortenAddress'
 
 
 const PlayerBoard = ({ entry }) => {
 
     return (
-        <div className="flex-1 flex flex-col bg-[#1c1c24] items-center justify-center rounded-[10px]">
-
+        <div className="flex-1 flex flex-col bg-[#1c1c24] items-center justify-center rounded-[10px] w-[400px]">
             <div className="flex flex-col w-full h-full  bg-[#1c1c24] rounded-[10px] ">
 
                 <div className="bg-[#2E4F4F] rounded-t-[10px]">
-                    <h2 className="text-lg font-medium text-center">Player Board</h2>
+                    <h2 className="text-lg font-medium text-center">Player Board {entry ? `: ${entry.length}` : ''} </h2>
                 </div>
 
                 <div className="flex flex-col justify-start items-center overflow-y-auto h-full">
@@ -31,7 +31,7 @@ const PlayerBoard = ({ entry }) => {
                                     entry.map((player, index) =>
                                     (
                                         <div key={`${player}-${index}`} className="flex justify-between items-center gap-4 py-1">
-                                            <p className="font-bold text-[16px] text-[#b2b3bd] leading-[26px] break-ll">{index + 1}. {player}</p>
+                                            <p className="font-bold text-[16px] text-[#b2b3bd] leading-[26px] break-ll">{index + 1}. {shortenAddress(player)}</p>
 
                                         </div>
                                     ))

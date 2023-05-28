@@ -35,6 +35,9 @@ export const StateContextProvider = ({ children }) => {
 
     const [smartAddress, setSmartAddress] = useState('');
 
+    const [winner, setWinner] = useState(0);
+
+
     // const [timeRemaining, setTimeRemaining] = useState();
     // 0: denied by user
     // 1: success, 2: buying ticket, 3: sending transaction, 4: sent transaction success, 5: getting lucky number, 6: get lucky number success
@@ -230,7 +233,9 @@ export const StateContextProvider = ({ children }) => {
             status,
             luckyNumber,
             ConnectWallet,
-            setStatus
+            setStatus,
+            winner,
+            setWinner
         }}>
             {children}
         </StateContext.Provider>
