@@ -57,15 +57,16 @@ const PlayerController = {
     }
   },
   getLimit: async (req, res) => {
-    let player = req.body.playerAddress;
-    let tickets = await contract.getCurrentTickets();
+    let player = req.query.player;
+    console.log("🚀 ~ file: players.controller.js:61 ~ getLimit: ~ player:", player)
+    let tickets = await contract.getCurrentTickets();    
     const rawTickets = tickets.filter((item) => item.player === player);
     console.log(rawTickets);
     try {
       if (rawTickets.length <= 5) {
         res.status(200).json({
           message: 'success',
-          limit: 5 - rawTickets.length,
+          limit: 5,
           current: rawTickets.length
         });
       }
