@@ -108,6 +108,7 @@ export const StateContextProvider = ({ children }) => {
                 // solution 0: split code to async function X
                 // solution 1: use useRef to store status and txHash
                 await gettingLuckNumber(currentTxHash.current, amount);
+                setIsLoading(false);
             } catch (error) {
                 if (error.message === 'User denied transaction signature') {
                     setStatus(0);
@@ -179,14 +180,20 @@ export const StateContextProvider = ({ children }) => {
             }
             else {
                 throw new Error('Send transaction error. Please try again later');
+                setIsLoading(false);
+
             }
 
         } catch (error) {
             if (error.code === 4001) {
                 throw new Error('User denied transaction signature');
+                setIsLoading(false);
+
             }
             if (error.code === -32002) {
                 throw new Error('Under processing.');
+                setIsLoading(false);
+
             }
         }
     }

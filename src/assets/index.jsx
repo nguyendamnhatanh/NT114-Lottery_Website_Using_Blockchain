@@ -16,6 +16,8 @@ import test from './test.svg';
 import pickluck from './pickluck.svg';
 import badgeCheck from './badgeCheck.svg';
 import statusFailed from './statusFailed.svg';
+import winnerTrophy from './winnerTrophy.svg';
+
 
 import Icon from "@mui/material/Icon";
 
@@ -38,5 +40,6 @@ export {
     thirdweb,
     pickluck,
     badgeCheck,
-    statusFailed
+    statusFailed,
+    winnerTrophy
 };

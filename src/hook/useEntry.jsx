@@ -54,6 +54,10 @@ export const useEntry = () => {
             }
             else {
                 fetchAttempts.current = fetchAttempts.current + 1;
+                if (fetchAttempts.current > 5) {
+                    clearInterval(timerId);
+                    setIsLoading(false);
+                }
             }
         };
 

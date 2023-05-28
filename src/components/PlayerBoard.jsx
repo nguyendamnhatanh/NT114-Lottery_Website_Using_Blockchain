@@ -8,13 +8,13 @@ const PlayerBoard = ({ entry }) => {
     return (
         <div className="flex-1 flex flex-col bg-[#1c1c24] items-center justify-center rounded-[10px]">
 
-            <div className="flex flex-col w-full  bg-[#1c1c24] rounded-[10px] ">
+            <div className="flex flex-col w-full h-full  bg-[#1c1c24] rounded-[10px] ">
 
                 <div className="bg-[#2E4F4F] rounded-t-[10px]">
                     <h2 className="text-lg font-medium text-center">Player Board</h2>
                 </div>
 
-                <div className="flex flex-col justify-start items-center overflow-y-auto max-h-[200px]">
+                <div className="flex flex-col justify-start items-center overflow-y-auto h-full">
                     {
                         // // example dummy data
                         // dummyEntry.reverse().map((item, index) => (
