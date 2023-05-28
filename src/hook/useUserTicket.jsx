@@ -9,7 +9,10 @@ import { Loader } from "../components";
 
 import { useStateContext } from "../context";
 
+import useBaseUrl from "./useBaseUrl";
+
 export const useUserTicket = () => {
+    const base_url = useBaseUrl();
 
     const { address, setIsLoading, status, setStatus } = useStateContext();
 
@@ -32,7 +35,7 @@ export const useUserTicket = () => {
 
         const fetchData = async () => {
             setIsLoading(true);
-            const response = await useAxios('GET', 'http://localhost:3000/api/getUserTickets?player=' + address);
+            const response = await useAxios('GET', base_url + '/api/getUserTickets?player=' + address);
             const newData = extractTicketData(response?.data?.tickets)
             if (isMounted && newData.length !== Result.length) {
                 setResult(newData);
@@ -67,7 +70,7 @@ export const useUserTicket = () => {
         try {
             if (!address) { setResult([]); return; }
             setIsLoading(true);
-            const response = await useAxios('GET', 'http://localhost:3000/api/getUserTickets?player=' + address);
+            const response = await useAxios('GET', base_url + '/api/getUserTickets?player=' + address);
             const Array = extractTicketData(response?.data?.tickets)
             setResult(Array);
             setIsLoading(false);

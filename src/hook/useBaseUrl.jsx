@@ -1,14 +1,9 @@
 import React from 'react'
 
 const useBaseUrl = () => {
-   
     const mode = import.meta.env.MODE;
-    console.log("🚀 ~ file: useBaseUrl.jsx:6 ~ useBaseUrl ~ mode:", mode)
-    return (
-        <div>
-            
-        </div>
-    )
+    const baseUrl = mode === 'development' ? 'http://localhost:3000' : 'http://lottery.dacn.site';
+    return baseUrl;
 }
 
 export default useBaseUrl

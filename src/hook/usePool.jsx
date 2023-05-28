@@ -4,8 +4,11 @@ import { useEffect, useState, useRef } from "react";
 
 import { useAxios } from "./useAxios";
 import { useStateContext } from "../context";
+import useBaseUrl from "./useBaseUrl";
 
 export const usePool = () => {
+
+    const base_url = useBaseUrl();
 
     const { address, setIsLoading, status, setStatus } = useStateContext();
 
@@ -15,7 +18,7 @@ export const usePool = () => {
 
     const fetchPool = async () => {
         try {
-            const response = await useAxios('GET', 'http://localhost:3000/api/getPool');
+            const response = await useAxios('GET', base_url + '/api/getPool');
             setResult(response?.data?.pool);
         } catch (error) {
             console.error(error);
@@ -35,7 +38,7 @@ export const usePool = () => {
 
         const fetchData = async () => {
             setIsLoading(true);
-            const response = await useAxios('GET', 'http://localhost:3000/api/getPool');
+            const response = await useAxios('GET', base_url + '/api/getPool');
             const newData = response?.data?.pool;
             if (isMounted && newData !== Result) {
                 setResult(newData);

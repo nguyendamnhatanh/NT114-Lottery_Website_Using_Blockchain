@@ -8,7 +8,7 @@ import {
   CustomButton,
   Loader,
   DisplayLuckyNumber,
-  MessageAlertBox,
+  // MessageAlertBox,
 } from '../components';
 import {
   calculateBarPercentage,
@@ -27,9 +27,12 @@ import {
   useEntry,
   useUserTicket,
   useBaseUrl,
+  useBetLeft,
 
 } from '../hook';
 import { io } from 'socket.io-client';
+
+
 
 const LotteryRoom = () => {
   const { state } = useLocation();
@@ -56,7 +59,7 @@ const LotteryRoom = () => {
 
 
   const ticketPrice = (0.01).toString();
-  const betLeft = 5;
+  const betLeft = useBetLeft();
   const pool = usePool();
   const timeRemaining = useTimeRemaining();
   const entry = useEntry();
@@ -109,8 +112,8 @@ const LotteryRoom = () => {
   // }, []);
 
   useEffect(() => {
-    //Local: http://localhost:3000
-    const socket = io('http://localhost:3000');
+    //Local: base_url
+    const socket = io('base_url');
     setSocket(socket);
     console.log('set boy');
     socket.on('testRandom', (data) => {
@@ -315,16 +318,16 @@ const LotteryRoom = () => {
           </div>
         </div>
       </div>
-      <MessageAlertBox
+      {/* <MessageAlertBox
         title='NOTIFY YOUR TRANSACTION STATUS'
         message={message}
         type={status === 4 ? 'success' : status < 0 ? 'error' : 'warning'}
         handleConfirm={() => {
-          window.location.reload();
+          window.location.reload();MessageAlertBox
         }}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
-      />
+      /> */}
     </div>
   );
 };

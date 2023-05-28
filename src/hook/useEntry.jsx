@@ -6,9 +6,12 @@ import { useAxios } from "./useAxios";
 import { useStateContext } from '../context';
 
 import { extractEntryData } from '../utils';
+import useBaseUrl from "./useBaseUrl";
 
 
 export const useEntry = () => {
+    
+    const base_url = useBaseUrl();
 
     const { address, setIsLoading, status, setStatus } = useStateContext();
 
@@ -18,7 +21,7 @@ export const useEntry = () => {
 
     const fetchFetchEntry = async () => {
         try {
-            const response = await useAxios('GET', 'http://localhost:3000/api/getEntries');
+            const response = await useAxios('GET', base_url + '/api/getEntries');
             // console.log('response ', response);
             setResult(response?.data?.players);
 
@@ -40,7 +43,7 @@ export const useEntry = () => {
 
         const fetchData = async () => {
             setIsLoading(true);
-            const response = await useAxios('GET', 'http://localhost:3000/api/getEntries' );
+            const response = await useAxios('GET', base_url + '/api/getEntries');
             const newData = extractEntryData(response?.data?.players)
             if (isMounted && newData.length !== Result.length) {
                 setResult(newData);
@@ -57,7 +60,7 @@ export const useEntry = () => {
         if (status === 1) {
             fetchData();
             if (fetchAttempts.current === 0) {
-                timerId = setInterval(() => {                    
+                timerId = setInterval(() => {
                     fetchData();
                 }, 1000);
             }

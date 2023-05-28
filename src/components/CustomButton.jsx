@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Loader, MessageAlertBox } from '.';
+import { Loader } from '.';
 
 import { useStateContext } from '../context';
 

@@ -63,7 +63,7 @@ export const getMessageBasedOnBuyStatus = (status, luckyNumber) => {
   // 
   switch (status) {
     case 0:
-      return 'Transaction is denied by user. Please try again.';
+      return 'Transaction is denied by user.';
     case 1:
       return 'Transaction is success. Your lottery number is: ' + luckyNumber + '. Please wait for the result.';
     case 2:
@@ -81,28 +81,30 @@ export const getMessageBasedOnBuyStatus = (status, luckyNumber) => {
     case -1:
       return 'Getting User Data';
     case -2:
-      return 'Not enough balance. Please try again.';
+      return 'Not enough balance.';
     case -3:
-      return 'Unknown error. Please try again.';
+      return 'Unknown error.';
     case -4:
-      return 'Something went wrong. Please try again.';
+      return 'Something went wrong.';
     case -5:
-      return 'Unknown error. Please try again.';
+      return 'Unknown error.';
     case -6:
-      return 'Get lucky number failed. Please try again.';
+      return 'Get lucky number failed.';
+    case -7:
+      return 'You reach the limit of ticket.';
     default:
-      return 'Unknown error. Please try again.';
+      return 'Unknown error.';
 
   }
 
-  // status === 0 ? 'Transaction is failed. Please try again.' :
+  // status === 0 ? 'Transaction is failed.' :
   //   status === 1 ? 'Transaction is success. Your lottery number is: ' + luckyNumber + '. Please wait for the result.' :
   //     status === 2 ? 'Transaction is pending. Please wait for the result.' :
   //       status === 3 ? 'Transaction is under processing. Please wait for the result.' :
-  //         status === -1 ? 'There is no Transaction found. Please try again.' :
-  //           status === -2 ? 'Not enough balance. Please try again.' :
-  //             status === -3 ? 'Transaction is canceled by user. Please try again.' :
-  //               'Something went wrong. Please try again.'
+  //         status === -1 ? 'There is no Transaction found.' :
+  //           status === -2 ? 'Not enough balance.' :
+  //             status === -3 ? 'Transaction is canceled by user.' :
+  //               'Something went wrong.'
 
 };
 

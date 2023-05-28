@@ -2,10 +2,11 @@
 import { useEffect, useState } from "react";
 
 import { useAxios } from "./useAxios";
-
+import useBaseUrl from "./useBaseUrl";
 
 
 export const useTimeRemaining = () => {
+    const base_url = useBaseUrl();
     // const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
     // const SEVEN_DAYS_IN_MS = 7 * 24 * 60 * 60 * 1000;
     // const NOW_IN_MS = new Date().getTime();
@@ -15,7 +16,7 @@ export const useTimeRemaining = () => {
     const DEADLINE = new Date('2023-05-30').getTime();
     // const getResult = async () => {
     //     try {
-    //         // const response = await useAxios('GET', 'http://localhost:3000/api/getExpire');
+    //         // const response = await useAxios('GET', base_url + '/api/getExpire');
     //         // setResult(response?.data?.remain);
     //     } catch (error) {
     //         console.error(error);

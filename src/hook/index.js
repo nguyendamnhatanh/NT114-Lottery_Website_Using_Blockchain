@@ -6,6 +6,9 @@ export { default as useEntry } from './useEntry';
 export { default as useUserTicket } from './useUserTicket';
 export { default as useBaseUrl } from './useBaseUrl';
 export { default as useCountdown } from './useCountdown';
+export { default as useBetLeft } from './useBetLeft';
+
+
 
 
 

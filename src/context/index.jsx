@@ -3,7 +3,7 @@ import React, { useContext, createContext, useState, useEffect, useCallback, use
 import { useAddress, useContract, useMetamask, useContractWrite, useWallet } from '@thirdweb-dev/react';
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { ethers } from "ethers";
-import { useAxios, useSmartContractAddress, useTimeRemaining } from "../hook";
+import { useAxios, useBaseUrl, useBetLeft, useSmartContractAddress, useTimeRemaining } from "../hook";
 import { parseAmount } from "../utils/parseAmount";
 import { convertTimestampToDateString } from '../utils';
 
@@ -15,9 +15,13 @@ const StateContext = createContext();
 
 // const contractAddress = useAddress();
 
+
 export const StateContextProvider = ({ children }) => {
 
+    const base_url = useBaseUrl();
+
     const [txHash, setTxHash] = useState('');
+
     const currentTxHash = useRef('');
     useEffect(() => {
         currentTxHash.current = txHash;
@@ -93,39 +97,47 @@ export const StateContextProvider = ({ children }) => {
         }
     };
 
-    const BuyTicket = async (amount) => {
-        try {
-            setStatus(2);
-            await sendTransaction(amount);
+    const BuyTicket = async (amount, betLeft) => {
+        if (betLeft)
+            try {
+                setStatus(2);
+                await sendTransaction(amount);
 
-            await new Promise(resolve => setTimeout(resolve, 500));
-            // cannot write barely code here <- txHash and status not update from initial state
-            // solution 0: split code to async function X
-            // solution 1: use useRef to store status and txHash
-            await gettingLuckNumber(currentTxHash.current, amount);
-        } catch (error) {
-            if (error.message === 'User denied transaction signature') {
-                setStatus(0);
+                await new Promise(resolve => setTimeout(resolve, 500));
+                // cannot write barely code here <- txHash and status not update from initial state
+                // solution 0: split code to async function X
+                // solution 1: use useRef to store status and txHash
+                await gettingLuckNumber(currentTxHash.current, amount);
+            } catch (error) {
+                if (error.message === 'User denied transaction signature') {
+                    setStatus(0);
+                }
+                else if (error.message === 'Get Lucky Number error. Maybe the transaction is still pending. Please try again later') {
+                    setStatus(-6);
+                }
+                else if (error.message === 'Send transaction error. Please try again later') {
+                    setStatus(-4);
+                }
+                else {
+                    console.log('Un-processing error:', error)
+                }
             }
-            else if (error.message === 'Get Lucky Number error. Maybe the transaction is still pending. Please try again later') {
-                setStatus(-6);
+            finally {
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                setIsLoading(false);
             }
-            else if (error.message === 'Send transaction error. Please try again later') {
-                setStatus(-4);
-            }
-            else {
-                console.log('Un-processing error:', error)
-            }
-        }
-        finally {
+        else {
+            setIsLoading(true);
+            setStatus(-7);
             await new Promise(resolve => setTimeout(resolve, 2000));
             setIsLoading(false);
         }
+
     }
 
     const gettingLuckNumber = async (txHash, amount) => {
-        console.log("🚀 ~ file: index.jsx:137 ~ gettingLuckNumber ~ txHash:", txHash)
-        console.log("🚀 ~ file: index.jsx:137 ~ gettingLuckNumber ~ amount:", amount)
+        // console.log("🚀 ~ file: index.jsx:137 ~ gettingLuckNumber ~ txHash:", txHash)
+        // console.log("🚀 ~ file: index.jsx:137 ~ gettingLuckNumber ~ amount:", amount)
         if (typeof (amount) !== 'number') amount = Number(amount);
         console.log('status gettingLuckNumber', currentStatus.current)
         if (currentStatus.current === 4 && txHash) {
@@ -133,13 +145,17 @@ export const StateContextProvider = ({ children }) => {
             const gettingLKN = await getLuckyNumber(txHash, amount);
             if (gettingLKN) {
                 setStatus(6);
-                setIsLoading(false);
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 setLuckyNumber(gettingLKN);
                 console.log('Congratulation, Buy Ticket Success', gettingLKN)
                 setStatus(1);
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                setIsLoading(false);
             }
             else {
+                setIsLoading(false);
                 throw new Error('Get Lucky Number error. Maybe the transaction is still pending. Please try again later');
+
             }
         }
     }
@@ -177,7 +193,7 @@ export const StateContextProvider = ({ children }) => {
 
     const getLuckyNumber = async (txHash, amount) => {
         try {
-            const response = await useAxios('POST', 'http://localhost:3000/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
+            const response = await useAxios('POST', base_url + '/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
             setLuckyNumber(response.data.luckyNumber);
             return response.data.lottery;
         } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Box, Modal, CircularProgress } from '@mui/material'
-import HorizontalLinearStepper from './HorizontalLinearStepper'
+import { Button, Box, Modal, CircularProgress, Alert } from '@mui/material'
+// import HorizontalLinearStepper from './HorizontalLinearStepper'
 import { getMessageBasedOnBuyStatus } from '../utils';
 
 const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
@@ -12,10 +12,23 @@ const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
 
     const [message, setMessage] = useState('');
 
+    const [SeverityStatus, setSeverityStatus] = useState('warning');
+
     useEffect(() => {
         const a = getMessageBasedOnBuyStatus(status, luckyNumber);
+        const b = severityStatus();
+        setSeverityStatus(b);
         setMessage(a);
     }, [status])
+
+
+    const severityStatus = () => {
+        if (status === 1 || status === 4 || status === 6) return 'success';
+        if (status <= -2 || status == 0) return 'error';
+        if (status === 2) return 'info';
+        return 'warning';
+    }
+
 
     const LotteryStatus = () =>
     (
@@ -24,16 +37,18 @@ const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
         (
             <div className="flex flex-col items-center">
                 <div className="flex text-black py-5">
-                    {                       
-                            <div className='flex flex-col items-center justify-center gap-10'>
-                                <CircularProgress />
-                                <p className="font-mono  text-[20px] text-center text-black uppercase">Processing...</p>
-                                <p className="font-mono  text-[20px] text-center text-black">Status: {message}</p>
-                            </div>                        
+                    {
+                        <div className='flex flex-col items-center justify-center gap-10'>
+                            <CircularProgress />
+                            <Alert variant="filled" severity={SeverityStatus} >
+                                Status: {message}
+                            </Alert>
+
+                        </div>
                     }
                 </div>
 
-            </div>
+            </div >
         )
     )
 

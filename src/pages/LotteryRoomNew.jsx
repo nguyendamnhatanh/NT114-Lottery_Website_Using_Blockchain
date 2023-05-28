@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
 
 import { useStateContext } from '../context';
-import { CountdownTimer, CustomButton, Loader, DisplayLuckyNumber, MessageAlertBox, HorizontalLinearStepper, ModalStepperBox, PlayerBoard, Confetti } from '../components';
+import { CountdownTimer, CustomButton, Loader, DisplayLuckyNumber, ModalStepperBox, PlayerBoard, Confetti } from '../components';
 import { calculateBarPercentage, daysLeft, getMessageBasedOnBuyStatus } from '../utils';
 import { thirdweb, pickluck, badgeCheck, statusFailed } from '../assets';
 
@@ -25,9 +25,10 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { Typography } from '@mui/material';
 
-import { useSmartContractAddress, useTimeRemaining, usePool, useEntry, useUserTicket } from "../hook";
+import { useSmartContractAddress, useTimeRemaining, usePool, useEntry, useUserTicket, useBetLeft } from "../hook";
 import { Padding, RoundedCorner, WidthFull } from '@mui/icons-material';
 import Stack from '@mui/material/Stack';
+import { shortenAddress } from '../utils/shortenAddress';
 
 // import classes from '../assets/styles/main.sass'
 
@@ -44,7 +45,7 @@ const LotteryRoom = () => {
     const [ticket, setTicket] = useState([]);
 
     const ticketPrice = (0.01).toString();
-    const betLeft = 5;
+    const betLeft = useBetLeft();
     const pool = usePool();
     const timeRemaining = useTimeRemaining();
     const entry = useEntry();
@@ -58,7 +59,7 @@ const LotteryRoom = () => {
     const handleBuyTicket = async () => {
         try {
             setModalIsOpen(true);
-            await BuyTicket(ticketPrice);
+            await BuyTicket(ticketPrice, betLeft);
             setModalIsOpen(false);
 
         } catch (error) {
@@ -112,6 +113,37 @@ const LotteryRoom = () => {
         setFSDOpen(false);
     };
 
+    const handleGetWinner = () => {
+
+    };
+
+
+    const GetWinner = () => (
+        <div className='flex justify-center items-center p-10'>
+            <Button variant="filled" onClick={handleClickOpen}
+                sx={
+                    {
+                        color: '#fff',
+                        backgroundColor: '#4acd8d',
+                        '&:hover': {
+                            backgroundColor: '#4acd8d',
+                            opacity: [0.9, 0.8, 0.7],
+                        },
+                        '&:loading': {
+                            backgroundColor: '#4acd8d',
+                            opacity: [0.9, 0.8, 0.7],
+                        },
+                        '&:disabled': {
+                            backgroundColor: '#4acd8d',
+                            opacity: [0.9, 0.8, 0.7],
+                        },
+                    }
+                }>
+                Get Winner
+            </Button>
+        </div >
+    )
+
     const FullScreenDialog = () => (
         <div className='flex justify-center items-center'>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -129,17 +161,16 @@ const LotteryRoom = () => {
                 <div className='flex w-full h-full justify-center items-center'>
                     <div className='flex flex-col justify-center items-center'>
                         <img src={badgeCheck} alt="image" className="w-[200px] h-[200px] object-contain" />
-                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">Congratulations!</p>
-                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">You won the lottery!</p>
-                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">Your lucky number is: {luckyNumber}</p>
-                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">You won: {pool} ETH</p>
-                        <p className="font-epilogue font-semibold text-[30px] text-center text-black uppercase">Transaction time: {transactionTime} seconds</p>
+                        <p className="font-epilogue font-sans text-[25px] text-center text-black uppercase">Congratulations!  {shortenAddress(address)}</p>
+                        <p className="font-epilogue font-sans text-[25px] text-center text-black uppercase">You won the lottery!</p>
+                        <p className="font-epilogue font-sans text-[25px] text-center text-black uppercase">Your winning lucky number is: {luckyNumber}</p>
+                        <p className="font-epilogue font-sans text-[25px] text-center text-black uppercase">You won: {pool} ETH</p>
+                        <p className="font-epilogue font-sans text-[25px] text-center text-black uppercase">Transaction time: {transactionTime} seconds</p>
                     </div>
                 </div>
 
             </Dialog >
         </div >
-
     )
 
 
@@ -156,27 +187,27 @@ const LotteryRoom = () => {
         </div>
     );
 
-    const LotteryStatus = () =>
-    (
-        isLoading &&
-        (
-            <div className="flex flex-col items-center">
-                <div className="flex text-green-600 py-5">
-                    {
-                        status &&
-                        (
-                            <div className='flex flex-col items-center justify-center gap-10'>
-                                <CircularProgress />
-                                <p className="font-epilogue  text-[20px] text-center text-white uppercase">Processing...</p>
-                                <p className="font-epilogue  text-[20px] text-center text-white">Status: {message}</p>
-                            </div>
-                        )
-                    }
-                </div>
+    // const LotteryStatus = () =>
+    // (
+    //     isLoading &&
+    //     (
+    //         <div className="flex flex-col items-center">
+    //             <div className="flex text-green-600 py-5">
+    //                 {
+    //                     status &&
+    //                     (
+    //                         <div className='flex flex-col items-center justify-center gap-10'>
+    //                             <CircularProgress />
+    //                             <p className="font-epilogue  text-[20px] text-center text-white uppercase">Processing...</p>
+    //                             <p className="font-epilogue  text-[20px] text-center text-white">Status: {message}</p>
+    //                         </div>
+    //                     )
+    //                 }
+    //             </div>
 
-            </div>
-        )
-    )
+    //         </div>
+    //     )
+    // )
 
 
     const ControlBox = () => (
@@ -304,6 +335,7 @@ const LotteryRoom = () => {
             {/* <LotteryRoomHeader /> */}
             {/* Display Component */}
             <FullScreenDialog />
+            <GetWinner />
             <ModalStepperBox isLoading={isLoading} luckyNumber={luckyNumber} isOpen={modalIsOpen} status={status} />
 
             <div className="mt-[60px] flex flex-col lg:flex-row gap-5">
