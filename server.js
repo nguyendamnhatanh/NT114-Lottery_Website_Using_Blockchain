@@ -10,19 +10,18 @@ app.startApp();
 const io = app.io;
 
 io.on('connection', (socket) => {
-  socket.on('testRandom', async (data) => {
-    if (data === 'test') {
-      console.log('test');
+  socket.on('luckyTime', async (data) => {
+    if (data === 'getWinner') {  
       const tickets = await contract.getCurrentTickets();
+      console.log("🚀 ~ file: server.js:16 ~ socket.on ~ tickets:", tickets)
       const random = Math.floor(Math.random() * tickets.length);
       if (tickets && tickets[random]) {
         let number = Number(
           BigInt(parseInt(tickets[random].lotteryCode._hex, 16))
         );
-        app.io.emit('testRandom', number);
         winner['address'] = tickets[random].player;
         winner['number'] = number;
-        console.log(winner);
+        app.io.emit('luckyTime', winner);
       }
     }
   });

@@ -45,23 +45,29 @@ const PlayerController = {
     }
   },
   ClaimReward: async (req, res) => {
+    console.log("🚀 ~ file: players.controller.js:48 ~ ClaimReward: ~ req:", req.body)
     const winner = req.body.winner;
-    console.log(winner);
+    console.log("🚀 ~ file: players.controller.js:49 ~ ClaimReward: ~ winner:", winner)
     try {
+      // if (!winner)
+      //   throw new Error('Winner undefined')
       await contract.transfer(winner);
       res.status(200).json({ message: 'success' });
     } catch (error) {
       res.status(500).json({
         message: error + '',
+        contract: contract
       });
     }
   },
   getLimit: async (req, res) => {
     let player = req.query.player;
-    console.log("🚀 ~ file: players.controller.js:61 ~ getLimit: ~ player:", player)
-    let tickets = await contract.getCurrentTickets();    
+    console.log("🚀 ~ file: players.controller.js:61 ~ getLimit: ~ req.query:", req.query)
+
+    let tickets = await contract.getCurrentTickets();
     const rawTickets = tickets.filter((item) => item.player === player);
-    console.log(rawTickets);
+    console.log("🚀 ~ file: players.controller.js:64 ~ getLimit: ~ rawTickets:", rawTickets)
+
     try {
       if (rawTickets.length <= 5) {
         res.status(200).json({
