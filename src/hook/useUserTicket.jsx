@@ -11,7 +11,12 @@ import { useStateContext } from "../context";
 
 import useBaseUrl from "./useBaseUrl";
 
+import useTimeOut from "./useTimeOut";
+
 export const useUserTicket = () => {
+
+    const timeOut = useTimeOut();
+
     const base_url = useBaseUrl();
 
     const { address, setIsLoading, status, setStatus } = useStateContext();
@@ -20,18 +25,43 @@ export const useUserTicket = () => {
 
     const fetchAttempts = useRef(0);
 
-    const [refreshKey, setRefreshKey] = useState(0);
-
     useEffect(() => {
         setStatus(7);
-        fetchTicketData();
+        if (address) {
+            console.log("🚀 ~ address change", address)
+            fetchTicketData();
+        }
         setStatus(-1);
     }, [address]);
+
+
+    const fetchTicketData = async () => {
+        try {
+            if (!address) { setResult([]); return; }
+            setIsLoading(true);
+            const response = await useAxios('GET', base_url + '/api/getUserTickets?player=' + address);
+            const Array = response ? extractTicketData(response?.data?.tickets) : [];
+            console.log("🚀 ~ fetchUserTicket:", Array.length)
+            setResult(Array);
+            setIsLoading(false);
+        } catch (error) {
+            console.error(error);
+            setResult([]);
+        }
+    };
 
 
     useEffect(() => {
         let isMounted = true;
         let timerId;
+
+        const callSetTimeOut = () => {
+            
+            timerId = setTimeout(() => {
+                console.log("🚀 ~ fetching newData at useUserTicket")
+                fetchData();
+            }, timeOut);
+        }
 
         const fetchData = async () => {
             setIsLoading(true);
@@ -42,47 +72,35 @@ export const useUserTicket = () => {
                 fetchAttempts.current = 0;
                 setStatus(-1);
                 setIsLoading(false);
-                clearInterval(timerId);
+                clearTimeout(timerId);
             }
             else {
                 fetchAttempts.current = fetchAttempts.current + 1;
-                if (fetchAttempts.current > 5) {
-                    clearInterval(timerId);
+
+                if (fetchAttempts.current < 5) {
+                    callSetTimeOut();
+                }
+                else {
+                    clearTimeout(timerId);
                     setIsLoading(false);
                 }
             }
         };
 
         if (status === 1) {
-            fetchData();
             if (fetchAttempts.current === 0) {
-                timerId = setInterval(() => {
-                    // console.log("🚀 ~ file: useUserTicket.jsx:96 ~ useEffect ~ status:", status)
-                    fetchData();
-                }, 1000);
+                callSetTimeOut();
             }
         }
         else {
-
-            clearInterval(timerId);
+            clearTimeout(timerId);
             isMounted = false;
+            // setIsLoading(false);
         }
 
     }, [status, fetchAttempts.current]);
 
-    const fetchTicketData = async () => {
-        try {
-            if (!address) { setResult([]); return; }
-            setIsLoading(true);
-            const response = await useAxios('GET', base_url + '/api/getUserTickets?player=' + address);
-            const Array = extractTicketData(response?.data?.tickets)
-            setResult(Array);
-            setIsLoading(false);
-        } catch (error) {
-            console.error(error);
-            setResult([]);
-        }
-    }; 
+
 
     return Result;
 }

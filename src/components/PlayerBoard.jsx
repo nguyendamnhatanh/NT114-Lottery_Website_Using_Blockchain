@@ -7,7 +7,7 @@ import { shortenAddress } from '../utils/shortenAddress'
 const PlayerBoard = ({ entry }) => {
 
     return (
-        <div className="flex-1 flex flex-col bg-[#1c1c24] items-center justify-center rounded-[10px] w-[400px]">
+        <div className="flex-1 flex flex-col bg-[#1c1c24] items-center justify-center rounded-[10px] lg:w-[400px] w-full">
             <div className="flex flex-col w-full h-full  bg-[#1c1c24] rounded-[10px] ">
 
                 <div className="bg-[#2E4F4F] rounded-t-[10px]">

@@ -4,9 +4,14 @@ import { useEffect, useState, useRef } from "react";
 
 import { useAxios } from "./useAxios";
 import { useStateContext } from "../context";
+
 import useBaseUrl from "./useBaseUrl";
 
+import useTimeOut from "./useTimeOut";
+
 export const usePool = () => {
+
+    const timeOut = useTimeOut();
 
     const base_url = useBaseUrl();
 
@@ -19,6 +24,7 @@ export const usePool = () => {
     const fetchPool = async () => {
         try {
             const response = await useAxios('GET', base_url + '/api/getPool');
+            console.log("🚀 ~ fetchPool:", response?.data?.pool)
             setResult(response?.data?.pool);
         } catch (error) {
             console.error(error);
@@ -28,13 +34,23 @@ export const usePool = () => {
 
     useEffect(() => {
         setStatus(7);
-        fetchPool();
+        if (address) {
+            fetchPool();
+        }
         setStatus(-1);
     }, [address]);
+
 
     useEffect(() => {
         let isMounted = true;
         let timerId;
+
+        const callSetTimeOut = () => {
+            timerId = setTimeout(() => {
+                console.log("🚀 ~ fetching newData at usePool")
+                fetchData();
+            }, timeOut);
+        }
 
         const fetchData = async () => {
             setIsLoading(true);
@@ -45,29 +61,30 @@ export const usePool = () => {
                 fetchAttempts.current = 0;
                 setStatus(-1);
                 setIsLoading(false);
-                clearInterval(timerId);
+                clearTimeout(timerId);
             }
             else {
                 fetchAttempts.current = fetchAttempts.current + 1;
-                if (fetchAttempts.current > 5) {
-                    clearInterval(timerId);
+
+                if (fetchAttempts.current < 5) {
+                    callSetTimeOut();
+                }
+                else {
+                    clearTimeout(timerId);
                     setIsLoading(false);
                 }
             }
         };
 
         if (status === 1) {
-            fetchData();
             if (fetchAttempts.current === 0) {
-                timerId = setInterval(() => {
-                    fetchData();
-                }, 1000);
+                callSetTimeOut();
             }
         }
         else {
-
-            clearInterval(timerId);
+            clearTimeout(timerId);
             isMounted = false;
+            // setIsLoading(false);
         }
 
     }, [status, fetchAttempts.current]);

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import { Link, useNavigate } from 'react-router-dom'
 
 import { logo, sun, money } from '../assets'
@@ -33,7 +34,7 @@ const Sidebar = () => {
 
   return (
     <div className='flex flex-col justify-between items-center  sticky top-5 h-[93vh]'>
-      <TestDialog isOpen={open} handleSet={handleClose} />
+      <TestDialog isOpen={open} handleCloseDialog={handleClose} />
       <Link to="/">
         <Icon styles="w-[52px] h-[52px] bg-[#2E4F4F]" imgUrl={logo} alt='React Dapp' />
       </Link>

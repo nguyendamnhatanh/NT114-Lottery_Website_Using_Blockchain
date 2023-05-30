@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { CustomButton } from './'
-import { logo, menu, search, thirdweb } from '../assets'
+import { CustomButton, NotifyBox } from './'
+import { logo, menu, search, thirdweb, walletIcon } from '../assets'
 import { navlinks } from '../constants'
 // import { connect } from 'react-redux'
 import { useStateContext } from '../context'
@@ -15,9 +15,15 @@ const Navbar = () => {
   const [isActive, setIsActive] = useState('dashboard')
   const { address, ConnectWallet } = useStateContext();
 
+  const [message, setMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [userOpen, setUserOpen] = React.useState(true);
+
+  const handleOpen = () => { setOpen(true) };
+  const handleClose = () => { setOpen(false) };
+  const handleUserClose = () => { setUserOpen(false) };
+
+
   const style = {
     p: 4,
     position: 'absolute',
@@ -35,17 +41,8 @@ const Navbar = () => {
     flexDirection: 'column',
   };
 
-  const NotifyError = () => (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description">
-      <Box sx={style}>
-        <p className="font-sans text-[20px] text-center text-black uppercase">Please Open Metamask or Refresh Page</p>
-      </Box>
-    </Modal>
-  )
+
+
 
   return (
     <div className='flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6'>
@@ -56,27 +53,30 @@ const Navbar = () => {
         </div>
       </div>
       <div className="sm:flex hidden flex-row justify-end gap-4">
-        <NotifyError />
+        <NotifyBox isOpen={open && userOpen} handleCloseDialog={handleClose} handleUserAction={handleUserClose} Title={message} />
         <CustomButton
           btnType="button"
           title={address ? address : 'Connect'}
           styles={address ? 'bg-[#8c6dfd]' : 'bg-[#1dc071]'}
-          handleClick={
-            async () => {
-              try {
-                if (address) {
+          handleClick={async () => {
+            try {
+              await ConnectWallet();
+            } catch (error) {
+              setMessage((
+                <>
+                  <div className='flex flex-col justify-center items-center'>
+                    <img src={walletIcon} className='w-[200px] h-[200px]' alt="" />
+                    <p className='font-mono text-center'>{error.message} </p>
+                    <p className='font-mono text-center'>Please install:
+                      <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" className='text-blue-400'> MetaMask</a>
+                    </p>
 
-                }
-                else {
-                  await ConnectWallet();
-                }
-              }
-              catch (e) {
-                setOpen(true);
-                // console.log('error');
-              }
+                  </div>
+                </>
+              ));
+              handleOpen();
             }
-          }
+          }}
         />
         <Link to='/profile'>
           <div className='w-[52px] h-[52px] rounded-full bg-[#2c2f32] flex justify-center items-center cursor-pointer'>

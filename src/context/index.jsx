@@ -8,6 +8,7 @@ import { parseAmount } from "../utils/parseAmount";
 import { convertTimestampToDateString } from '../utils';
 
 import Web3 from "web3";
+import useWinner from "../hook/useWinner";
 
 const StateContext = createContext();
 
@@ -23,6 +24,7 @@ export const StateContextProvider = ({ children }) => {
     const [txHash, setTxHash] = useState('');
 
     const currentTxHash = useRef('');
+
     useEffect(() => {
         currentTxHash.current = txHash;
     }, [txHash])
@@ -35,8 +37,9 @@ export const StateContextProvider = ({ children }) => {
 
     const [smartAddress, setSmartAddress] = useState('');
 
-    const [winner, setWinner] = useState(0);
+    const winner = useWinner();
 
+    const [myBalance, setMyBalance] = useState(0);
 
     // const [timeRemaining, setTimeRemaining] = useState();
     // 0: denied by user
@@ -60,6 +63,7 @@ export const StateContextProvider = ({ children }) => {
     const contractAddress = useSmartContractAddress();
 
 
+
     const ConnectWallet = useCallback(async () => {
         const handleConnect = () => {
             try {
@@ -77,6 +81,8 @@ export const StateContextProvider = ({ children }) => {
             if (window.ethereum) {
                 window.web3 = new Web3(window.ethereum);
                 await window.ethereum.enable();
+                const accounts = await window.ethereum.request({ method: "eth_accounts" });
+                // getBalance(accounts[0]);
             } else if (window.web3) {
                 window.web3 = new Web3(window.web3.currentProvider);
             } else {
@@ -87,8 +93,10 @@ export const StateContextProvider = ({ children }) => {
             if (e.code === -32002) {
                 throw new Error("Under processing.");
             }
+            else {
+                throw new Error(e.message);
+            }
         }
-
     }, []);
 
     const checkAccountConnected = async () => {
@@ -96,9 +104,19 @@ export const StateContextProvider = ({ children }) => {
         if (accounts.length === 0) {
             console.log("Please connect to MetaMask.");
         } else {
+            // getBalance(accounts[0]);
             console.log("Connected:", accounts[0]);
         }
     };
+
+
+    const getBalance = async (address) => {
+        var balance = await window.web3.eth.getBalance(address);
+        balance = await window.web3.utils.fromWei(balance)
+        balance = balance ? Number(balance).toFixed(4) : 0;
+        console.log("🚀 ~ file: index.jsx:114 ~ getBalance ~ balance:", balance)
+        setMyBalance(balance)
+    }
 
     const BuyTicket = async (amount, betLeft) => {
         if (betLeft)
@@ -106,7 +124,7 @@ export const StateContextProvider = ({ children }) => {
                 setStatus(2);
                 await sendTransaction(amount);
 
-                await new Promise(resolve => setTimeout(resolve, 500));
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 // cannot write barely code here <- txHash and status not update from initial state
                 // solution 0: split code to async function X
                 // solution 1: use useRef to store status and txHash
@@ -219,23 +237,19 @@ export const StateContextProvider = ({ children }) => {
         <StateContext.Provider value={{
             address: playerAddress,
             connect,
-            // wallet,
-            // ,contract
             sendTransaction,
             txHash,
             isLoading,
             setIsLoading,
             smartAddress,
             setSmartAddress,
-            // timeRemaining,
-            // userTicket,
             BuyTicket,
             status,
             luckyNumber,
             ConnectWallet,
             setStatus,
-            winner,
-            setWinner
+            winner,            
+            myBalance,
         }}>
             {children}
         </StateContext.Provider>

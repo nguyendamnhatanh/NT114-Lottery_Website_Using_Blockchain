@@ -15,6 +15,10 @@ export { default as Confetti } from './Confetti';
 export { default as TestDialog } from './TestDialog';
 export { default as ConfettiDialog } from './ConfettiDialog';
 export { default as GetWinner } from './GetWinner';
+export { default as ClaimAward } from './ClaimAward';
+export { default as NotifyBox } from './NotifyBox';
+
+
 
 
 

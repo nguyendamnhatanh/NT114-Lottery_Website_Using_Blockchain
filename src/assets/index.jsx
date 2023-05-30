@@ -17,6 +17,7 @@ import pickluck from './pickluck.svg';
 import badgeCheck from './badgeCheck.svg';
 import statusFailed from './statusFailed.svg';
 import winnerTrophy from './winnerTrophy.svg';
+import walletIcon from './walletIcon.svg';
 
 
 import Icon from "@mui/material/Icon";
@@ -41,5 +42,6 @@ export {
     pickluck,
     badgeCheck,
     statusFailed,
-    winnerTrophy
+    winnerTrophy,
+    walletIcon
 };

@@ -9,7 +9,7 @@ import { Navbar, Sidebar } from './components'
 const App = () => {
 
     return (
-        <div className="relative sm:-8 p-4 bg-[#2C3333] min-h-screen flex flex-row">
+        <div className="relative sm:-8 p-4  bg-[#2C3333] min-h-screen flex flex-row">
             <div className="sm:flex hidden mr-10 relative">
                 <Sidebar />
             </div>

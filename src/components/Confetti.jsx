@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Confetti = () => {
-    let confettiNum = 200;
+    let confettiNum = 100;
     let coinNum = 30;
     let dollarNum = 50;
     let elements = [];

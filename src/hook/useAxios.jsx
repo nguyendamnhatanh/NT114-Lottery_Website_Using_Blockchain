@@ -1,6 +1,7 @@
 import axios from "axios"
 
 export const useAxios = async (method, url, token = '', data = '') => {
+  // console.log("🚀 getData from ", url)
   const requestOption = {
     method: method,
     url: url,
@@ -17,11 +18,8 @@ export const useAxios = async (method, url, token = '', data = '') => {
     // console.log("Success:", response?.data);
     return response;
   } catch (error) {
-    console.error("Error:", error?.response?.data);
+    console.log("Error:", error?.response?.data);
     return '';
   }
 }
-
-
-
 export default useAxios;

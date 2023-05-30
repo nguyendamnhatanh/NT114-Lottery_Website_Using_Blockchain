@@ -1,25 +1,3 @@
-// import React from 'react'
-// import ReactDOM from 'react-dom/client'
-// import './index.css'
-
-// import { BrowserRouter, Route, Routes } from 'react-router-dom'
-// import {App, App2} from './components/index'
-
-// ReactDOM.createRoot(document.getElementById('root')).render(
-//   <React.StrictMode>
-//     <Provider store={store}>
-//       <BrowserRouter>
-//         <Routes>
-//           <Route path='/'>
-//             <Route index element={<App></App>}></Route> 
-//             <Route path='app2' element={<App2></App2>}></Route> {/* App2 in different route can use App Data without nesting App2 in App1*/}
-//           </Route>
-//         </Routes>
-//       </BrowserRouter>
-//     </Provider>
-//   </React.StrictMode>,
-// )
-
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom';
@@ -40,16 +18,16 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 
+{/* <Provider store={store}>
+</Provider> */}
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThirdwebProvider>
     <BrowserRouter>
       <React.StrictMode>
         <ThemeProvider theme={theme}>
-          <StateContextProvider>
-            <Provider store={store}>
+          <StateContextProvider>           
               <CssBaseline />
-              <App />
-            </Provider>
+              <App />      
           </StateContextProvider>
         </ThemeProvider>
       </React.StrictMode>
