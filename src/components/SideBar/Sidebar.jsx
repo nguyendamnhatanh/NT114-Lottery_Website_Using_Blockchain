@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 
 import { Link, useNavigate } from 'react-router-dom'
 
-import { logo, sun, money } from '../assets'
-import { navlinks } from '../constants'
-import TestDialog from './TestDialog'
+import { logo, sun, money } from '../../assets'
+import { navlinks } from '../../constants'
+import TestDialog from '../TestFeature/TestDialog'
 
 const Icon = ({ styles, imgUrl, name, isActive, disabled, handleClick }) => (
 

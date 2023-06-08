@@ -13,7 +13,7 @@ export const useTimeRemaining = () => {
 
     // const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
     // const dateTimeAfterSevenDays = NOW_IN_MS + SEVEN_DAYS_IN_MS;
-    const DEADLINE = new Date('2023-05-31').getTime();
+    const DEADLINE = new Date('2023-06-8').getTime();
     // const getResult = async () => {
     //     try {
     //         // const response = await useAxios('GET', base_url + '/api/getExpire');

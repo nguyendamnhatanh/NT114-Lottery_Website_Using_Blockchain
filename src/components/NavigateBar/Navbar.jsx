@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { CustomButton, NotifyBox } from './'
-import { logo, menu, search, thirdweb, walletIcon } from '../assets'
-import { navlinks } from '../constants'
+import { CustomButton, NotifyBox } from '..'
+import { logo, menu, search, thirdweb, walletIcon } from '../../assets'
+import { navlinks } from '../../constants'
 // import { connect } from 'react-redux'
-import { useStateContext } from '../context'
+import { useStateContext } from '../../context'
 import { Box, Modal } from '@mui/material'
 
 const Navbar = () => {
@@ -62,18 +62,32 @@ const Navbar = () => {
             try {
               await ConnectWallet();
             } catch (error) {
-              setMessage((
-                <>
-                  <div className='flex flex-col justify-center items-center'>
-                    <img src={walletIcon} className='w-[200px] h-[200px]' alt="" />
-                    <p className='font-mono text-center'>{error.message} </p>
-                    <p className='font-mono text-center'>Please install:
-                      <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" className='text-blue-400'> MetaMask</a>
-                    </p>
+              if (error.message === 'Under processing.2')
+                setMessage((
+                  <>
+                    <div className='flex flex-col justify-center items-center'>
+                      <img src={walletIcon} className='w-[200px] h-[200px]' alt="" />
+                      <p className='font-mono text-center'>Please Login MetaMask</p>
+                    </div>
+                  </>
+                ))
 
-                  </div>
-                </>
-              ));
+              if (error.message === 'Browser does not support Ethereum')
+                setMessage((
+                  <>
+                    <div className='flex flex-col justify-center items-center'>
+                      <img src={walletIcon} className='w-[200px] h-[200px]' alt="" />
+                      <p className='font-mono text-center'>Browser does not support Ethereum</p>
+                      <p className='font-mono text-center'>Please install:
+                        <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" className='text-blue-400'> MetaMask</a>
+                      </p>
+
+                    </div>
+                  </>
+                ))
+
+
+                  ;
               handleOpen();
             }
           }}

@@ -1,10 +1,10 @@
 import React from 'react'
 
-import dummyData from '../utils/dummyData';
+import dummyData from '../../utils/dummyData';
 
-import Loader from './Loader';
+import Loader from '../Common/Loader';
 
-import { winnerTrophy } from '../assets';
+import { winnerTrophy } from '../../assets';
 
 import { Fullscreen, WidthFull } from '@mui/icons-material';
 

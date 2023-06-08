@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ethers } from 'ethers';
-import { money } from '../assets';
+import { money } from '../../assets';
 
-import { CustomButton, FormField } from '../components';
-import { useStateContext } from '../context';
+import { CustomButton, FormField } from '..';
+import { useStateContext } from '../../context';
 // import { checkIfImage } from '../utils';
 
 

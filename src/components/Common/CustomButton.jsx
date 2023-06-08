@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Loader } from '.';
+import { Loader } from '..';
 
-import { useStateContext } from '../context';
+import { useStateContext } from '../../context';
 
 const CustomButton = ({ btnType, title, handleClick, styles, custom }) => {
   const { isLoading } = useStateContext();

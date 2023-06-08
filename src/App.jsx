@@ -2,7 +2,8 @@
 import React, { useMemo } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
-import { Home, Profile, LotteryRoom, CreateRoom, TestFeat } from './pages'
+import { Home, Profile, LotteryRoom, TestFeat } from './pages'
+
 import { Navbar, Sidebar } from './components'
 
 
@@ -18,7 +19,7 @@ const App = () => {
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/profile' element={<Profile />} />
-                    <Route path='/create-room' element={<CreateRoom />} />
+                    {/* <Route path='/create-room' element={<CreateRoom />} /> */}
                     <Route path='/lottery-room' element={<LotteryRoom />} />
                     <Route path='/test-feat' element={<TestFeat />} />
                     {/* <Route path='/payment' element={<Payment />} />  */}

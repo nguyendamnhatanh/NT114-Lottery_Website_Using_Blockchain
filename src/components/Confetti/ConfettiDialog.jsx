@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 
 import { Button, Dialog, Slide } from '@mui/material'
-import { badgeCheck, winnerTrophy } from '../assets'
+import { badgeCheck, winnerTrophy } from '../../assets'
 import Confetti from './Confetti'
-import { shortenAddress } from '../utils/shortenAddress'
-import { useBaseUrl } from '../hook'
-import { useStateContext } from '../context'
-import ClaimAward from './ClaimAward'
+import { shortenAddress } from '../../utils/shortenAddress'
+import { useBaseUrl } from '../../hook'
+import { useStateContext } from '../../context'
+import ClaimAward from '../LotteryRoom/ClaimAward'
 
 const ConfettiDialog = ({ pool, transactionTime, handleClickOpen, handleCloseDialog, isOpen, winner }) => {
     return (

@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
 import { Button, Dialog } from '@mui/material';
-import ConfettiDialog from './ConfettiDialog';
-import GetWinner from './GetWinner';
 
-const TestDialog = ({ isOpen, handleCloseDialog }) => {
+const NotifyBox = ({ isOpen, handleCloseDialog, Title, handleUserAction }) => {
 
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
         setOpen(isOpen);
     }, [isOpen])
-
-    const handleListItemClick = (value) => {
-        onClose(value);
-    };
 
 
     const handleClickOpen = () => {
@@ -23,15 +17,16 @@ const TestDialog = ({ isOpen, handleCloseDialog }) => {
 
     const handleClose = () => {
         handleCloseDialog();
+        handleCloseDialog();
     };
 
     return (
         <div>
             <Dialog onClose={handleClose} open={open} >
-                <GetWinner />
+                <p className='p-10 text-xl font-mono text-center text-black'>{Title}</p>
             </Dialog>
         </div>
     );
 }
 
-export default TestDialog
+export default NotifyBox

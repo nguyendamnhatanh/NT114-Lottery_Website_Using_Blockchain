@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Box, Modal, CircularProgress, Alert } from '@mui/material'
+import { getMessageBasedOnBuyStatus } from '../../utils'
 // import HorizontalLinearStepper from './HorizontalLinearStepper'
-import { getMessageBasedOnBuyStatus } from '../utils';
+
 
 const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
-
     useEffect(() => {
         setOpen(isOpen);
     }, [isOpen])

@@ -8,8 +8,6 @@ import './index.css'
 import './assets/styles/Confetti.scss'
 import './assets/styles/CountDownTimer.scss'
 
-
-import { store } from './redux/store'
 import { Provider } from 'react-redux'
 import { StateContextProvider } from './context';
 import { ThirdwebProvider } from '@thirdweb-dev/react';

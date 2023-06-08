@@ -10,10 +10,10 @@ const useWinner = () => {
     useEffect(() => {
         if (counterUseEffect.current === 0) {
             const socket = io(base_url);
-            console.log("🚀 Socket on",)
+            console.log("🚀 Socket on", socket)
             setSocket(socket);
             socket.on('luckyTime', (data) => {
-                if (data) setWinner(data);
+                if (!winner && data) setWinner(data);
             });
             counterUseEffect.current++;
         }
@@ -21,7 +21,7 @@ const useWinner = () => {
 
     const getWinner = () => {
         if (socket) {
-            console.log("🚀 emit")
+            console.log("🚀 emit", socket)
             socket?.emit('luckyTime', 'getWinner');
         }
     };

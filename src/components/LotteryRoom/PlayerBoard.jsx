@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CircularProgress } from '@mui/material'
-import { shortenAddress } from '../utils/shortenAddress'
+import { shortenAddress } from '../../utils/shortenAddress'
 
 
 const PlayerBoard = ({ entry }) => {

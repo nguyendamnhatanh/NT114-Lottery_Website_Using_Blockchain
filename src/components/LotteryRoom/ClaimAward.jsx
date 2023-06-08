@@ -1,16 +1,15 @@
 import { Box, Button, CircularProgress, Fab } from '@mui/material'
 import React from 'react'
-import { useAxios, useBaseUrl } from '../hook';
+import { useAxios, useBaseUrl } from '../../hook';
 import { Cancel } from '@mui/icons-material';
 import { green } from '@mui/material/colors';
 import CheckIcon from '@mui/icons-material/Check';
-import { money } from '../assets';
-import { useStateContext } from '../context';
+import { money } from '../../assets';
+import { useStateContext } from '../../context';
 
 const ClaimAward = ({ winner, handleCloseThis }) => {
 
     const base_url = useBaseUrl();
-
 
     const MoneyIcon = () => (<img src={money} alt="" className='flex w-1/2 h-1/2' />)
 
@@ -84,7 +83,6 @@ const ClaimAward = ({ winner, handleCloseThis }) => {
         }
     };
 
-
     return (
 
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -94,7 +92,7 @@ const ClaimAward = ({ winner, handleCloseThis }) => {
                     color="primary"
                     sx={buttonSx}
                     onClick={handleButtonClick}
-                    disabled={disabled}
+                    disabled={disabled || loading}
                 >
                     {success ? <CheckIcon /> : <MoneyIcon />}
                 </Fab>
@@ -116,9 +114,8 @@ const ClaimAward = ({ winner, handleCloseThis }) => {
                 <Button
                     variant="contained"
                     sx={buttonSx}
-                    disabled={loading}
+                    disabled={disabled || loading}
                     onClick={handleButtonClick}
-                    disabled={disabled}
                 >
                     {success ? 'Reward Claimed' : 'Claim Reward'}
                 </Button>

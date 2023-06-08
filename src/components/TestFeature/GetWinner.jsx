@@ -2,36 +2,11 @@ import { Button } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react'
 
 import { io } from 'socket.io-client';
-import { useBaseUrl } from '../hook';
-import { useStateContext } from '../context';
 
-import useWinner from '../hook/useWinner';
+import { useStateContext } from '../../context';
+import { useBaseUrl, useWinner } from '../../hook';
 
-const GetWinner = () => {
-    // const base_url = useBaseUrl();
-
-    // const [socket, setSocket] = useState(null);
-    // const counterUseEffect = useRef(0);
-
-    // useEffect(() => {
-    //     if (counterUseEffect.current === 0) {
-    //         const socket = io(base_url);
-    //         console.log("🚀", socket)
-    //         setSocket(socket);
-    //         socket.on('luckyTime', (data) => {
-    //             setWinner(data);
-    //         });
-    //         counterUseEffect.current++;
-    //     }
-    // }, []);
-
-
-    // const getWinner = () => {
-    //     console.log("🚀 emit")
-    //     socket.emit('luckyTime', 'getWinner');
-    // };
-
-    // const magic = useWinner();
+const GetWinner = () => {    
 
     const {  winner } = useStateContext();
 

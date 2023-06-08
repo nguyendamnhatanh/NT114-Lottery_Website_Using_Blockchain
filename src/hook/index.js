@@ -9,9 +9,7 @@ export { default as useCountdown } from './useCountdown';
 export { default as useBetLeft } from './useBetLeft';
 export { default as useMyBalance } from './useMyBalance';
 export { default as useTimeOut } from './useTimeOut';
-
-
-// export { default as useWinner } from './useWinner';
+export { default as useWinner } from './useWinner';
 
 
 
