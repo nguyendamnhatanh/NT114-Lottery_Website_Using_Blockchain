@@ -42,10 +42,10 @@ const PurchaseTicket = ({ status, setStatus, setIsLoading, playerAddress, contra
                 value: parseAmount(amount), // Only required to send ether to the recipient from the initiating external account.   
             };
 
-            window.web3 = new Web3(window.ethereum);
-            await window.ethereum.enable()
+            const web3 = new Web3(window.ethereum);
+            
 
-            const txHash = await window.web3.eth.sendTransaction(params);
+            const txHash = await web3.eth.sendTransaction(params);
             console.log("🚀 ~ file: PurchaseTicket.jsx:44 ~ purchase ~ txHash:", txHash)
 
             if (txHash) {

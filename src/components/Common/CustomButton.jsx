@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { Loader } from '..';
+import React from 'react';
 
 import { useStateContext } from '../../context';
 

@@ -1,5 +1,5 @@
+import { Alert, Box, CircularProgress, Modal } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { Button, Box, Modal, CircularProgress, Alert } from '@mui/material'
 import { getMessageBasedOnBuyStatus } from '../../utils'
 // import HorizontalLinearStepper from './HorizontalLinearStepper'
 
