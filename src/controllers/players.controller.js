@@ -1,7 +1,5 @@
-const { ethers } = require('ethers');
 const dotenv = require('dotenv');
-const { contractAddress } = require('../utils/contract');
-const { contract, etherscanKey } = require('../utils/contract');
+const { contract } = require('../utils/contract');
 const winner = require('../data/player').winner;
 dotenv.config();
 
@@ -45,12 +43,8 @@ const PlayerController = {
     }
   },
   ClaimReward: async (req, res) => {
-    console.log("🚀 ~ file: players.controller.js:48 ~ ClaimReward: ~ req:", req.body)
     const winner = req.body.winner;
-    console.log("🚀 ~ file: players.controller.js:49 ~ ClaimReward: ~ winner:", winner)
     try {
-      // if (!winner)
-      //   throw new Error('Winner undefined')
       await contract.transfer(winner);
       res.status(200).json({ message: 'success' });
     } catch (error) {
@@ -62,11 +56,8 @@ const PlayerController = {
   },
   getLimit: async (req, res) => {
     let player = req.query.player;
-    console.log("🚀 ~ file: players.controller.js:61 ~ getLimit: ~ req.query:", req.query)
-
     let tickets = await contract.getCurrentTickets();
     const rawTickets = tickets.filter((item) => item.player === player);
-    console.log("🚀 ~ file: players.controller.js:64 ~ getLimit: ~ rawTickets:", rawTickets)
 
     try {
       if (rawTickets.length <= 5) {

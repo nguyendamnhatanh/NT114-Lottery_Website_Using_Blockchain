@@ -49,30 +49,6 @@ const ContractController = {
       });
     }
   },
-  destroy: async (req, res) => {
-    try {
-      await contract.destroy();
-      res.status(200).json({
-        message: 'success',
-      });
-    } catch (error) {
-      res.status(500).json({
-        error: error + '',
-      });
-    }
-  },
-  removeAllTicket: async (req, res) => {
-    try {
-      await contract.removeAllTicket();
-      res.status(200).json({
-        message: 'success',
-      });
-    } catch (error) {
-      res.status(500).json({
-        error: error + '',
-      });
-    }
-  },
 };
 
 module.exports = ContractController;

@@ -14,9 +14,6 @@ routes.get('/getAllTickets', TransactionController.getAllTickets);
 routes.get('/getPool', ContractController.getLotteryPool);
 routes.get('/getAddress', ContractController.getAddress);
 routes.get('/getEntries', ContractController.getEntries);
-routes.delete('/removeAllTicket', ContractController.removeAllTicket);
-routes.delete('/destroy', ContractController.destroy);
-
 
 //player
 routes.post('/isWinner', PlayerController.IsWinner);

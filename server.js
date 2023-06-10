@@ -1,8 +1,6 @@
 const app = require('./src/utils/app');
 const schedule = require('node-schedule');
-const fs = require('fs');
 const winner = require('./src/data/player.js').winner;
-const players = require('./src/data/player.js').players;
 const { contract } = require('./src/utils/contract');
 
 app.startApp();
@@ -13,7 +11,6 @@ io.on('connection', (socket) => {
   socket.on('luckyTime', async (data) => {
     if (data === 'getWinner') {  
       const tickets = await contract.getCurrentTickets();
-      console.log("🚀 ~ file: server.js:16 ~ socket.on ~ tickets:", tickets)
       const random = Math.floor(Math.random() * tickets.length);
       if (tickets && tickets[random]) {
         let number = Number(
