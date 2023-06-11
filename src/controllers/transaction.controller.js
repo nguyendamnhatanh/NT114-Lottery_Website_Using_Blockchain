@@ -1,6 +1,6 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
-const { contractAddress } = require('../utils/contract');
+const { contractAddress, getAllTickets } = require('../utils/contract');
 const { contract, etherscanKey } = require('../utils/contract');
 dotenv.config();
 
@@ -52,17 +52,9 @@ const TransactionController = {
       });
     }
   },
-  getAllTickets: async (req, res) => {
+  GetAllTickets: async (req, res) => {
+    let tickets = await getAllTickets()
     try {
-      const rawTickets = await contract.getCurrentTickets();
-      const tickets = rawTickets.map((item) => {
-        const value = {
-          player: item[0],
-          luckyNumber: String(BigInt(parseInt(item[1]._hex, 16))),
-          createDate: String(BigInt(parseInt(item[2]._hex, 16))),
-        };
-        return value;
-      });
       res.status(200).json({
         message: 'success',
         tickets: tickets,

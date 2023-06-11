@@ -1,11 +1,35 @@
 const { ethers } = require('ethers');
 const dotenv = require('dotenv');
-const { contract } = require('../utils/contract');
-const players = require('../data/player').players;
+const { contract, getAllTickets } = require('../utils/contract');
+
+let weeklyTickets = [];
+
 dotenv.config();
+let nextWeek = 7 * 24 * 60 * 60 * 1000;
+
+const genWeeklyTickets = () => {
+  for (let i = 0; i < 100; i++) {
+    let lotteryNumber = Math.floor(100000 + Math.random() * 900000);
+    while (weeklyTickets.includes(lotteryNumber)) {
+      lotteryNumber = Math.floor(100000 + Math.random() * 900000);
+    }
+    let tickets = {
+      number: lotteryNumber,
+      status: true,
+    };
+    weeklyTickets.push(tickets);
+  }
+};
+
+genWeeklyTickets();
+
+setInterval(() => {
+  weeklyTickets = [];
+  genWeeklyTickets();
+}, nextWeek);
 
 const PaymentController = {
-  generateLottery: async (req, res) => {
+  GenerateLottery: async (req, res) => {
     try {
       let wssProvider = new ethers.providers.WebSocketProvider(
         'wss://eth-sepolia.g.alchemy.com/v2/PaYQty97bkPd0uDjTGjWX0eB8zAblAQE',
@@ -43,6 +67,19 @@ const PaymentController = {
       });
     }
   },
+  BuyAvailableTicket: async (req, res) => {
+    try {
+      let ticket = req.body.ticket;
+      const tickets = await contract.getCurrentTickets();
+      res.status(200).json({
+        message: 'success',
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: error + '',
+      });
+    }
+  },
   GetLimit: async (req, res) => {
     try {
       const player = req.query.player;
@@ -50,14 +87,76 @@ const PaymentController = {
       const rawTickets = tickets.filter((item) => item.player === player);
       if (rawTickets) {
         res.status(200).json({
-          message: "success",
-          limit: 5 - rawTickets.length
-        })
+          message: 'success',
+          limit: 5 - rawTickets.length,
+        });
       }
     } catch (error) {
       res.status(500).json({
-        message: error + ''
-      })
+        message: error + '',
+      });
+    }
+  },
+  GetTicketsGallery: (req, res) => {
+    try {
+      res.status(200).json({
+        message: 'success',
+        tickets: weeklyTickets,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: error + '',
+      });
+    }
+  },
+  BuyDesireTickets: async (req, res) => {
+    try {
+      let txHash = req.body.txHash;
+      let playerAddress = req.body.playerAddress;
+      let ticket = req.body.ticket;
+
+      let tickets = await getAllTickets();
+      if (
+        tickets.some(
+          (item) => item.luckyNumber === ticket && item.player === playerAddress
+        )
+      ) {
+        res.status(403).json({
+          message: 'You already has this ticket',
+        });
+      } else {
+        let wssProvider = new ethers.providers.WebSocketProvider(
+          'wss://eth-sepolia.g.alchemy.com/v2/PaYQty97bkPd0uDjTGjWX0eB8zAblAQE',
+          'sepolia'
+        );
+        let transaction = await wssProvider.getTransaction(txHash);
+        if (transaction) {
+          let currentTickets = tickets.filter(
+            (item) => item.player == playerAddress
+          );
+          if (currentTickets.length >= 5) {
+            res.status(403).json({
+              message: 'You have reached your limit',
+            });
+          } else {
+            await contract.addTicket(playerAddress, ticket);
+            res.status(201).json({
+              message: 'success',
+            });
+          }
+        } else {
+          res.status(404).json({
+            message: 'No Transaction Found',
+          });
+        }
+      }
+      res.status(201).json({
+        message: 'success',
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: error + '',
+      });
     }
   },
 };
