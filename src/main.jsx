@@ -7,6 +7,7 @@ import App from './App'
 import './index.css'
 import './assets/styles/Confetti.scss'
 import './assets/styles/CountDownTimer.scss'
+import './assets/styles/LuckyNumberInput.scss'
 
 import { Provider } from 'react-redux'
 import { StateContextProvider } from './context';
@@ -20,17 +21,16 @@ import theme from './theme';
 </Provider> */}
 ReactDOM.createRoot(document.getElementById('root')).render(
   <ThirdwebProvider>
-    <BrowserRouter>
-      <React.StrictMode>
-        <ThemeProvider theme={theme}>
-          <StateContextProvider>           
-              <CssBaseline />
-              <App />      
-          </StateContextProvider>
-        </ThemeProvider>
-      </React.StrictMode>
-
-    </BrowserRouter>
+    <StateContextProvider>
+      <BrowserRouter>
+        <React.StrictMode>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </React.StrictMode>
+      </BrowserRouter>
+    </StateContextProvider>
   </ThirdwebProvider>
 
 )

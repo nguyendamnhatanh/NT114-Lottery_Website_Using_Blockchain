@@ -1,27 +1,51 @@
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 
-import { useAxios } from "./useAxios";
 import { useStateContext } from "../context";
+import { useAxios } from "./useAxios";
 import useBaseUrl from "./useBaseUrl";
 import useTimeOut from "./useTimeOut";
 
-export const useBetLeft = () => {
+export const useBetLeft = (props) => {
+
     const timeOut = useTimeOut();
 
     const base_url = useBaseUrl();
 
-    const { address, setIsLoading, status, setStatus } = useStateContext();
-
     const fetchAttempts = useRef(0);
 
-    const [Result, setResult] = useState();
+    const [Result, setResult] = useState('');
+
+    const [playerAddress, setPlayerAddress] = useState('');
+
+    const [status, setStatus] = useState(-1);
+
+    useEffect(() => {
+        if (props) {
+            if (props.myAddress)
+                setPlayerAddress(props.myAddress);
+            if (props.status)
+                setStatus(props.status);
+        }
+
+    }, [props])
+
+    useEffect(() => {
+        // console.log("🚀 ~ file: useBetLeft.jsx:63 ~ fetchBetLeft ~ playerAddress:", playerAddress)
+        if (playerAddress) {
+            console.log("🚀 ~ fetchLimit:")
+            fetchBetLeft();
+        }
+    }, [playerAddress]);
+
+
+    // const { playerAddress } = props;
 
     const fetchBetLeft = async () => {
-        if (!address) return;
+        if (!playerAddress) return;
         try {
-            const response = await useAxios('GET', base_url + '/api/getLimit?player=' + address);
+            const response = await useAxios('GET', base_url + '/api/getLimit?player=' + playerAddress);
             const Remaining = response?.data?.limit - response?.data?.current;
             console.log("🚀 ~  fetchBetLeft :", Remaining)
             setResult(Remaining);
@@ -30,18 +54,6 @@ export const useBetLeft = () => {
             setResult('');
         }
     };
-
-
-    useEffect(() => {
-        setStatus(7);
-        if (address) {
-            console.log("🚀 ~ fetchLimit:")
-            fetchBetLeft();
-        }
-        setStatus(-1);
-    }, [address]);
-
-
 
     useEffect(() => {
         let isMounted = true;
@@ -55,16 +67,13 @@ export const useBetLeft = () => {
         }
 
         const fetchData = async () => {
-            setIsLoading(true);
-            const response = await useAxios('GET', base_url + '/api/getLimit?player=' + address);
+            const response = await useAxios('GET', base_url + '/api/getLimit?player=' + playerAddress);
             // console.log("🚀 ~ file: useBetLeft.jsx:45 ~ fetchData ~ response:", response)
             const newData = response?.data?.limit - response?.data?.current;
             // console.log("🚀 ~ file: useBetLeft.jsx:46 ~ fetchData ~ newData:", newData)
             if (isMounted && newData !== Result) {
                 setResult(newData);
                 fetchAttempts.current = 0;
-                setStatus(-1);
-                setIsLoading(false);
                 clearTimeout(timerId);
             }
             else {
@@ -75,7 +84,6 @@ export const useBetLeft = () => {
                 }
                 else {
                     clearTimeout(timerId);
-                    setIsLoading(false);
                 }
             }
         };
@@ -88,9 +96,7 @@ export const useBetLeft = () => {
         else {
             clearTimeout(timerId);
             isMounted = false;
-            // setIsLoading(false);
         }
-
     }, [status, fetchAttempts.current]);
 
     return Result;

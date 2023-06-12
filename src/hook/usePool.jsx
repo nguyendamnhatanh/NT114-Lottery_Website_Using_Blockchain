@@ -1,25 +1,41 @@
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 
 import { useAxios } from "./useAxios";
-import { useStateContext } from "../context";
 
 import useBaseUrl from "./useBaseUrl";
 
 import useTimeOut from "./useTimeOut";
 
-export const usePool = () => {
+export const usePool = (props) => {
+
+    const [status, setStatus] = useState(-1);
+
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [playerAddress, setPlayerAddress] = useState('');
+
+    useEffect(() => {
+        if (props) {
+            if (props.myAddress)
+                setPlayerAddress(props.myAddress);
+            if (props.status)
+                setStatus(props.status);
+            if (props.isLoading)
+                setIsLoading(props.isLoading);
+        }
+    }, [props])
 
     const timeOut = useTimeOut();
 
     const base_url = useBaseUrl();
 
-    const { address, setIsLoading, status, setStatus } = useStateContext();
+    // const { playerAddress, setIsLoading, status, setStatus } = useStateContext();
 
     const fetchAttempts = useRef(0);
 
-    const [Result, setResult] = useState();
+    const [Result, setResult] = useState('');
 
     const fetchPool = async () => {
         try {
@@ -33,12 +49,12 @@ export const usePool = () => {
     };
 
     useEffect(() => {
-        setStatus(7);
-        if (address) {
+        // setStatus(7);
+        if (playerAddress) {
             fetchPool();
         }
-        setStatus(-1);
-    }, [address]);
+        // setStatus(-1);
+    }, [playerAddress]);
 
 
     useEffect(() => {
@@ -53,14 +69,14 @@ export const usePool = () => {
         }
 
         const fetchData = async () => {
-            setIsLoading(true);
+            // setIsLoading(true);
             const response = await useAxios('GET', base_url + '/api/getPool');
             const newData = response?.data?.pool;
             if (isMounted && newData !== Result) {
                 setResult(newData);
                 fetchAttempts.current = 0;
-                setStatus(-1);
-                setIsLoading(false);
+                // setStatus(-1);
+                // setIsLoading(false);
                 clearTimeout(timerId);
             }
             else {
@@ -71,7 +87,7 @@ export const usePool = () => {
                 }
                 else {
                     clearTimeout(timerId);
-                    setIsLoading(false);
+                    // setIsLoading(false);
                 }
             }
         };

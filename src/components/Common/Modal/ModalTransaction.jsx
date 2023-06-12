@@ -1,17 +1,21 @@
 import { Alert, Box, CircularProgress, Modal } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { getMessageBasedOnBuyStatus } from '../../utils'
+import { getMessageBasedOnBuyStatus } from '../../../utils'
 // import HorizontalLinearStepper from './HorizontalLinearStepper'
 
 
-const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
+const ModalTransaction = ({ isLoading, luckyNumber, isOpen, status }) => {
     useEffect(() => {
         setOpen(isOpen);
     }, [isOpen])
+        
 
     const [message, setMessage] = useState('');
-
     const [SeverityStatus, setSeverityStatus] = useState('warning');
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);    
 
     useEffect(() => {
         const a = getMessageBasedOnBuyStatus(status, luckyNumber);
@@ -20,7 +24,6 @@ const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
         setMessage(a);
     }, [status])
 
-
     const severityStatus = () => {
         if (status === 1 || status === 4 || status === 6) return 'success';
         if (status <= -2 || status == 0) return 'error';
@@ -28,13 +31,12 @@ const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
         return 'warning';
     }
 
-
     const LotteryStatus = () =>
     (
         isLoading &&
         // true &&
         (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center bg">
                 <div className="flex text-black py-5">
                     {
                         <div className='flex flex-col items-center justify-center gap-10'>
@@ -42,18 +44,13 @@ const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
                             <Alert variant="filled" severity={SeverityStatus} >
                                 Status: {message}
                             </Alert>
-
                         </div>
                     }
                 </div>
-
             </div >
         )
     )
 
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
     const style = {
         p: 4,
         position: 'absolute',
@@ -62,13 +59,15 @@ const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
         transform: 'translate(-50%, -50%)',
         width: '75%',
         height: '50%',
-        bgcolor: 'background.paper',
+        bgcolor: '#2C3333',
         border: '2px solid #000',
         boxShadow: 24,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
+        borderRadius: '10px'
+
     };
 
     return (
@@ -80,15 +79,12 @@ const ModalStepperBox = ({ isLoading, luckyNumber, isOpen, status }) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
-                    {/* <CircularProgress className='mb-10' />
-                    <HorizontalLinearStepper /> */}
-                    <LotteryStatus />
-                    {/* Console.log('{status}') */}
+                <Box sx={style}>                   
+                    <LotteryStatus />                  
                 </Box>
             </Modal>
         </div>
     )
 }
 
-export default ModalStepperBox
+export default ModalTransaction

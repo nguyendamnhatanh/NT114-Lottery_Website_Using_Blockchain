@@ -1,10 +1,6 @@
 import { Button } from '@mui/material';
-import React, { useState, useEffect, useRef } from 'react'
-
-import { io } from 'socket.io-client';
-
+import React from 'react';
 import { useStateContext } from '../../context';
-import { useBaseUrl, useWinner } from '../../hook';
 
 const GetWinner = () => {    
 

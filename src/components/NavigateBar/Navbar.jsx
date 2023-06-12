@@ -47,10 +47,12 @@ const Navbar = () => {
   return (
     <div className='flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6'>
       <div className="lg:flex-1 flex flex-row max-w-[456px] py-2 pl-4 pr-2 h-[52px] bg-[#2E4F4F] rounded-[100px]">
-        <input type="text" placeholder='Search' className='flex w-full font-epilogue font-normal text-[14px] placeholder:text-[#ffffff] text-white bg-transparent outline-none' />
-        <div className="w-[72px] h-full rounded-[20px] bg-[#4acd8d] flex justify-center items-center cursor-pointer">
-          <img src={search} alt="search" className='w-[15px] h-[15px] object-contain' />
+        <div className='flex justify-center font-mono font-bold items-center w-full font-epilogue text-[16px] text-center text-white bg-transparent outline-none' >
+          Lottery Room Number 001
         </div>
+        {/* <div className="w-[72px] h-full rounded-[20px] bg-[#4acd8d] flex justify-center items-center cursor-pointer">
+          <img src={search} alt="search" className='w-[15px] h-[15px] object-contain' />
+        </div> */}
       </div>
       <div className="sm:flex hidden flex-row justify-end gap-4">
         <NotifyBox isOpen={open && userOpen} handleCloseDialog={handleClose} handleUserAction={handleUserClose} Title={message} />

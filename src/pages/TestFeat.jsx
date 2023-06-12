@@ -1,50 +1,69 @@
 
-import React, { useEffect, useState } from 'react';
-
-import { ethers } from 'ethers'
-
-import { ConfettiDialog } from '../components';
-
-import { useStateContext } from '../context';
-
-import { useAxios } from '../hook';
-import { Button } from '@mui/material';
-
-
-// import { LotteryRoomNew } from '.';
-
-// test txHash: 0x56c892e3a97b9a6644ec07fe8626d0fa8a59ee4403fefcdd4302a865005c86e0
-
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { gsap } from 'gsap';
+import { MuiOtpInput } from 'mui-one-time-password-input'
+import { Controller, useForm } from "react-hook-form";
+import { Box, Button, FormHelperText } from '@mui/material';
+import styled from 'styled-components';
 
 const TestFeat = () => {
-  
-  const [FSDOpen, setFSDOpen] = useState(false);
 
-  useEffect(() => {
-    console.log(FSDOpen)
-  }, [FSDOpen]);
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      LuckyNumber: ""
+    }
+  });
 
-  const handleOpen = () => {
-    setFSDOpen(true);
+  const onSubmit = (data) => {
+    alert(JSON.stringify(data));
   };
 
-  const handleClose = () => {
-    setFSDOpen(false);
-  };
+  const matchIsNumeric = (text) => {
+    // is delete key
+    if (text === '') {
+      return true
+    }
+    // is space key
+    if (text === ' ') {
+      return false
+    }
+
+    const isNumber = typeof text === 'number'
+    const isString = typeof text === 'string'
+    return (isNumber || (isString && text !== '')) && !isNaN(Number(text))
+  }
+
+  const validateChar = (value, index) => {
+    return matchIsNumeric(value)
+  }
 
   return (
-    <div className='flex flex-1 justify-center items-center '>
-      <ConfettiDialog
-        address={'0x86032ac4010E601828e56C57c2Fe9B79b1141B13'}
-        luckyNumber={123}
-        pool={0.0}
-        transactionTime={0}
-        isOpen={FSDOpen}
-        handleClickOpen={handleOpen}
-        handleCloseDialog={handleClose}
-      />
+    <div className='flex justify-center items-center h-full'>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className='flex justify-center items-center flex-col w-[500px]'>
+          <Controller
+            control={control}
+            rules={{ validate: (value) => value.length === 6 }}
+            render={({ field, fieldState }) => (
+              <Box>
+                <MuiOtpInput sx={{ gap: 3 }} {...field} length={6} validateChar={validateChar} />
+                {fieldState.invalid ? (
+                  <FormHelperText error>OTP invalid</FormHelperText>
+                ) : null}
+              </Box>
+            )}
+            name="LuckyNumber"
+          />
+          <Box>
+            <Button  type="submit" variant="contained" sx={{ mt: 5 } }>
+              Buy Ticket
+            </Button>
+          </Box>
+        </div>
+
+      </form>
     </div>
-  )
+  );
 }
 
 export default TestFeat

@@ -11,16 +11,38 @@ import useBaseUrl from "./useBaseUrl";
 
 import useTimeOut from "./useTimeOut";
 
-export const useEntry = () => {
+export const useEntry = (props) => {
     const timeOut = useTimeOut();
 
     const base_url = useBaseUrl();
 
-    const { address, setIsLoading, status, setStatus } = useStateContext();
-
+    
     const fetchAttempts = useRef(0);
 
+    const [status, setStatus] = useState(-1);
+
+    const [isLoading, setIsLoading] = useState(false);
+
+
     const [Result, setResult] = useState();
+
+    const [playerAddress, setPlayerAddress] = useState('');
+
+
+
+
+    useEffect(() => {
+        if (props) {
+            if (props.myAddress)
+                setPlayerAddress(props.myAddress);
+            if (props.status)
+                setStatus(props.status);
+            if (props.isLoading)
+                setIsLoading(props.isLoading);
+        }
+    }, [props])
+
+
 
     const fetchFetchEntry = async () => {
         try {
@@ -36,18 +58,18 @@ export const useEntry = () => {
     };
 
     useEffect(() => {
-        setStatus(7);
-        if (address) {
+        // setStatus(7);
+        if (playerAddress) {
             fetchFetchEntry();
         }
-        setStatus(-1);
-    }, [address]);
+        // setStatus(-1);
+    }, [playerAddress]);
 
     useEffect(() => {
         let isMounted = true;
         let timerId;
 
-        const callSetTimeOut = () => {          
+        const callSetTimeOut = () => {
             timerId = setTimeout(() => {
                 console.log("🚀 ~ fetching newData at useEntry")
                 fetchData();
@@ -55,25 +77,23 @@ export const useEntry = () => {
         }
 
         const fetchData = async () => {
-            setIsLoading(true);
             const response = await useAxios('GET', base_url + '/api/getEntries');
             const newData = extractEntryData(response?.data?.players)
             if (isMounted && newData.length !== Result.length) {
                 setResult(newData);
                 fetchAttempts.current = 0;
-                setStatus(-1);
-                setIsLoading(false);
+                // setStatus(-1);
+                // setIsLoading(false);
                 clearTimeout(timerId);
             }
             else {
-               fetchAttempts.current = fetchAttempts.current + 1;
-
+                fetchAttempts.current = fetchAttempts.current + 1;
                 if (fetchAttempts.current < 2) {
                     callSetTimeOut();
                 }
                 else {
                     clearTimeout(timerId);
-                    setIsLoading(false);
+                    // setIsLoading(false);
                 }
             }
         };

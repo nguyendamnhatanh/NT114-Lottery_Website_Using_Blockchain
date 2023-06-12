@@ -1,27 +1,24 @@
-import lottery from './lottery.svg';
+import badgeCheck from './badgeCheck.svg';
+import dashboard from './dashboard.svg';
+import loader from './loader.svg';
 import logo from './logo.svg';
 import logout from './logout.svg';
-import payment from './payment.svg';
-import profile from './profile.svg';
-import sun from './sun.svg';
-import tagType from './type.svg';
-import search from './search.svg';
+import lottery from './lottery.svg';
+import lucky from './lucky.svg';
 import menu from './menu.svg';
 import money from './money.svg';
-import loader from './loader.svg';
-import thirdweb from './thirdweb.png';
-import dashboard from './dashboard.svg';
-import lucky from './lucky.svg';
-import test from './test.svg';
+import payment from './payment.svg';
 import pickluck from './pickluck.svg';
-import badgeCheck from './badgeCheck.svg';
+import profile from './profile.svg';
+import randomIcon from './randomIcon.svg';
+import search from './search.svg';
 import statusFailed from './statusFailed.svg';
-import winnerTrophy from './winnerTrophy.svg';
+import sun from './sun.svg';
+import test from './test.svg';
+import thirdweb from './thirdweb.png';
+import tagType from './type.svg';
 import walletIcon from './walletIcon.svg';
-
-
-import Icon from "@mui/material/Icon";
-
+import winnerTrophy from './winnerTrophy.svg';
 
 export {
     test,
@@ -43,5 +40,6 @@ export {
     badgeCheck,
     statusFailed,
     winnerTrophy,
-    walletIcon
+    walletIcon,
+    randomIcon
 };

@@ -47,8 +47,8 @@ const ClaimAward = ({ winner, handleCloseThis }) => {
             console.log("🚀 Award!!");
             // console.log("🚀 ~ file: ClaimAward.jsx:19 ~ handleClaimAward ~ winner:", winner)
             const response = useAxios('POST', base_url + '/api/claim', '', {
-                winner: '0x86032ac4010E601828e56C57c2Fe9B79b1141B13'
-                // winner: winner?.address
+                // winner: '0x86032ac4010E601828e56C57c2Fe9B79b1141B13'
+                winner: winner?.address
             })
             return response;
         } catch (error) {
@@ -88,7 +88,7 @@ const ClaimAward = ({ winner, handleCloseThis }) => {
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ m: 1, position: 'relative' }}>
                 <Fab
-                    aria-label="save"
+                    aria-label="claim"
                     color="primary"
                     sx={buttonSx}
                     onClick={handleButtonClick}

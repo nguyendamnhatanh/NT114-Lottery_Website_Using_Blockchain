@@ -92,6 +92,8 @@ export const getMessageBasedOnBuyStatus = (status, luckyNumber) => {
       return 'Get lucky number failed.';
     case -7:
       return 'You reach the limit of ticket.';
+    case -8:
+      return 'You owned this ticket.';
     default:
       return 'Unknown error.';
 
