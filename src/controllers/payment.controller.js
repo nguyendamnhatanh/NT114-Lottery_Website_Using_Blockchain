@@ -116,14 +116,11 @@ const PaymentController = {
       let ticket = req.body.ticket;
 
       let tickets = await getAllTickets();
-      if (
-        tickets.some(
-          (item) => item.luckyNumber === ticket && item.player === playerAddress
-        )
-      ) {
+      if (tickets.some((item) => item.luckyNumber === ticket && item.player === playerAddress)) {
         res.status(403).json({
           message: 'You already has this ticket',
         });
+        return;
       } else {
         let wssProvider = new ethers.providers.WebSocketProvider(
           'wss://eth-sepolia.g.alchemy.com/v2/PaYQty97bkPd0uDjTGjWX0eB8zAblAQE',
@@ -138,11 +135,13 @@ const PaymentController = {
             res.status(403).json({
               message: 'You have reached your limit',
             });
+            return;
           } else {
             await contract.addTicket(playerAddress, ticket);
             res.status(201).json({
               message: 'success',
             });
+            return;
           }
         } else {
           res.status(404).json({
@@ -150,10 +149,8 @@ const PaymentController = {
           });
         }
       }
-      res.status(201).json({
-        message: 'success',
-      });
     } catch (error) {
+      console.log(error);
       res.status(500).json({
         message: error + '',
       });

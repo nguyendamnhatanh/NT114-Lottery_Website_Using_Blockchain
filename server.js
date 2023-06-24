@@ -9,7 +9,7 @@ const io = app.io;
 
 io.on('connection', (socket) => {
   socket.on('luckyTime', async (data) => {
-    if (data === 'getWinner') {  
+    if (data === 'getWinner') {
       const tickets = await contract.getCurrentTickets();
       const random = Math.floor(Math.random() * tickets.length);
       if (tickets && tickets[random]) {
