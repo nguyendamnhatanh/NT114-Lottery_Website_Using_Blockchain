@@ -18,6 +18,7 @@ io.on('connection', (socket) => {
         );
         winner['address'] = tickets[random].player;
         winner['number'] = number;
+        winner['isClaim'] = false;
         app.io.emit('luckyTime', winner);
       }
     }

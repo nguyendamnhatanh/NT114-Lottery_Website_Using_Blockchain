@@ -30,11 +30,14 @@ const PlayerController = {
     }
   },
   GetWinner: (req, res) => {
-    let winnerAddress = winner.address;
-    if (winnerAddress) {
+    let winnerAddress = winner?.address;
+    let winnerNumber = winner?.number;
+    let isClaim = winner?.isClaim;
+    if (winnerAddress && winnerNumber) {
       res.status(200).json({
-        message: 'success',
-        winner: winnerAddress,
+        address: winnerAddress,
+        number: winnerNumber,
+        isClaim: isClaim,
       });
     } else {
       res.status(404).json({
@@ -43,9 +46,10 @@ const PlayerController = {
     }
   },
   ClaimReward: async (req, res) => {
-    const winner = req.body.winner;
+    const reqWinner = req.body.winner;
     try {
-      await contract.transfer(winner);
+      await contract.transfer(reqWinner);
+      winner.isClaim = true;
       res.status(200).json({ message: 'success' });
     } catch (error) {
       res.status(500).json({
