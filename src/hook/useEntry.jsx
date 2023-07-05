@@ -16,20 +16,15 @@ export const useEntry = (props) => {
 
     const base_url = useBaseUrl();
 
-    
     const fetchAttempts = useRef(0);
 
     const [status, setStatus] = useState(-1);
 
     const [isLoading, setIsLoading] = useState(false);
 
-
     const [Result, setResult] = useState();
 
     const [playerAddress, setPlayerAddress] = useState('');
-
-
-
 
     useEffect(() => {
         if (props) {
@@ -79,7 +74,7 @@ export const useEntry = (props) => {
         const fetchData = async () => {
             const response = await useAxios('GET', base_url + '/api/getEntries');
             const newData = extractEntryData(response?.data?.players)
-            if (isMounted && newData.length !== Result.length) {
+            if (isMounted && newData.length !== Result?.length) {
                 setResult(newData);
                 fetchAttempts.current = 0;
                 // setStatus(-1);

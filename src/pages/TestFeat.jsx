@@ -8,60 +8,31 @@ import styled from 'styled-components';
 
 const TestFeat = () => {
 
-  const { control, handleSubmit } = useForm({
-    defaultValues: {
-      LuckyNumber: ""
+  const getTicket = async (txHash, amount, data) => {
+    let success = false;
+    while (!success) {
+        try {           
+
+            const response = await useAxios('POST', base_url + '/api/buyDesireTicket', '', {
+                txHash: txHash,
+                playerAddress: playerAddress,
+                ticket: data
+            });
+            console.log("🚀 ~ file: PurchaseTicket.jsx:142 ~ getTicket ~ response:", response);
+
+            if (response?.data?.message === 'success') {
+                success = true;
+            }
+        } catch (error) {
+            console.log("🚀 ~ file: PurchaseTicket.jsx:137 ~ getTicket ~ error:", error);
+        }
     }
-  });
-
-  const onSubmit = (data) => {
-    alert(JSON.stringify(data));
-  };
-
-  const matchIsNumeric = (text) => {
-    // is delete key
-    if (text === '') {
-      return true
-    }
-    // is space key
-    if (text === ' ') {
-      return false
-    }
-
-    const isNumber = typeof text === 'number'
-    const isString = typeof text === 'string'
-    return (isNumber || (isString && text !== '')) && !isNaN(Number(text))
-  }
-
-  const validateChar = (value, index) => {
-    return matchIsNumeric(value)
-  }
+    return success;
+};
 
   return (
     <div className='flex justify-center items-center h-full'>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='flex justify-center items-center flex-col w-[500px]'>
-          <Controller
-            control={control}
-            rules={{ validate: (value) => value.length === 6 }}
-            render={({ field, fieldState }) => (
-              <Box>
-                <MuiOtpInput sx={{ gap: 3 }} {...field} length={6} validateChar={validateChar} />
-                {fieldState.invalid ? (
-                  <FormHelperText error>OTP invalid</FormHelperText>
-                ) : null}
-              </Box>
-            )}
-            name="LuckyNumber"
-          />
-          <Box>
-            <Button  type="submit" variant="contained" sx={{ mt: 5 } }>
-              Buy Ticket
-            </Button>
-          </Box>
-        </div>
-
-      </form>
+      
     </div>
   );
 }

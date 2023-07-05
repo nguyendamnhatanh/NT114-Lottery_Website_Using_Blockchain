@@ -12,12 +12,12 @@ export { default as ModalBuyTicket } from './Common/Modal/ModalBuyTicket';
 export { default as PlayerBoard } from './LotteryRoom/PlayerBoard';
 export { default as TestDialog } from './TestFeature/TestDialog';
 
-export { default as Confetti } from './Confetti/Confetti';
-export { default as ConfettiDialog } from './Confetti/ConfettiDialog';
+export { default as Confetti } from './Common/Modal/Confetti';
+export { default as ModalConfetti } from './Common/Modal/ModalConfetti';
 
 export { default as GetWinner } from './TestFeature/GetWinner';
 export { default as ClaimAward } from './LotteryRoom/ClaimAward';
-export { default as NotifyBox } from './TestFeature/NotifyBox';
+export { default as NotifyBox } from './Common/Modal/NotifyBox';
 export { default as Control } from './LotteryRoom//Box/Control';
 export { default as Winner } from './LotteryRoom//Box/Winner';
 

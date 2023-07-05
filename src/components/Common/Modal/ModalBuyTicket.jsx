@@ -10,13 +10,13 @@ import { LoadingButton } from '@mui/lab';
 
 const ModalBuyTicket = ({ isLoading, luckyNumber, status, handleBuyTicket }) => {
 
-    const style = {
+    const styleModal = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: '60%',
-        height: '50%',
+        height: '60%',
         border: '2px solid #000',
         boxShadow: 24,
         display: 'flex',
@@ -31,17 +31,17 @@ const ModalBuyTicket = ({ isLoading, luckyNumber, status, handleBuyTicket }) => 
 
     const btnStyle = {
         color: '#fff',
-        backgroundColor: '#4acd8d',
+        backgroundColor: '#1B6B93',
         '&:hover': {
-            backgroundColor: '#4acd8d',
+            backgroundColor: '#1B6B93',
             opacity: [0.9, 0.8, 0.7],
         },
         '&:loading': {
-            backgroundColor: '#4acd8d',
+            backgroundColor: '#1B6B93',
             opacity: [0.9, 0.8, 0.7],
         },
         '&:disabled': {
-            backgroundColor: '#4acd8d',
+            backgroundColor: '#1B6B93',
             opacity: [0.9, 0.8, 0.7],
         },
     }
@@ -67,14 +67,14 @@ const ModalBuyTicket = ({ isLoading, luckyNumber, status, handleBuyTicket }) => 
 
         return (
             <React.Fragment>
-                <Button onClick={handleOpen}>Enter Number</Button>
+                <Button sx={btnStyle} className='p-5' onClick={handleOpen}>Enter Number</Button>
                 <Modal
                     open={open}
                     onClose={handleClose}
                     aria-labelledby="child-modal-title"
                     aria-describedby="child-modal-description"
                 >
-                    <Box sx={{ ...style }}>
+                    <Box sx={{ ...styleModal }}>
                         <ChooseNumberAction
                             closeThis={handleClose}
                             setModalIsOpen={setModalIsOpen}
@@ -162,13 +162,14 @@ const ModalBuyTicket = ({ isLoading, luckyNumber, status, handleBuyTicket }) => 
                             />
                         )}
                     </Box>
-                    <Button variant="contained" onClick={() => handleBuyTicket(random)}>Buy</Button>
+                    <Button sx={btnStyle} onClick={() => handleBuyTicket(random)}>Buy</Button>
 
                 </div>
             </div>
 
         );
     };
+
 
     const ChildModalRandomNumber = () => {
         const [open, setOpen] = React.useState(false);
@@ -184,7 +185,7 @@ const ModalBuyTicket = ({ isLoading, luckyNumber, status, handleBuyTicket }) => 
         return (
             <React.Fragment>
                 <div className="flex flex-row justify-between items-center">
-                    <Button onClick={handleOpen}>Random</Button>
+                    <Button sx={btnStyle} className='p-5' onClick={handleOpen}>Random</Button>
                 </div>
                 <Modal
                     open={open}
@@ -192,13 +193,15 @@ const ModalBuyTicket = ({ isLoading, luckyNumber, status, handleBuyTicket }) => 
                     aria-labelledby="child-modal-title"
                     aria-describedby="child-modal-description"
                 >
-                    <Box sx={{ ...style }}>
+                    <Box sx={{ ...styleModal }}>
                         <RandomBox />
                     </Box>
                 </Modal>
             </React.Fragment>
         );
     }
+
+
 
     return (
         <div>
@@ -209,16 +212,24 @@ const ModalBuyTicket = ({ isLoading, luckyNumber, status, handleBuyTicket }) => 
                 variant="contained"
                 color='inherit'
                 sx={btnStyle}
-            >Buy Ticket</LoadingButton>
+            >Buy</LoadingButton>
             <Modal
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="parent-modal-title"
                 aria-describedby="parent-modal-description"
             >
-                <Box sx={{ ...style }}>
-                    <h2 id="parent-modal-title" className='text-white'>Choose method</h2>
-                    <div className='child-modal flex flex-row'>
+                <Box sx={{ ...styleModal }}>
+                    <h2 id="parent-modal-title" className='text-white text-[30px]'>Choose method </h2>
+                    <h2 id="parent-modal-title" className='text-white text-[30px] w-fit h-[50%]'>
+                        <div className="arrow-animation">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </h2>
+
+                    <div className='child-modal flex flex-col gap-5 justify-center items-center'>
                         <ChildModalEnterNumber />
                         <ChildModalRandomNumber />
                     </div>

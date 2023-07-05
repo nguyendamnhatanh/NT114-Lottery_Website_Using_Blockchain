@@ -17,7 +17,7 @@ const PurchaseTicket = ({ status, setStatus, setIsLoading, playerAddress, contra
 
     const [txHash, setTxHash] = useState('');
 
-    const [isTxSent, setIsTxSent] = useState(0);
+
 
     const base_url = useBaseUrl();
 
@@ -115,8 +115,6 @@ const PurchaseTicket = ({ status, setStatus, setIsLoading, playerAddress, contra
     };
 
 
-
-
     const getLuckyNumber = async (txHash, amount, data) => {
         if (typeof (amount) !== 'number') amount = Number(amount);
         console.log('status gettingLuckNumber', currentStatus.current)
@@ -125,7 +123,7 @@ const PurchaseTicket = ({ status, setStatus, setIsLoading, playerAddress, contra
             if (await getTicket(txHash, amount, data)) {
                 setStatus(6);
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                // setLuckyNumber(LuckyNumber);
+                setLuckyNumber(data);
                 console.log('Congratulation, Buy Ticket Success', data)
                 setStatus(1);
                 await new Promise(resolve => setTimeout(resolve, 2000));
@@ -144,16 +142,26 @@ const PurchaseTicket = ({ status, setStatus, setIsLoading, playerAddress, contra
             console.log("🚀 ~ file: PurchaseTicket.jsx:139 ~ getTicket ~ playerAddress:", playerAddress)
             console.log("🚀 ~ file: PurchaseTicket.jsx:139 ~ getTicket ~ txHash:", txHash)
             // const response = await useAxios('POST', base_url + '/api/getTicket', '', { txHash: txHash, ticketPrice: amount, playerAddress: playerAddress })
-            const response = await useAxios('POST', base_url + '/api/buyDesireTicket', '', { txHash: txHash, playerAddress: playerAddress, ticket: data })
+            const response = await
+                useAxios('POST', base_url + '/api/buyDesireTicket', '',
+                    {
+                        txHash: txHash,
+                        playerAddress: playerAddress,
+                        ticket: data
+                    })
             console.log("🚀 ~ file: PurchaseTicket.jsx:142 ~ getTicket ~ response:", response)
 
             return response?.data?.message === 'success' ? true : false;
         } catch (error) {
             console.log("🚀 ~ file: PurchaseTicket.jsx:137 ~ getTicket ~ error:", error)
-            const randomNumber = Math.floor(Math.random() * 100);
-            setIsTxSent(randomNumber);
-            throw new Error('Get Lucky Number error. Maybe the transaction is still pending. Please try again later');
-            return false;
+            // if (error.response) {
+            //     // The request was made and the server responded with a status code
+            //     // that falls out of the range of 2xx
+            //    if(error.response.status != 201){
+            //    }
+
+
+            //   } 
         }
     };
 

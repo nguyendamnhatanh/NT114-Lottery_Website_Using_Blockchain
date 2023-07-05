@@ -2,9 +2,9 @@ import { Button } from '@mui/material';
 import React from 'react';
 import { useStateContext } from '../../context';
 
-const GetWinner = () => {    
+const GetWinner = () => {
 
-    const {  winner } = useStateContext();
+    const { winner } = useStateContext();
 
     return (
         <div className='flex justify-center items-center p-10'>

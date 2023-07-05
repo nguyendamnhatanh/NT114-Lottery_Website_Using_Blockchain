@@ -8,6 +8,8 @@ import './index.css'
 import './assets/styles/Confetti.scss'
 import './assets/styles/CountDownTimer.scss'
 import './assets/styles/LuckyNumberInput.scss'
+import './assets/styles/ArrowAnimation.scss'
+
 
 import { Provider } from 'react-redux'
 import { StateContextProvider } from './context';

@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
 
-import { ConfettiDialog, Control, DisplayLuckyNumber, ModalBuyTicket, ModalTransaction, PlayerBoard, Winner } from '../components';
+import { ModalConfetti, Control, DisplayLuckyNumber, ModalBuyTicket, ModalTransaction, PlayerBoard, Winner } from '../components';
 import { useStateContext } from '../context';
 import { getMessageBasedOnBuyStatus } from '../utils';
 
@@ -8,11 +8,6 @@ import Skeleton from '@mui/material/Skeleton';
 
 import Stack from '@mui/material/Stack';
 import { useBetLeft, useEntry, useMyBalance, usePool, useTimeRemaining, useUserTicket } from "../hook";
-
-
-
-
-// import classes from '../assets/styles/main.sass'
 
 const LotteryRoom = memo(
 
@@ -34,9 +29,9 @@ const LotteryRoom = memo(
       userTicket,
       pool
     }
-    =
-    useStateContext();
-    
+      =
+      useStateContext();
+
     // UseState Area
 
     const [amount, setAmount] = useState('');
@@ -153,11 +148,11 @@ const LotteryRoom = memo(
       };
 
       return (
-        <ConfettiDialog
+        <ModalConfetti
           address={address}
           luckyNumber={winner?.data?.number}
           pool={pool}
-          isOpen={winner?.data?.address === address && FSDOpen && userOpen}
+          isOpen={winner?.data?.isClaim == false && winner?.data?.address === address && FSDOpen && userOpen}
           handleClickOpen={handleOpen}
           handleCloseDialog={handleClose}
           winner={winner?.data}
@@ -176,14 +171,14 @@ const LotteryRoom = memo(
 
         {/* <TestDialog /> */}
         <div>
-          <CongratulateWinner />   
+          <CongratulateWinner />
           <ModalTransaction
             isLoading={isLoading}
             luckyNumber={luckyNumber}
             isOpen={modalIsOpen}
             status={status}
-          />      
-          
+          />
+
         </div>
 
         <div className="flex flex-col  lg:flex-row gap-5">

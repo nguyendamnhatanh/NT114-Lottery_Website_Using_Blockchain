@@ -21,9 +21,10 @@ export const StateContextProvider = ({ children }) => {
     const [userTicket, setUserTicket] = useState([]);
     const [pool, setPool] = useState('');
 
-
     // Hook Area
     const winner = useWinner();
+    
+    // console.log("🚀 ~ file: index.jsx:27 ~ StateContextProvider ~ winner:", winner)
     const contractAddress = useSmartContractAddress();
 
     const playerAddress = useMyAddress();
@@ -33,11 +34,6 @@ export const StateContextProvider = ({ children }) => {
     const getPool = usePool({ myAddress, isLoading, status });
 
     useEffect(() => {
-        // console.log("🚀 ~ file: index.jsx:48 ~ StateContextProvider ~ getPool:", getPool)
-        // console.log("🚀 ~ file: index.jsx:48 ~ StateContextProvider ~ getUserTicket:", getUserTicket)
-        // console.log("🚀 ~ file: index.jsx:48 ~ StateContextProvider ~ getEntry:", getEntry?.length)
-        // console.log("🚀 ~ file: index.jsx:48 ~ StateContextProvider ~ playerAddress:", playerAddress)
-        // console.log("🚀 ~ file: index.jsx:48 ~ StateContextProvider ~ getBetLeft:", getBetLeft)
         if (playerAddress)
             setMyAddress(playerAddress);
         if (getBetLeft)

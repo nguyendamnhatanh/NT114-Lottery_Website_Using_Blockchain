@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-import { Button, Dialog, Slide } from '@mui/material'
-import { badgeCheck, winnerTrophy } from '../../assets'
+import { Dialog } from '@mui/material'
+import { winnerTrophy } from '../../../assets'
+import { shortenAddress } from '../../../utils/shortenAddress'
+import ClaimAward from '../../LotteryRoom/ClaimAward'
 import Confetti from './Confetti'
-import { shortenAddress } from '../../utils/shortenAddress'
-import { useBaseUrl } from '../../hook'
-import { useStateContext } from '../../context'
-import ClaimAward from '../LotteryRoom/ClaimAward'
 
-const ConfettiDialog = ({ pool, transactionTime, handleClickOpen, handleCloseDialog, isOpen, winner }) => {
+const ModalConfetti = ({ pool, transactionTime, handleClickOpen, handleCloseDialog, isOpen, winner }) => {
     return (
         <div className='flex justify-center items-center'>
 
@@ -49,4 +47,4 @@ const ConfettiDialog = ({ pool, transactionTime, handleClickOpen, handleCloseDia
     )
 }
 
-export default ConfettiDialog
+export default ModalConfetti

@@ -1,11 +1,11 @@
 import { logo, lottery, lucky, payment, profile, dashboard, logout, test, money } from '../assets';
 
 export const navlinks = [
-  // {
-  //   name: 'dashboard',
-  //   imgUrl: dashboard,
-  //   path: '/',
-  // },
+  {
+    name: 'dashboard',
+    imgUrl: dashboard,
+    path: '/',
+  },
 
   {
     name: 'lottery-room',
@@ -14,18 +14,18 @@ export const navlinks = [
     disabled: false,
   },
 
-  // {
-  //   name: 'profile',
-  //   imgUrl: profile,
-  //   path: '/profile',
-  //   disabled: false,
-  // },
-
   {
-    name: 'test-feat',
-    imgUrl: test,
-    path: '/test-feat',
-  }
+    name: 'profile',
+    imgUrl: profile,
+    path: '/profile',
+    disabled: false,
+  },
+
+  // {
+  //   name: 'test-feat',
+  //   imgUrl: test,
+  //   path: '/test-feat',
+  // }
   
   
 ];
